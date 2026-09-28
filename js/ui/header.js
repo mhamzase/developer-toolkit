@@ -97,7 +97,9 @@
         paintThemeIcon();
       });
 
+      const settingsBtn = DT.ui.settings.render();
       const actions = dom.el("div", { class: "dt-header__actions" }, [
+        settingsBtn,
         themeBtn,
       ]);
 

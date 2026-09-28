@@ -238,9 +238,25 @@
   }
 
   function clearAllSwatches() {
-    saveSaved([]).then(() => {
-      renderSwatches([]);
-      DT.ui.toast.success("All swatches cleared");
+    loadSaved().then(function (snap) {
+      if (!snap.length) {
+        DT.ui.toast.info("Nothing to clear");
+        return;
+      }
+      saveSaved([]).then(function () {
+        renderSwatches([]);
+        DT.ui.toast.undo(
+          "Cleared " +
+            snap.length +
+            " swatch" +
+            (snap.length === 1 ? "" : "es"),
+          function () {
+            saveSaved(snap).then(function () {
+              renderSwatches(snap);
+            });
+          },
+        );
+      });
     });
   }
 
@@ -464,15 +480,7 @@
         setFromRgb({ r: bytes[0], g: bytes[1], b: bytes[2] });
         DT.ui.toast.success("Random color");
       });
-      on(btnClearSw, "click", () => {
-        loadSaved().then((l) => {
-          if (!l.length) {
-            DT.ui.toast.info("Nothing to clear");
-            return;
-          }
-          clearAllSwatches();
-        });
-      });
+      on(btnClearSw, "click", clearAllSwatches);
 
       loadSaved().then(renderSwatches);
     },

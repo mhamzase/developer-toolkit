@@ -481,3 +481,44 @@
     display: none;
   }
 }
+
+
+
+/* ------------------------------------------------------------
+ * 10. GRID SECTIONS (Favorites / Recently used / All tools)
+ * ------------------------------------------------------------ */
+
+.dt-grid-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.dt-grid-section:last-child {
+  margin-bottom: 0;
+}
+
+.dt-grid-section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dt-grid-section__title {
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.dt-grid-section__count {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-subtle);
+
+  padding: 1px 7px;
+  background-color: var(--color-surface-2);
+  border-radius: var(--radius-full);
+}
