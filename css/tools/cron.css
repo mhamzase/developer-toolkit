@@ -1,0 +1,120 @@
+/* ============================================================
+ * File: css/tools/cron.css
+ * Module: Tool CSS — Cron Parser
+ * ============================================================ */
+
+/* Human-readable description */
+.dt-cron-desc {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+}
+
+/* Field breakdown */
+.dt-cron-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dt-cron-field {
+  display: grid;
+  grid-template-columns: 80px 70px 1fr;
+  gap: 12px;
+  align-items: baseline;
+
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-cron-field:hover {
+  background-color: var(--color-hover);
+}
+
+.dt-cron-field__name {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.dt-cron-field__token {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.dt-cron-field__values {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  word-break: break-word;
+}
+
+/* Next runs list */
+.dt-cron-runs {
+  display: flex;
+  flex-direction: column;
+}
+
+.dt-cron-run {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-cron-run:hover {
+  background-color: var(--color-hover);
+}
+
+.dt-cron-run__index {
+  flex: 0 0 auto;
+  width: 24px;
+  text-align: right;
+
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.dt-cron-run__date {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-cron-run__rel {
+  flex: 0 0 auto;
+  font-size: 10px;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .dt-cron-field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .dt-cron-field__values {
+    padding-left: 4px;
+  }
+}

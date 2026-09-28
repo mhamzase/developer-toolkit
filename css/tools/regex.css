@@ -1,0 +1,194 @@
+/* ============================================================
+ * File: css/tools/regex.css
+ * Module: Tool CSS — Regex Tester
+ * ============================================================ */
+
+/* Mono input for the pattern field */
+.dt-input--mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+/* Flag checkboxes row */
+.dt-regex-flags {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dt-regex-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-surface);
+
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+
+  cursor: pointer;
+  user-select: none;
+
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-regex-flag:hover {
+  background-color: var(--color-hover);
+  color: var(--color-text);
+}
+
+.dt-regex-flag input {
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+/* Highlight preview */
+.dt-regex-highlight {
+  margin: 0;
+  padding: 12px 16px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text);
+
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  max-height: 260px;
+  overflow: auto;
+}
+
+.dt-regex-hit {
+  background-color: #fde68a;
+  color: #78350f;
+  border-radius: 2px;
+  padding: 0 1px;
+  box-shadow: 0 0 0 1px rgba(120, 53, 15, 0.15);
+}
+
+.dt-regex-hit--alt {
+  background-color: #bfdbfe;
+  color: #1e3a8a;
+  box-shadow: 0 0 0 1px rgba(30, 58, 138, 0.15);
+}
+
+[data-theme='dark'] .dt-regex-hit {
+  background-color: #a16207;
+  color: #fef3c7;
+  box-shadow: 0 0 0 1px rgba(254, 243, 199, 0.25);
+}
+
+[data-theme='dark'] .dt-regex-hit--alt {
+  background-color: #1d4ed8;
+  color: #dbeafe;
+  box-shadow: 0 0 0 1px rgba(219, 234, 254, 0.25);
+}
+
+/* Match list */
+.dt-regex-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.dt-regex-match {
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.dt-regex-match__body {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dt-regex-match__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dt-regex-match__value {
+  display: block;
+  padding: 6px 10px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+
+  background-color: var(--color-bg-subtle);
+  border-radius: var(--radius-sm);
+  border: var(--border-thin) solid var(--color-border);
+
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 120px;
+  overflow: auto;
+}
+
+/* Groups */
+.dt-regex-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 4px;
+}
+
+.dt-regex-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.dt-regex-group__label {
+  flex: 0 0 auto;
+  min-width: 22px;
+  text-align: right;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.dt-regex-group__label--named {
+  min-width: auto;
+  padding: 0 6px;
+
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+}
+
+.dt-regex-group__value {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stat pill danger variant (for error count) */
+.dt-stat--danger {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+  border-color: rgba(180, 35, 24, 0.25);
+}

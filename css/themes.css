@@ -1,0 +1,135 @@
+/* ============================================================
+ * File: css/themes.css
+ * Module: Theme Colors
+ * Purpose: Semantic color tokens for light + dark themes.
+ * Usage: <html data-theme="light"> or <html data-theme="dark">
+ * Rule: Components must ONLY use these semantic tokens,
+ *       never raw hex values.
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * LIGHT THEME (default)
+ * ------------------------------------------------------------ */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --color-bg:          #ffffff;
+  --color-bg-subtle:   #f6f7f9;
+  --color-surface:     #ffffff;
+  --color-surface-2:   #f2f4f7;
+  --color-elevated:    #ffffff;
+  --color-input-bg:    #ffffff;
+  --color-hover:       #f2f4f7;
+  --color-active:      #e9ecf1;
+
+  /* Borders */
+  --color-border:        #e4e7ec;
+  --color-border-strong: #cfd4dc;
+
+  /* Text */
+  --color-text:         #16181d;
+  --color-text-muted:   #5b6472;
+  --color-text-subtle:  #8a929f;
+  --color-text-inverse: #ffffff;
+
+  /* Accent (indigo) */
+  --color-accent:        #4f46e5;
+  --color-accent-hover:  #4338ca;
+  --color-accent-active: #3730a3;
+  --color-accent-soft:   #eef2ff;
+  --color-on-accent:     #ffffff;
+
+  /* Status */
+  --color-success:      #12805c;
+  --color-success-soft: #e6f6ef;
+  --color-warning:      #b25e09;
+  --color-warning-soft: #fdf3e6;
+  --color-danger:       #b42318;
+  --color-danger-soft:  #fdeceb;
+  --color-info:         #175cd3;
+  --color-info-soft:    #eaf1fd;
+
+  /* Focus + overlay */
+  --color-focus-ring: rgba(79, 70, 229, 0.45);
+  --color-overlay:    rgba(16, 24, 40, 0.45);
+
+  /* Scrollbar */
+  --color-scrollbar-thumb:       #cfd4dc;
+  --color-scrollbar-thumb-hover: #b3bac6;
+  --color-scrollbar-track:       transparent;
+
+  /* Selection */
+  --color-selection-bg:   #dbe0ff;
+  --color-selection-text: #16181d;
+
+  /* Elevation (color-dependent, so declared per theme) */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.10), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+}
+
+/* ------------------------------------------------------------
+ * DARK THEME
+ * ------------------------------------------------------------ */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-bg:          #0e1014;
+  --color-bg-subtle:   #14171d;
+  --color-surface:     #171b22;
+  --color-surface-2:   #1e232b;
+  --color-elevated:    #1f242d;
+  --color-input-bg:    #12151b;
+  --color-hover:       #1e232b;
+  --color-active:      #262c36;
+
+  /* Borders */
+  --color-border:        #262c36;
+  --color-border-strong: #363d49;
+
+  /* Text */
+  --color-text:         #e7eaf0;
+  --color-text-muted:   #a0a8b6;
+  --color-text-subtle:  #6f7787;
+  --color-text-inverse: #0e1014;
+
+  /* Accent (indigo) */
+  --color-accent:        #6366f1;
+  --color-accent-hover:  #818cf8;
+  --color-accent-active: #4f46e5;
+  --color-accent-soft:   rgba(99, 102, 241, 0.16);
+  --color-on-accent:     #ffffff;
+
+  /* Status */
+  --color-success:      #34d399;
+  --color-success-soft: rgba(52, 211, 153, 0.14);
+  --color-warning:      #fbbf24;
+  --color-warning-soft: rgba(251, 191, 36, 0.14);
+  --color-danger:       #f87171;
+  --color-danger-soft:  rgba(248, 113, 113, 0.14);
+  --color-info:         #60a5fa;
+  --color-info-soft:    rgba(96, 165, 250, 0.14);
+
+  /* Focus + overlay */
+  --color-focus-ring: rgba(129, 140, 248, 0.55);
+  --color-overlay:    rgba(0, 0, 0, 0.60);
+
+  /* Scrollbar */
+  --color-scrollbar-thumb:       #363d49;
+  --color-scrollbar-thumb-hover: #4a5364;
+  --color-scrollbar-track:       transparent;
+
+  /* Selection */
+  --color-selection-bg:   #2f3563;
+  --color-selection-text: #e7eaf0;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 16px -4px rgba(0, 0, 0, 0.55), 0 4px 6px -2px rgba(0, 0, 0, 0.30);
+}

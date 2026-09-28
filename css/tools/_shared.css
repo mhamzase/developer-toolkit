@@ -1,0 +1,287 @@
+/* ============================================================
+ * File: css/tools/_shared.css
+ * Module: Tool CSS — Shared patterns
+ * Purpose: Panel system + shared tool patterns used across tools.
+ * Depends on: variables.css, themes.css, components.css
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * WORKSPACE — top-level tool body wrapper
+ * ------------------------------------------------------------ */
+
+.dt-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+/* ------------------------------------------------------------
+ * TOOLBAR — top action row
+ * ------------------------------------------------------------ */
+
+.dt-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.dt-toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.dt-toolbar__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------
+ * PANEL — main container for input/output
+ * ------------------------------------------------------------ */
+
+.dt-panel {
+  display: flex;
+  flex-direction: column;
+
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+
+  transition: border-color var(--duration-fast) var(--ease-standard),
+              box-shadow   var(--duration-fast) var(--ease-standard);
+}
+
+.dt-panel:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Header */
+
+.dt-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  padding: 10px var(--space-4);
+  min-height: 42px;
+
+  background-color: var(--color-bg-subtle);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.dt-panel__title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.dt-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Body */
+
+.dt-panel__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Footer */
+
+.dt-panel__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  padding: 8px var(--space-4);
+  min-height: 32px;
+
+  background-color: var(--color-bg-subtle);
+  border-top: var(--border-thin) solid var(--color-border);
+
+  font-size: 11px;
+  color: var(--color-text-subtle);
+}
+
+/* ------------------------------------------------------------
+ * EDITOR PANEL — borderless textarea/input/code inside panel
+ * ------------------------------------------------------------ */
+
+.dt-panel--editor .dt-textarea,
+.dt-panel--editor .dt-input,
+.dt-panel--editor .dt-code {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: transparent;
+  min-height: 160px;
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.dt-panel--editor .dt-textarea,
+.dt-panel--editor .dt-input {
+  resize: vertical;
+}
+
+.dt-panel--editor .dt-textarea:focus,
+.dt-panel--editor .dt-input:focus,
+.dt-panel--editor .dt-code:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* ------------------------------------------------------------
+ * CODE BLOCK — used by JWT, Hash
+ * ------------------------------------------------------------ */
+
+.dt-code {
+  display: block;
+  width: 100%;
+
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-input-bg);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+
+  white-space: pre;
+  overflow: auto;
+  max-height: 240px;
+  tab-size: 2;
+}
+
+/* ------------------------------------------------------------
+ * SECTION (title + actions above a block)
+ * ------------------------------------------------------------ */
+
+.dt-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dt-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* ------------------------------------------------------------
+ * RESULT CARD — used by Timestamp, Color
+ * ------------------------------------------------------------ */
+
+.dt-result {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: var(--space-3);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.dt-result__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+.dt-result__row:last-child { border-bottom: none; }
+
+.dt-result__label {
+  flex: 0 0 auto;
+  min-width: 84px;
+
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.dt-result__value {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+
+  word-break: break-all;
+}
+
+/* ------------------------------------------------------------
+ * SEGMENTED CONTROL — used by Timestamp
+ * ------------------------------------------------------------ */
+
+.dt-segmented {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-surface-2);
+  gap: 2px;
+}
+
+.dt-segmented > button {
+  appearance: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-segmented > button:hover {
+  color: var(--color-text);
+}
+
+.dt-segmented > button[aria-pressed='true'] {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: var(--shadow-xs);
+}

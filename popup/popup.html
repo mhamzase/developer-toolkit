@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dev Toolkit</title>
+    <!-- Base layers (order matters) -->
+    <link rel="stylesheet" href="../css/variables.css" />
+    <link rel="stylesheet" href="../css/themes.css" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/responsive.css" />
+
+    <!-- Shared tool patterns -->
+    <link rel="stylesheet" href="../css/tools/_shared.css" />
+
+    <!-- Per-tool styles -->
+    <link rel="stylesheet" href="../css/tools/json.css" />
+    <link rel="stylesheet" href="../css/tools/jwt.css" />
+    <link rel="stylesheet" href="../css/tools/base64.css" />
+    <link rel="stylesheet" href="../css/tools/url.css" />
+    <link rel="stylesheet" href="../css/tools/uuid.css" />
+    <link rel="stylesheet" href="../css/tools/timestamp.css" />
+    <link rel="stylesheet" href="../css/tools/case.css" />
+    <link rel="stylesheet" href="../css/tools/color.css" />
+    <link rel="stylesheet" href="../css/tools/hash.css" />
+    <link rel="stylesheet" href="../css/tools/text.css" />
+    <link rel="stylesheet" href="../css/tools/regex.css" />
+    <link rel="stylesheet" href="../css/tools/diff.css" />
+    <link rel="stylesheet" href="../css/tools/password.css" />
+    <link rel="stylesheet" href="../css/tools/lorem.css" />
+    <link rel="stylesheet" href="../css/tools/http.css" />
+    <link rel="stylesheet" href="../css/tools/cron.css" />
+
+    <!-- App-window overrides (always last) -->
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!-- Root container. Everything is rendered by JS into here. -->
+    <div id="dt-root" class="dt-root" aria-live="polite"></div>
+
+    <!-- Toast container (positioned fixed by CSS) -->
+    <div
+      id="dt-toasts"
+      class="dt-toasts"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <!-- ============================================================
+       Script load order (no build step, global DT namespace)
+       ============================================================ -->
+
+    <!-- Utils -->
+    <script src="../js/utils/escape.js"></script>
+    <script src="../js/utils/debounce.js"></script>
+    <script src="../js/utils/clipboard.js"></script>
+    <script src="../js/utils/format.js"></script>
+    <script src="../js/utils/icons.js"></script>
+
+    <!-- Core -->
+    <script src="../js/core/storage.js"></script>
+    <script src="../js/core/theme.js"></script>
+    <script src="../js/core/registry.js"></script>
+    <script src="../js/core/router.js"></script>
+    <script src="../js/core/app.js"></script>
+
+    <!-- UI -->
+    <script src="../js/ui/dom.js"></script>
+    <script src="../js/ui/toast.js"></script>
+    <script src="../js/ui/header.js"></script>
+    <script src="../js/ui/nav.js"></script>
+    <script src="../js/ui/grid.js"></script>
+    <script src="../js/ui/toolview.js"></script>
+    <script src="../js/ui/footer.js"></script>
+
+    <!-- Tools (each self-registers into DT.tools) -->
+    <script src="../js/tools/json.js"></script>
+    <script src="../js/tools/jwt.js"></script>
+    <script src="../js/tools/base64.js"></script>
+    <script src="../js/tools/url.js"></script>
+    <script src="../js/tools/uuid.js"></script>
+    <script src="../js/tools/timestamp.js"></script>
+    <script src="../js/tools/case.js"></script>
+    <script src="../js/tools/color.js"></script>
+    <script src="../js/tools/hash.js"></script>
+    <script src="../js/tools/text.js"></script>
+    <script src="../js/tools/regex.js"></script>
+    <script src="../js/tools/diff.js"></script>
+    <script src="../js/tools/password.js"></script>
+    <script src="../js/tools/lorem.js"></script>
+    <script src="../js/tools/http.js"></script>
+    <script src="../js/tools/cron.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="popup.js"></script>
+  </body>
+</html>

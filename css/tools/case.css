@@ -1,0 +1,44 @@
+/* ============================================================
+ * File: css/tools/case.css
+ * Module: Tool CSS — Case Converter
+ * ============================================================ */
+
+.dt-case-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dt-case-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: 6px var(--space-2);
+
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-case-row:hover {
+  background-color: var(--color-hover);
+}
+
+.dt-case-row .dt-result__label {
+  min-width: 110px;
+  flex: 0 0 auto;
+}
+
+.dt-case-row .dt-result__value {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-case-row__value--empty {
+  color: var(--color-text-subtle);
+}

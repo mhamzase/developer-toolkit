@@ -1,0 +1,43 @@
+/* ============================================================
+ * File: css/tools/uuid.css
+ * Module: Tool CSS — UUID Generator
+ * Purpose: Styles for the UUID list and rows.
+ * ============================================================ */
+
+.dt-uuid-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dt-uuid-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-1) var(--space-2);
+
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.dt-uuid-row__index {
+  flex: 0 0 auto;
+  width: 22px;
+  text-align: right;
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.dt-uuid-row__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

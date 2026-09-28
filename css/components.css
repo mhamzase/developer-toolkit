@@ -1,0 +1,729 @@
+/* ============================================================
+ * File: css/components.css
+ * Module: Global UI Components
+ * Purpose: Buttons, inputs, textareas, selects, cards, tabs,
+ *          toasts, badges, tooltips, empty states, alerts.
+ * Depends on: variables.css, themes.css
+ * Notes:
+ *   Tool-specific styles live in css/tools/*.css.
+ *   Shared tool patterns live in css/tools/_shared.css.
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * 1. BUTTONS
+ * ------------------------------------------------------------ */
+
+.dt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  height: var(--control-height-md);
+  padding: 0 var(--space-3);
+
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1;
+
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid transparent;
+
+  background-color: transparent;
+  color: var(--color-text);
+
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.dt-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.dt-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Sizes */
+.dt-btn--sm {
+  height: var(--control-height-sm);
+  padding: 0 var(--space-2);
+  font-size: var(--fs-xs);
+}
+
+.dt-btn--lg {
+  height: var(--control-height-lg);
+  padding: 0 var(--space-4);
+  font-size: var(--fs-md);
+}
+
+/* Primary */
+.dt-btn--primary {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  box-shadow: var(--shadow-xs);
+}
+
+.dt-btn--primary:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+
+.dt-btn--primary:active:not(:disabled) {
+  background-color: var(--color-accent-active);
+}
+
+/* Secondary */
+.dt-btn--secondary {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dt-btn--secondary:hover:not(:disabled) {
+  background-color: var(--color-hover);
+  border-color: var(--color-border-strong);
+}
+
+/* Ghost */
+.dt-btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-muted);
+}
+
+.dt-btn--ghost:hover:not(:disabled) {
+  background-color: var(--color-hover);
+  color: var(--color-text);
+}
+
+/* Danger */
+.dt-btn--danger {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.dt-btn--danger:hover:not(:disabled) {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+/* Icon-only */
+.dt-btn--icon {
+  width: var(--control-height-md);
+  padding: 0;
+}
+
+.dt-btn--icon.dt-btn--sm {
+  width: var(--control-height-sm);
+}
+
+.dt-btn--icon.dt-btn--lg {
+  width: var(--control-height-lg);
+}
+
+/* Full-width */
+.dt-btn--block {
+  width: 100%;
+}
+
+/* Group */
+.dt-btn-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Anchor rendered as a button — reset link styles */
+a.dt-btn {
+  text-decoration: none;
+}
+
+a.dt-btn:hover {
+  text-decoration: none;
+}
+
+a.dt-btn--primary,
+a.dt-btn--primary:hover {
+  color: var(--color-on-accent);
+}
+
+a.dt-btn--secondary,
+a.dt-btn--secondary:hover {
+  color: var(--color-text);
+}
+
+a.dt-btn--ghost,
+a.dt-btn--ghost:hover {
+  color: var(--color-text-muted);
+}
+
+a.dt-btn--ghost:hover {
+  color: var(--color-text);
+}
+
+/* ------------------------------------------------------------
+ * 2. INPUTS & TEXTAREAS & SELECTS
+ * ------------------------------------------------------------ */
+
+.dt-input,
+.dt-textarea,
+.dt-select {
+  width: 100%;
+  display: block;
+
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+
+  background-color: var(--color-input-bg);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  height: var(--control-height-md);
+
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-input,
+.dt-textarea {
+  padding: var(--space-2) var(--space-3);
+}
+
+.dt-textarea {
+  height: auto;
+  min-height: 120px;
+  padding: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  resize: vertical;
+  white-space: pre;
+  overflow: auto;
+  tab-size: 2;
+}
+
+.dt-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: var(--control-height-md);
+
+  padding: 0 var(--space-6) 0 var(--space-3);
+
+  line-height: 1;
+  display: block;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) calc(50% + 1px),
+    calc(100% - 9px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dt-select--sm {
+  height: var(--control-height-sm);
+  padding: 0 var(--space-5) 0 var(--space-2);
+  font-size: var(--fs-xs);
+  background-position:
+    calc(100% - 12px) calc(50% + 1px),
+    calc(100% - 8px) calc(50% + 1px);
+}
+
+.dt-input:hover,
+.dt-textarea:hover,
+.dt-select:hover {
+  border-color: var(--color-border-strong);
+}
+
+.dt-input:focus,
+.dt-textarea:focus,
+.dt-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.dt-input::placeholder,
+.dt-textarea::placeholder {
+  color: var(--color-text-subtle);
+}
+
+.dt-input--error,
+.dt-textarea--error {
+  border-color: var(--color-danger);
+}
+
+.dt-input--error:focus,
+.dt-textarea--error:focus {
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+}
+
+/* Textarea size variants */
+.dt-textarea--lg {
+  min-height: 200px;
+}
+
+.dt-textarea--xl {
+  min-height: 260px;
+}
+
+/* ------------------------------------------------------------
+ * 3. FORM FIELD WRAPPER
+ * ------------------------------------------------------------ */
+
+.dt-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dt-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.dt-help {
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+  line-height: var(--lh-snug);
+}
+
+.dt-error {
+  font-size: var(--fs-xs);
+  color: var(--color-danger);
+  line-height: var(--lh-snug);
+}
+
+/* ------------------------------------------------------------
+ * 4. CARDS
+ * ------------------------------------------------------------ */
+
+.dt-card {
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.dt-card--interactive {
+  cursor: pointer;
+}
+
+.dt-card--interactive:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.dt-card--interactive:active {
+  transform: translateY(1px);
+}
+
+/* ------------------------------------------------------------
+ * 5. TABS
+ * ------------------------------------------------------------ */
+
+.dt-tabs {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.dt-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+
+  padding: var(--space-1) var(--space-3);
+  height: 28px;
+
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+
+  border-radius: var(--radius-full);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.dt-tab:hover {
+  background-color: var(--color-hover);
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+/* SELECTED — solid accent, high contrast in both themes */
+.dt-tab[aria-selected='true'] {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.35);
+}
+
+.dt-tab[aria-selected='true']:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-on-accent);
+}
+
+/* ------------------------------------------------------------
+ * 6. BADGES
+ * ------------------------------------------------------------ */
+
+.dt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+
+  padding: 2px var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-2);
+  color: var(--color-text-muted);
+}
+
+.dt-badge--accent {
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.dt-badge--success {
+  background-color: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.dt-badge--warning {
+  background-color: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.dt-badge--danger {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.dt-badge--info {
+  background-color: var(--color-info-soft);
+  color: var(--color-info);
+}
+
+/* ------------------------------------------------------------
+ * 7. TOASTS
+ * ------------------------------------------------------------ */
+
+.dt-toasts {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-5);
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+
+  width: max-content;
+  max-width: calc(100% - var(--space-8));
+
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+
+.dt-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-2) var(--space-4);
+
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-normal);
+  color: #ffffff;
+
+  border-radius: var(--radius-full);
+  border: none;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.14);
+
+  pointer-events: auto;
+  cursor: pointer;
+
+  animation: dt-toast-in var(--duration-base) var(--ease-out);
+
+  max-width: 360px;
+}
+
+.dt-toast--out {
+  animation: dt-toast-out var(--duration-fast) var(--ease-in) forwards;
+}
+
+.dt-toast--info {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.dt-toast--success {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+.dt-toast--error {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+
+.dt-toast__dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+@keyframes dt-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dt-toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+
+/* ------------------------------------------------------------
+ * 8. TOOLTIP
+ * ------------------------------------------------------------ */
+
+.dt-tip {
+  position: relative;
+}
+
+.dt-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+
+  padding: 4px var(--space-2);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+
+  background-color: var(--color-elevated);
+  color: var(--color-text);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+  z-index: var(--z-dropdown);
+}
+
+.dt-tip:hover::after {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------
+ * 9. EMPTY STATE
+ * ------------------------------------------------------------ */
+
+.dt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  color: var(--color-text-subtle);
+}
+
+.dt-empty__icon {
+  color: var(--color-text-subtle);
+  opacity: 0.7;
+}
+
+.dt-empty__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.dt-empty__text {
+  font-size: var(--fs-sm);
+}
+
+/* ------------------------------------------------------------
+ * 10. DIVIDER
+ * ------------------------------------------------------------ */
+
+.dt-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  border: none;
+  margin: var(--space-3) 0;
+}
+
+/* ------------------------------------------------------------
+ * 11. ICON
+ * ------------------------------------------------------------ */
+
+.dt-icon {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+  flex: 0 0 auto;
+  display: inline-block;
+  color: currentColor;
+}
+
+.dt-icon--sm {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.dt-icon--lg {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+}
+
+.dt-icon--xl {
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
+}
+
+/* ------------------------------------------------------------
+ * 12. ALERTS — inline feedback (error, success, info, warning)
+ * ------------------------------------------------------------ */
+
+.dt-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid transparent;
+
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+}
+
+.dt-alert--error {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+  border-color: rgba(180, 35, 24, 0.18);
+}
+
+.dt-alert--success {
+  background-color: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.dt-alert--warning {
+  background-color: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.dt-alert--info {
+  background-color: var(--color-info-soft);
+  color: var(--color-info);
+}
+
+/* ------------------------------------------------------------
+ * 13. KEYBOARD HINTS
+ * ------------------------------------------------------------ */
+
+.dt-kbd {
+  display: inline-block;
+  padding: 1px 5px;
+
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+
+  background-color: var(--color-surface-2);
+  border: var(--border-thin) solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.dt-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+}
+
+
+/* ------------------------------------------------------------
+ * 14. PANEL-NESTED FIELDS — small variant when inside a panel head
+ * ------------------------------------------------------------ */
+
+.dt-panel .dt-input,
+.dt-panel .dt-select {
+  height: 30px;
+  font-size: var(--fs-xs);
+}
+
+.dt-panel .dt-textarea {
+  border: none;
+  border-radius: 0;
+}
+
+.dt-panel .dt-textarea:focus {
+  box-shadow: none;
+}

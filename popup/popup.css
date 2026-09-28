@@ -1,0 +1,32 @@
+/* ============================================================
+ * File: popup/popup.css
+ * Module: App-window overrides
+ * Purpose: Rules specific to running as a detached Chrome window.
+ * Depends on: all css/* files
+ * ============================================================ */
+
+/* Prevent flash of unstyled theme before JS applies data-theme */
+html[data-theme='light'] { background-color: #ffffff; }
+html[data-theme='dark']  { background-color: #0e1014; }
+
+/* Lock the app to the window viewport */
+body {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Root fills the window */
+#dt-root {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Toasts anchor to the window bottom */
+#dt-toasts {
+  position: fixed;
+}

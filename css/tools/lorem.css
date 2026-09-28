@@ -1,0 +1,9 @@
+/* ============================================================
+ * File: css/tools/lorem.css
+ * Module: Tool CSS — Lorem Ipsum
+ * ============================================================ */
+
+/* Custom word source panel — hidden by default, toggled in JS */
+.dt-lorem-custom-panel .dt-textarea {
+  min-height: 90px;
+}

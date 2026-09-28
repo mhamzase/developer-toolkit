@@ -1,0 +1,111 @@
+/* ============================================================
+ * File: css/tools/color.css
+ * Module: Tool CSS — Color Tools
+ * Purpose: Styles for the color preview, picker, and swatches.
+ * ============================================================ */
+
+.dt-color-preview {
+  height: 60px;
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-color-picker {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 44px;
+  height: 34px;
+  padding: 0;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: transparent;
+}
+.dt-color-picker::-webkit-color-swatch-wrapper { padding: 2px; }
+.dt-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: calc(var(--radius-md) - 3px);
+}
+
+.dt-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: var(--space-2);
+}
+
+.dt-swatch {
+  position: relative;
+  height: 34px;
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard);
+}
+.dt-swatch:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+}
+
+.dt-swatch__remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: var(--border-thin) solid var(--color-border);
+
+  background-color: var(--color-elevated);
+  color: var(--color-text);
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.dt-swatch:hover .dt-swatch__remove {
+  display: inline-flex;
+}
+
+
+/* ------------------------------------------------------------
+ * EYEDROPPER BUTTON
+ * ------------------------------------------------------------ */
+
+.dt-color-eyedropper {
+  width: 44px;
+  height: 34px;
+  padding: 0;
+
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+
+  color: var(--color-accent);
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              border-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard),
+              transform var(--duration-fast) var(--ease-standard);
+}
+
+.dt-color-eyedropper:hover:not(:disabled) {
+  background-color: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.dt-color-eyedropper:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.dt-color-eyedropper:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

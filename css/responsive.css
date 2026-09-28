@@ -1,0 +1,65 @@
+/* ============================================================
+ * File: css/responsive.css
+ * Module: Responsive Rules
+ * Purpose: Breakpoints for the app window (detached window mode).
+ * Depends on: variables.css, layout.css, components.css
+ * ============================================================ */
+
+/* ------------------------------------------------------------
+ * Base app container — fills the Chrome window
+ * ------------------------------------------------------------ */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-width: var(--app-min-width);
+  min-height: var(--app-min-height);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------
+ * Small widths (< 360px) — tighten spacing, shrink header
+ * ------------------------------------------------------------ */
+
+@media (max-width: 360px) {
+  :root {
+    --space-3: 10px;
+    --space-4: 12px;
+    --header-height: 48px;
+  }
+
+  .dt-header__title {
+    font-size: var(--fs-sm);
+  }
+}
+
+/* ------------------------------------------------------------
+ * Compact height (< 500px) — tighten vertical padding, keep full height
+ * ------------------------------------------------------------ */
+
+@media (max-height: 500px) {
+  .dt-main {
+    padding: var(--space-2);
+  }
+
+  .dt-footer {
+    height: 26px;
+  }
+}
+
+/* ------------------------------------------------------------
+ * Wide + tall — allow side-by-side split for tool views
+ * ------------------------------------------------------------ */
+
+@media (min-width: 560px) and (min-height: 560px) {
+  .dt-split {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .dt-split > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
