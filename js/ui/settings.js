@@ -62,14 +62,6 @@
     const settings = DT.core.session.getSettings();
 
     /* Toggle rows */
-    const rememberRow = toggleRow(
-      "dt-set-remember",
-      "Remember last tool",
-      "Reopen where you left off",
-      settings.rememberLastTool,
-      "Recommended",
-    );
-
     const persistRow = toggleRow(
       "dt-set-persist",
       "Save tool inputs",
@@ -77,12 +69,7 @@
       settings.persistInput,
     );
 
-    /* Wire toggles */
-    rememberRow.input.addEventListener("change", function () {
-      DT.core.session.set("rememberLastTool", rememberRow.input.checked);
-      DT.ui.toast.success(rememberRow.input.checked ? "Enabled" : "Disabled");
-    });
-
+    /* Wire toggle */
     persistRow.input.addEventListener("change", function () {
       DT.core.session.set("persistInput", persistRow.input.checked);
       DT.ui.toast.success(persistRow.input.checked ? "Enabled" : "Disabled");
@@ -120,13 +107,15 @@
       dom.el("div", { class: "dt-settings__head" }, [
         dom.el("div", { class: "dt-settings__title", text: "Settings" }),
       ]),
-      dom.el("div", { class: "dt-settings__body" }, [
-        rememberRow.el,
+        dom.el('div', { class: 'dt-settings__body' }, [
         persistRow.el,
-        dom.el("div", { class: "dt-settings__divider" }),
-        clearBtn,
-      ]),
+        dom.el('div', { class: 'dt-settings__divider' }),
+        clearBtn
+      ])
     ]);
+
+    el.style.display = "none";
+    el.style.pointerEvents = "none";
 
     return el;
   }
@@ -137,7 +126,10 @@
     if (!isOpen || !menu) return;
     isOpen = false;
     menu.classList.remove("dt-settings--open");
-    menu.hidden = true;
+    menu.style.pointerEvents = "none";
+    setTimeout(function () {
+      if (menu) menu.style.display = "none";
+    }, 180);
 
     if (outsideHandler) {
       document.removeEventListener("mousedown", outsideHandler, true);
@@ -159,7 +151,8 @@
     menu.style.top = rect.bottom + 6 + "px";
     menu.style.right = Math.max(8, window.innerWidth - rect.right) + "px";
 
-    menu.hidden = false;
+    menu.style.display = "block";
+    menu.style.pointerEvents = "auto";
     requestAnimationFrame(function () {
       menu.classList.add("dt-settings--open");
     });

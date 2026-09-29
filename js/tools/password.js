@@ -400,6 +400,15 @@
         text: "Clear",
       });
 
+      const btnDownload = DT.ui.dlButton({
+        getText: () =>
+          refs && refs.currentPasswords ? refs.currentPasswords.join("\n") : "",
+        filename: () => DT.utils.download.withTimestamp("passwords", "txt"),
+        mime: "text/plain;charset=utf-8",
+        label: "Download",
+        emptyMsg: "Generate passwords first",
+      });
+
       const toolbar = dom.el("div", { class: "dt-toolbar" }, [
         dom.el("div", { class: "dt-toolbar__group" }, [
           lengthLabel,
@@ -408,6 +417,7 @@
           count,
           btnGen,
           btnCopyAll,
+          btnDownload,
         ]),
         btnClear,
       ]);

@@ -363,10 +363,32 @@
         text: "Clear",
       });
 
+      const btnDownload = DT.ui.dlButton({
+        getText: function () {
+          if (!refs || !refs.left) return "";
+          const aLines = splitLines(refs.left.value);
+          const bLines = splitLines(refs.right.value);
+          if (!aLines.length && !bLines.length) return "";
+          const diff = diffLines(aLines, bLines);
+          const lines = ["--- Original", "+++ Modified"];
+          diff.forEach(function (d) {
+            if (d.type === "same") lines.push(" " + d.a);
+            else if (d.type === "remove") lines.push("-" + d.a);
+            else if (d.type === "add") lines.push("+" + d.b);
+          });
+          return lines.join("\n");
+        },
+        filename: () => DT.utils.download.withTimestamp("diff", "patch"),
+        mime: "text/plain;charset=utf-8",
+        label: "Download",
+        emptyMsg: "Nothing to diff",
+      });
+
       const toolbar = dom.el("div", { class: "dt-toolbar" }, [
         dom.el("div", { class: "dt-toolbar__group" }, [
           btnSwap,
           btnCopy,
+          btnDownload,
           btnSample,
         ]),
         btnClear,

@@ -419,8 +419,35 @@
         text: "Clear",
       });
 
+      const btnDownload = DT.ui.dlButton({
+        getText: function () {
+          if (!refs || !refs.pattern) return "";
+          const result = runMatch();
+          if (!result.ok || !result.matches.length) return "";
+          return JSON.stringify(
+            {
+              pattern: refs.pattern.value,
+              flags: flagsString(),
+              count: result.matches.length,
+              matches: result.matches,
+            },
+            null,
+            2,
+          );
+        },
+        filename: () =>
+          DT.utils.download.withTimestamp("regex-matches", "json"),
+        mime: "application/json;charset=utf-8",
+        label: "Download",
+        emptyMsg: "No matches to download",
+      });
+
       const toolbar = dom.el("div", { class: "dt-toolbar" }, [
-        dom.el("div", { class: "dt-toolbar__group" }, [btnCopy, btnSample]),
+        dom.el("div", { class: "dt-toolbar__group" }, [
+          btnCopy,
+          btnDownload,
+          btnSample,
+        ]),
         btnClear,
       ]);
 

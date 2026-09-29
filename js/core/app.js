@@ -40,6 +40,13 @@
 
   DT.core.app = {
     init: function () {
+      /* Safety: remove any orphaned overlays from a previous failed boot */
+      document
+        .querySelectorAll(".dt-help, .dt-palette, .dt-confirm, .dt-settings")
+        .forEach(function (el) {
+          el.remove();
+        });
+
       const root = document.getElementById("dt-root");
       if (!root) {
         console.error("[DT] #dt-root not found");
@@ -81,22 +88,14 @@
         DT.ui.palette.init();
         attachPaletteHint();
 
-        // Restore last tool if enabled
-        var initialView = "list";
-        var initialToolId = null;
-        if (DT.core.session.get("rememberLastTool")) {
-          var lt = DT.core.session.getLastTool();
-          if (lt && DT.core.registry.get(lt)) {
-            initialView = "tool";
-            initialToolId = lt;
-          }
-        }
+        // Keyboard shortcuts help overlay ("?")
+        DT.ui.help.init();
 
-        if (initialView === "tool") {
-          DT.core.router.go("tool", { toolId: initialToolId });
-        } else {
-          DT.core.router.go("list");
-        }
+        // First-run welcome (shows only once)
+        DT.ui.welcome.init();
+
+        // ALWAYS open on the home grid with "All" category selected
+        DT.core.router.go("list", { filter: "All", query: "" });
       });
     },
   };

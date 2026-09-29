@@ -82,11 +82,6 @@
         return;
       }
 
-      // Remember this tool as the last one used
-      if (DT.core.session && DT.core.session.setLastTool) {
-        DT.core.session.setLastTool(tool.id);
-      }
-
       // If switching to a different tool, unmount the previous one.
       if (activeTool && activeTool.id !== tool.id) safeUnmount();
       activeTool = tool;

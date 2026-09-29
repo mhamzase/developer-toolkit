@@ -354,11 +354,33 @@
         text: "Clear",
       });
 
+      const btnDownload = DT.ui.dlButton({
+        getText: function () {
+          if (!refs || !refs.resultSlot) return "";
+          const decoded = decode(refs.input.value);
+          if (!decoded.ok) return "";
+          return JSON.stringify(
+            {
+              header: decoded.header,
+              payload: decoded.payload,
+              signature: decoded.signature,
+            },
+            null,
+            2,
+          );
+        },
+        filename: () => DT.utils.download.withTimestamp("jwt", "json"),
+        mime: "application/json;charset=utf-8",
+        label: "Download",
+        emptyMsg: "Decode a token first",
+      });
+
       const toolbar = dom.el("div", { class: "dt-toolbar" }, [
         dom.el("div", { class: "dt-toolbar__group" }, [
           btnDecode,
           btnCopy,
           btnSample,
+          btnDownload,
         ]),
         btnClear,
       ]);

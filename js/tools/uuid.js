@@ -203,12 +203,22 @@
         text: "Clear",
       });
 
+      const btnDownload = DT.ui.dlButton({
+        getText: () =>
+          refs && refs.currentIds ? refs.currentIds.join("\n") : "",
+        filename: () => DT.utils.download.withTimestamp("uuids", "txt"),
+        mime: "text/plain;charset=utf-8",
+        label: "Download",
+        emptyMsg: "Generate UUIDs first",
+      });
+
       const toolbar = dom.el("div", { class: "dt-toolbar" }, [
         dom.el("div", { class: "dt-toolbar__group" }, [
           countLabel,
           count,
           btnGen,
           btnCopyAll,
+          btnDownload,
         ]),
         btnClear,
       ]);

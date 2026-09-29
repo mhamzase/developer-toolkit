@@ -8,20 +8,19 @@
  */
 
 (function () {
-  'use strict';
+  "use strict";
 
   const DT = (window.DT = window.DT || {});
   DT.core = DT.core || {};
 
-  const LAST_TOOL_KEY = 'dt:lastTool';
-  const SETTINGS_KEY  = 'dt:settings';
+  const LAST_TOOL_KEY = "dt:lastTool";
+  const SETTINGS_KEY = "dt:settings";
 
   /* Bump this number whenever DEFAULTS changes so users get new defaults. */
-  const SETTINGS_VERSION = 2;
+  const SETTINGS_VERSION = 3;
 
   const DEFAULTS = {
-    rememberLastTool: true,
-    persistInput: false
+    persistInput: false,
   };
 
   let settings = Object.assign({}, DEFAULTS, { _v: SETTINGS_VERSION });
@@ -30,7 +29,11 @@
 
   function emit() {
     listeners.forEach(function (fn) {
-      try { fn(); } catch (e) { console.error('[DT session]', e); }
+      try {
+        fn();
+      } catch (e) {
+        console.error("[DT session]", e);
+      }
     });
   }
 
@@ -40,9 +43,11 @@
     load: function () {
       return Promise.all([
         DT.core.storage.get(LAST_TOOL_KEY, null),
-        DT.core.storage.get(SETTINGS_KEY, null)
+        DT.core.storage.get(SETTINGS_KEY, null),
       ]).then(function (r) {
-        lastTool = r[0] || null;
+        lastTool = null;
+        /* Clean up any leftover last-tool value from previous versions */
+        if (r[0]) DT.core.storage.remove(LAST_TOOL_KEY);
 
         const saved = r[1];
 
@@ -76,41 +81,38 @@
       emit();
     },
 
-    /* ---------------- Last tool ---------------- */
-
-    getLastTool: function () { return lastTool; },
-
-    setLastTool: function (id) {
-      lastTool = id;
-      DT.core.storage.set(LAST_TOOL_KEY, id);
-    },
+    /* ---------------- Last tool (kept for cleanup only) ---------------- */
 
     clearLastTool: function () {
       lastTool = null;
       DT.core.storage.remove(LAST_TOOL_KEY);
     },
-
     /* ---------------- Wipe ---------------- */
 
     /** Clear all app data AND reset settings to defaults. */
     clearAllSaved: function () {
-      return DT.utils.persist.clearAll().then(function () {
-        return Promise.all([
-          DT.core.storage.remove(LAST_TOOL_KEY),
-          DT.core.storage.remove('dt:recents'),
-          DT.core.storage.remove('dt:favorites'),
-          DT.core.storage.remove('dt:colors'),
-          DT.core.storage.remove(SETTINGS_KEY)
-        ]);
-      }).then(function () {
-        settings = Object.assign({}, DEFAULTS, { _v: SETTINGS_VERSION });
-        lastTool = null;
-        emit();
-      });
+      return DT.utils.persist
+        .clearAll()
+        .then(function () {
+          return Promise.all([
+            DT.core.storage.remove(LAST_TOOL_KEY),
+            DT.core.storage.remove("dt:recents"),
+            DT.core.storage.remove("dt:favorites"),
+            DT.core.storage.remove("dt:colors"),
+            DT.core.storage.remove(SETTINGS_KEY),
+          ]);
+        })
+        .then(function () {
+          settings = Object.assign({}, DEFAULTS, { _v: SETTINGS_VERSION });
+          lastTool = null;
+          emit();
+        });
     },
 
     /* ---------------- Subscribe ---------------- */
 
-    on: function (fn) { if (typeof fn === 'function') listeners.push(fn); }
+    on: function (fn) {
+      if (typeof fn === "function") listeners.push(fn);
+    },
   };
 })();

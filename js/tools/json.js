@@ -282,6 +282,12 @@
         class: "dt-btn dt-btn--secondary dt-btn--sm",
         text: "Copy",
       });
+      const btnDownload = DT.ui.dlButton({
+        getText: () => (refs && refs.output ? refs.output.value : ""),
+        filename: () => DT.utils.download.withTimestamp("json", "json"),
+        mime: "application/json;charset=utf-8",
+        label: "Download",
+      });
 
       const outputPanel = dom.el(
         "div",
@@ -289,7 +295,10 @@
         [
           dom.el("div", { class: "dt-panel__head" }, [
             dom.el("div", { class: "dt-panel__title", text: "Output" }),
-            dom.el("div", { class: "dt-panel__actions" }, [btnCopy]),
+            dom.el("div", { class: "dt-panel__actions" }, [
+              btnCopy,
+              btnDownload,
+            ]),
           ]),
           dom.el("div", { class: "dt-panel__body" }, [output]),
           dom.el("div", { class: "dt-panel__foot" }, [outputStats]),
