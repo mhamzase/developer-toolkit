@@ -45,9 +45,10 @@
    */
   function runMatch() {
     const pattern = refs.pattern.value;
-    if (!pattern) return { ok: true, matches: [] };
+    if (!pattern) return { ok: true, matches: [], duration: 0 };
 
     const flags = flagsString();
+    esult.duration.toFixe;
     let re;
     const start = performance.now();
     try {
@@ -116,7 +117,9 @@
     }
 
     const n = result.matches.length;
-    const dur = result.duration.toFixed(2);
+    const dur = (
+      typeof result.duration === "number" ? result.duration : 0
+    ).toFixed(2);
 
     el.appendChild(
       DT.ui.dom.el("span", { class: "dt-stat" }, [
