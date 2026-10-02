@@ -38,19 +38,14 @@
 
   /* ---------------- Matching ---------------- */
 
-  /**
-   * Run the regex against the test string.
-   * @returns {{ok:true, matches:Array, duration:number}
-   *          | {ok:false, error:string}}
-   */
   function runMatch() {
     const pattern = refs.pattern.value;
     if (!pattern) return { ok: true, matches: [], duration: 0 };
 
     const flags = flagsString();
-    esult.duration.toFixe;
-    let re;
     const start = performance.now();
+
+    let re;
     try {
       re = new RegExp(pattern, flags);
     } catch (e) {
@@ -65,39 +60,39 @@
       let m;
       let guard = 0;
       while ((m = re.exec(text)) !== null && matches.length < MAX) {
-        matches.push(snapshot(m, text));
-        if (m[0] === "") re.lastIndex++; // avoid infinite loop on zero-width
+        matches.push(snapshot(m));
+        if (m[0] === "") re.lastIndex++;
         guard++;
         if (guard > MAX * 2) break;
       }
     } else {
       const m = re.exec(text);
-      if (m) matches.push(snapshot(m, text));
+      if (m) matches.push(snapshot(m));
     }
 
     const duration = performance.now() - start;
     return { ok: true, matches, duration };
   }
 
-  function snapshot(m, text) {
+  function snapshot(m) {
     const groups = [];
     for (let i = 1; i < m.length; i++) {
       groups.push({ index: i, value: m[i] });
     }
-    // Named groups
+
     const named = [];
     if (m.groups) {
-      Object.keys(m.groups).forEach((k) =>
-        named.push({ name: k, value: m.groups[k] }),
-      );
+      Object.keys(m.groups).forEach(function (k) {
+        named.push({ name: k, value: m.groups[k] });
+      });
     }
 
     return {
       value: m[0],
       index: m.index,
       length: m[0].length,
-      groups,
-      named,
+      groups: groups,
+      named: named,
     };
   }
 
@@ -110,7 +105,7 @@
     if (!result.ok) {
       el.appendChild(
         DT.ui.dom.el("span", { class: "dt-stat dt-stat--danger" }, [
-          DT.ui.dom.txt("Error "),
+          DT.ui.dom.txt("Error"),
         ]),
       );
       return;
@@ -167,7 +162,7 @@
     }
 
     const list = dom.el("div", { class: "dt-regex-matches" });
-    result.matches.forEach((m, i) => {
+    result.matches.forEach(function (m, i) {
       const head = dom.el("div", { class: "dt-regex-match__head" }, [
         dom.el("span", {
           class: "dt-badge dt-badge--accent",
@@ -183,16 +178,14 @@
         class: "dt-regex-match__value",
         text: m.value || "(empty)",
       });
-
       const body = dom.el("div", { class: "dt-regex-match__body" }, [
         head,
         value,
       ]);
 
-      // Groups
       if (m.groups.length) {
         const groupWrap = dom.el("div", { class: "dt-regex-groups" });
-        m.groups.forEach((g) => {
+        m.groups.forEach(function (g) {
           groupWrap.appendChild(
             dom.el("div", { class: "dt-regex-group" }, [
               dom.el("span", {
@@ -209,10 +202,9 @@
         body.appendChild(groupWrap);
       }
 
-      // Named groups
       if (m.named.length) {
         const namedWrap = dom.el("div", { class: "dt-regex-groups" });
-        m.named.forEach((g) => {
+        m.named.forEach(function (g) {
           namedWrap.appendChild(
             dom.el("div", { class: "dt-regex-group" }, [
               dom.el("span", {
@@ -229,8 +221,7 @@
         body.appendChild(namedWrap);
       }
 
-      const card = dom.el("div", { class: "dt-regex-match" }, [body]);
-      list.appendChild(card);
+      list.appendChild(dom.el("div", { class: "dt-regex-match" }, [body]));
     });
 
     slot.appendChild(list);
@@ -259,10 +250,9 @@
     }
 
     const pre = dom.el("pre", { class: "dt-regex-highlight" });
-
-    // Build highlight using DOM nodes (safe — no innerHTML)
     let cursor = 0;
-    result.matches.forEach((m, i) => {
+
+    result.matches.forEach(function (m, i) {
       if (m.index > cursor) {
         pre.appendChild(document.createTextNode(text.slice(cursor, m.index)));
       }
@@ -274,6 +264,7 @@
       pre.appendChild(span);
       cursor = m.index + m.length;
     });
+
     if (cursor < text.length) {
       pre.appendChild(document.createTextNode(text.slice(cursor)));
     }
@@ -315,28 +306,31 @@
       DT.ui.toast.info("No matches to copy");
       return;
     }
+
     const out = result.matches
-      .map(
-        (m, i) =>
-          "#" +
-          (i + 1) +
-          "  index " +
-          m.index +
-          '  "' +
-          m.value +
-          '"' +
-          (m.groups.length
-            ? "\n    groups: " +
-              m.groups
-                .map((g) => "$" + g.index + '="' + (g.value || "") + '"')
-                .join(", ")
-            : ""),
-      )
+      .map(function (m, i) {
+        let line = "#" + (i + 1) + "  index " + m.index + '  "' + m.value + '"';
+        if (m.groups.length) {
+          line +=
+            "\n    groups: " +
+            m.groups
+              .map(function (g) {
+                return "$" + g.index + '="' + (g.value || "") + '"';
+              })
+              .join(", ");
+        }
+        return line;
+      })
       .join("\n");
+
     DT.utils.clipboard
       .copy(out)
-      .then(() => DT.ui.toast.success("Matches copied"))
-      .catch(() => DT.ui.toast.error("Copy failed"));
+      .then(function () {
+        DT.ui.toast.success("Matches copied");
+      })
+      .catch(function () {
+        DT.ui.toast.error("Copy failed");
+      });
   }
 
   function loadSample() {
@@ -361,7 +355,7 @@
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
 
-      /* --- Pattern row --- */
+      /* Pattern row */
       const pattern = dom.el("input", {
         type: "text",
         class: "dt-input dt-input--mono",
@@ -371,10 +365,10 @@
         placeholder: "e.g. (\\w+)@(\\w+)\\.com",
       });
 
-      /* --- Flags --- */
+      /* Flags */
       const flagsWrap = dom.el("div", { class: "dt-regex-flags" });
       const flags = {};
-      FLAGS.forEach((f) => {
+      FLAGS.forEach(function (f) {
         const cb = dom.el("input", {
           type: "checkbox",
           id: "dt-regex-flag-" + f.id,
@@ -405,7 +399,7 @@
         ),
       ]);
 
-      /* --- Toolbar --- */
+      /* Toolbar */
       const btnCopy = dom.el("button", {
         type: "button",
         class: "dt-btn dt-btn--secondary dt-btn--sm",
@@ -438,8 +432,9 @@
             2,
           );
         },
-        filename: () =>
-          DT.utils.download.withTimestamp("regex-matches", "json"),
+        filename: function () {
+          return DT.utils.download.withTimestamp("regex-matches", "json");
+        },
         mime: "application/json;charset=utf-8",
         label: "Download",
         emptyMsg: "No matches to download",
@@ -454,7 +449,7 @@
         btnClear,
       ]);
 
-      /* --- Test string --- */
+      /* Test string */
       const text = dom.el("textarea", {
         class: "dt-textarea",
         id: "dt-regex-text",
@@ -471,7 +466,7 @@
         dom.el("div", { class: "dt-panel__body" }, [text]),
       ]);
 
-      /* --- Highlight preview --- */
+      /* Highlight */
       const highlightSlot = dom.el("div", {
         id: "dt-regex-highlight",
         style: { padding: "12px 16px" },
@@ -483,7 +478,7 @@
         highlightSlot,
       ]);
 
-      /* --- Matches --- */
+      /* Matches */
       const matchesSlot = dom.el("div", {
         id: "dt-regex-matches",
         style: { padding: "8px 12px" },
@@ -504,14 +499,22 @@
       workspace.appendChild(matchesPanel);
       container.appendChild(workspace);
 
-      refs = { pattern, text, flags, highlightSlot, matchesSlot, matchStats };
+      refs = {
+        pattern: pattern,
+        text: text,
+        flags: flags,
+        highlightSlot: highlightSlot,
+        matchesSlot: matchesSlot,
+        matchStats: matchStats,
+      };
 
-      /* --- Events --- */
+      /* Events */
       const updateDebounced = DT.utils.debounce(update, 120);
-
       on(pattern, "input", updateDebounced);
       on(text, "input", updateDebounced);
-      FLAGS.forEach((f) => on(flags[f.id], "change", update));
+      FLAGS.forEach(function (f) {
+        on(flags[f.id], "change", update);
+      });
 
       on(btnCopy, "click", copyMatches);
       on(btnSample, "click", loadSample);
