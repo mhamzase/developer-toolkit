@@ -251,6 +251,7 @@
     icon: "lorem",
     description: "Generate placeholder text in Latin or custom words.",
 
+    keywords: "ipsum placeholder dummy filler text generator paragraphs",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

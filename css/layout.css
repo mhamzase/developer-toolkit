@@ -1,57 +1,92 @@
 /* ============================================================
  * File: css/layout.css
- * Module: Layout Shell
- * Purpose: Root, header, nav tabs, tool grid, tool view,
- *          output/input regions, split areas.
+ * Module: Layout Shell (v2: Clean Pro)
+ * Purpose: Root row shell (sidebar + content), sidebar head and
+ *          navigation, home grid/list, tool view, split areas,
+ *          footer.
  * Depends on: variables.css, themes.css, components.css
  * ============================================================ */
 
 /* ------------------------------------------------------------
- * 1. ROOT
+ * 0. CATEGORY COLOR HOOKS
+ *    Any element with data-cat="<slug>" gets --cat-bg/--cat-fg.
+ * ------------------------------------------------------------ */
+
+[data-cat="data"]       { --cat-bg: var(--cat-data-bg);       --cat-fg: var(--cat-data-fg); }
+[data-cat="encoding"]   { --cat-bg: var(--cat-encoding-bg);   --cat-fg: var(--cat-encoding-fg); }
+[data-cat="security"]   { --cat-bg: var(--cat-security-bg);   --cat-fg: var(--cat-security-fg); }
+[data-cat="generators"] { --cat-bg: var(--cat-generators-bg); --cat-fg: var(--cat-generators-fg); }
+[data-cat="conversion"] { --cat-bg: var(--cat-conversion-bg); --cat-fg: var(--cat-conversion-fg); }
+[data-cat="text"]       { --cat-bg: var(--cat-text-bg);       --cat-fg: var(--cat-text-fg); }
+[data-cat="color"]      { --cat-bg: var(--cat-color-bg);      --cat-fg: var(--cat-color-fg); }
+[data-cat="reference"]  { --cat-bg: var(--cat-reference-bg);  --cat-fg: var(--cat-reference-fg); }
+[data-cat="regex"]      { --cat-bg: var(--cat-regex-bg);      --cat-fg: var(--cat-regex-fg); }
+
+/* ------------------------------------------------------------
+ * 1. ROOT SHELL: sidebar (fixed width) + content (fluid)
  * ------------------------------------------------------------ */
 
 .dt-root {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   height: 100%;
   min-height: 100vh;
   background-color: var(--color-bg);
 }
 
+.dt-sidebar {
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-sidebar-bg);
+  border-right: var(--border-thin) solid var(--color-border);
+}
+
+.dt-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
 /* ------------------------------------------------------------
- * 2. HEADER
+ * 2. SIDEBAR HEAD (brand row + search row)
  * ------------------------------------------------------------ */
 
 .dt-header {
   flex: 0 0 auto;
 
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 
-  height: var(--header-height);
-  padding: 0 var(--space-3);
-
-  background-color: var(--color-bg);
-  border-bottom: var(--border-thin) solid var(--color-border);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  background-color: transparent;
 }
 
 .dt-header__brand {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .dt-header__logo {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   flex: 0 0 auto;
   display: block;
   object-fit: contain;
-  border-radius: 6px;
+  border-radius: 7px;
   user-select: none;
   -webkit-user-drag: none;
 }
@@ -67,24 +102,26 @@
 }
 
 .dt-header__search {
-  flex: 1 1 auto;
+  order: 3;
+  flex: 1 1 100%;
   min-width: 0;
   position: relative;
 }
 
 .dt-header__search .dt-input {
-  height: 30px;
-  font-size: var(--fs-xs);
-  padding-left: 30px;
+  height: 34px;
+  font-size: var(--fs-sm);
+  padding-left: 32px;
+  background-color: var(--color-input-bg);
 }
 
 .dt-header__search-icon {
   position: absolute;
-  left: 9px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   color: var(--color-text-subtle);
   pointer-events: none;
 }
@@ -96,56 +133,158 @@
   flex: 0 0 auto;
 }
 
+/* Ctrl+K hint chip inside the search field (added by app.js) */
+.dt-palette-hint {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-subtle);
+  background-color: var(--color-surface-2);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------
- * 3. NAV (category chips — wrapping, no horizontal scroll needed)
+ * 3. SIDEBAR NAV (tool navigation)
  * ------------------------------------------------------------ */
 
 .dt-nav {
-  flex: 0 0 auto;
-
-  padding: var(--space-2) var(--space-3);
-
-  background-color: var(--color-bg);
-  border-bottom: var(--border-thin) solid var(--color-border);
-
-  /* Fallback for extreme narrow widths: still scrollable */
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
-}
-
-.dt-nav::-webkit-scrollbar {
-  display: none;
-}
-
-/* Subtle right-edge fade — only when content actually overflows */
-.dt-nav.dt-nav--overflow {
-  -webkit-mask-image: linear-gradient(to right,
-      #000 0,
-      #000 calc(100% - 20px),
-      transparent 100%);
-  mask-image: linear-gradient(to right,
-      #000 0,
-      #000 calc(100% - 20px),
-      transparent 100%);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-2) var(--space-2) var(--space-3);
 }
 
 .dt-nav__track {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  min-height: 0;
+  flex-direction: column;
+  gap: 2px;
 }
 
-/* Compact chips inside the nav only */
-.dt-nav .dt-tab {
-  height: 24px;
+.dt-side-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--space-4);
+}
+
+.dt-side-group__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 4px 10px;
+
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  text-align: left;
+  background: none;
+  border: none;
+}
+
+button.dt-side-group__label {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+button.dt-side-group__label:hover {
+  color: var(--color-text);
+  background-color: var(--color-sidebar-hover);
+}
+
+.dt-side-group__label--active {
+  color: var(--color-accent);
+}
+
+.dt-side-group__label-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dt-side-group__count {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-subtle);
+}
+
+.dt-side-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 34px;
   padding: 0 10px;
-  font-size: 11px;
-  gap: 4px;
+
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+  text-align: left;
+
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-side-item:hover {
+  background-color: var(--color-sidebar-hover);
+  color: var(--color-text);
+}
+
+.dt-side-item--active {
+  background-color: var(--color-sidebar-active);
+  color: var(--color-accent);
+  font-weight: var(--fw-semibold);
+}
+
+.dt-side-item--active:hover {
+  background-color: var(--color-sidebar-active);
+  color: var(--color-accent);
+}
+
+.dt-side-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  color: var(--cat-fg, var(--color-text-subtle));
+}
+
+.dt-side-item__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dt-side-item__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-side-item__count {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-subtle);
 }
 
 /* ------------------------------------------------------------
@@ -157,33 +296,114 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--space-4);
+  padding: var(--space-5);
 
   background-color: var(--color-bg);
 
-  /* Cap content width on ultrawide windows and center it */
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
 }
 
+/* Soft entrance when the view changes */
+.dt-main > * {
+  animation: dt-view-in var(--duration-base) var(--ease-out);
+}
+
+@keyframes dt-view-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ------------------------------------------------------------
- * 5. TOOL GRID (home)
+ * 5. HOME HEAD (title + count + grid/list toggle)
+ * ------------------------------------------------------------ */
+
+.dt-home-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.dt-home-head__title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-text);
+}
+
+.dt-home-head__count {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-accent);
+  padding: 2px 9px;
+  background-color: var(--color-accent-soft);
+  border-radius: var(--radius-full);
+  line-height: 1.4;
+}
+
+.dt-view-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  background-color: var(--color-surface-2);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.dt-view-toggle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.dt-view-toggle__btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.dt-view-toggle__btn:hover {
+  color: var(--color-text);
+}
+
+.dt-view-toggle__btn--on {
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ------------------------------------------------------------
+ * 6. TOOL GRID (home, card view)
  * ------------------------------------------------------------ */
 
 .dt-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: var(--space-3);
+}
+
+.dt-tool-card-wrap {
+  position: relative;
 }
 
 .dt-tool-card {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  width: 100%;
+  height: 100%;
 
-  padding: var(--space-3);
+  padding: var(--space-4);
 
+  font-family: var(--font-sans);
   background-color: var(--color-surface);
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -201,10 +421,11 @@
   border-color: var(--color-border-strong);
   background-color: var(--color-hover);
   box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
 
 .dt-tool-card:active {
-  transform: translateY(1px);
+  transform: translateY(0);
 }
 
 .dt-tool-card__icon-wrap {
@@ -212,16 +433,21 @@
   align-items: center;
   justify-content: center;
 
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-md);
 
-  background-color: var(--color-accent-soft);
-  color: var(--color-accent);
+  background-color: var(--cat-bg, var(--color-accent-soft));
+  color: var(--cat-fg, var(--color-accent));
+}
+
+.dt-tool-card__icon-wrap svg {
+  width: 19px;
+  height: 19px;
 }
 
 .dt-tool-card__title {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   font-weight: var(--fw-bold);
   color: var(--color-text);
   line-height: var(--lh-tight);
@@ -233,8 +459,129 @@
   line-height: var(--lh-snug);
 }
 
+/* Favorite star on cards and rows (positioned by the wrap) */
+.dt-tool-card__star {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--color-text-subtle);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-tool-card-wrap:hover .dt-tool-card__star,
+.dt-tool-card__star--on,
+.dt-tool-card__star:focus-visible {
+  opacity: 1;
+}
+
+.dt-tool-card__star:hover {
+  color: var(--color-warning);
+  background-color: var(--color-warning-soft);
+}
+
+.dt-tool-card__star--on {
+  color: var(--color-warning);
+}
+
 /* ------------------------------------------------------------
- * 6. TOOL VIEW
+ * 7. TOOL ROWS (home, list view)
+ * ------------------------------------------------------------ */
+
+.dt-tool-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dt-tool-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+
+  padding: var(--space-2) var(--space-3);
+
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  text-align: left;
+  cursor: pointer;
+
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-tool-row:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-hover);
+}
+
+.dt-tool-row__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+
+  background-color: var(--cat-bg, var(--color-accent-soft));
+  color: var(--cat-fg, var(--color-accent));
+}
+
+.dt-tool-row__icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.dt-tool-row__main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dt-tool-row__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  line-height: var(--lh-tight);
+}
+
+.dt-tool-row__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: var(--lh-snug);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-tool-row__cat {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  padding: 2px 9px;
+  background-color: var(--color-surface-2);
+  border-radius: var(--radius-full);
+}
+
+/* ------------------------------------------------------------
+ * 8. TOOL VIEW
  * ------------------------------------------------------------ */
 
 .dt-toolview {
@@ -246,21 +593,63 @@
 .dt-toolview__bar {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  min-height: 28px;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.dt-toolview__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+
+  background-color: var(--cat-bg, var(--color-accent-soft));
+  color: var(--cat-fg, var(--color-accent));
+}
+
+.dt-toolview__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dt-toolview__meta {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .dt-toolview__title {
-  flex: 1 1 auto;
-  min-width: 0;
-
-  font-size: var(--fs-md);
+  font-size: var(--fs-lg);
   font-weight: var(--fw-bold);
   color: var(--color-text);
+  line-height: var(--lh-tight);
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.dt-toolview__desc {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: var(--lh-snug);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-toolview__star--on {
+  color: var(--color-warning);
+}
+
+.dt-toolview__star--on svg {
+  fill: currentColor;
 }
 
 .dt-toolview__body {
@@ -270,7 +659,7 @@
 }
 
 /* ------------------------------------------------------------
- * 7. COMMON STACK/ROW HELPERS
+ * 9. COMMON STACK/ROW HELPERS
  * ------------------------------------------------------------ */
 
 .dt-stack {
@@ -308,7 +697,7 @@
 }
 
 /* ------------------------------------------------------------
- * 8. SPLIT (input/output two-pane, stacked in popup)
+ * 10. SPLIT (input/output two-pane, stacked in popup)
  * ------------------------------------------------------------ */
 
 .dt-split {
@@ -318,7 +707,7 @@
 }
 
 /* ------------------------------------------------------------
- * 9. FOOTER
+ * 11. FOOTER (bottom of the content column)
  * ------------------------------------------------------------ */
 
 .dt-footer {
@@ -340,8 +729,6 @@
   user-select: none;
 }
 
-/* -------- Sides -------- */
-
 .dt-footer__side {
   display: flex;
   align-items: center;
@@ -353,16 +740,10 @@
   gap: var(--space-2);
 }
 
-/* -------- Brand mark -------- */
-
 .dt-footer__logo-icon {
   width: 12px;
   height: 12px;
 }
-
-
-
-/* -------- Version chip -------- */
 
 .dt-footer__version {
   display: inline-flex;
@@ -386,8 +767,6 @@
   white-space: nowrap;
 }
 
-/* -------- Developer credit -------- */
-
 .dt-footer__credit {
   display: inline-flex;
   align-items: center;
@@ -409,8 +788,6 @@
   color: var(--color-danger);
   opacity: 0.85;
 }
-
-/* -------- GitHub button -------- */
 
 .dt-footer__github {
   display: inline-flex;
@@ -443,8 +820,6 @@
   letter-spacing: -0.02em;
 }
 
-/* -------- Donate button -------- */
-
 .dt-footer__donate {
   height: 26px;
   padding: 0 10px;
@@ -464,8 +839,6 @@
   height: 12px;
 }
 
-/* -------- Compact window fallback -------- */
-
 @media (max-width: 620px) {
   .dt-footer__github-text {
     display: none;
@@ -482,10 +855,8 @@
   }
 }
 
-
-
 /* ------------------------------------------------------------
- * 10. GRID SECTIONS (Favorites / Recently used / All tools)
+ * 12. GRID SECTIONS (Favorites / Recently used / All tools)
  * ------------------------------------------------------------ */
 
 .dt-grid-section {
@@ -499,7 +870,6 @@
   margin-bottom: 0;
 }
 
-/* Section header row */
 .dt-grid-section__head {
   display: flex;
   align-items: center;
@@ -509,7 +879,6 @@
   border-bottom: var(--border-thin) solid var(--color-border);
 }
 
-/* Left accent bar */
 .dt-grid-section__head::before {
   content: '';
   display: inline-block;
@@ -520,7 +889,6 @@
   flex: 0 0 auto;
 }
 
-/* Prominent label */
 .dt-grid-section__title {
   font-size: var(--fs-md);
   font-weight: var(--fw-bold);
@@ -530,7 +898,6 @@
   line-height: 1.2;
 }
 
-/* Count pill on the right */
 .dt-grid-section__count {
   margin-left: auto;
 
@@ -546,9 +913,8 @@
   text-align: center;
 }
 
-
 /* ------------------------------------------------------------
- * 11. RECENTLY USED — CHIP ROW
+ * 13. RECENTLY USED: CHIP ROW
  * ------------------------------------------------------------ */
 
 .dt-chip-row {

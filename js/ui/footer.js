@@ -16,7 +16,11 @@
   /* --------------------------------------------------------------
    * Configuration
    * -------------------------------------------------------------- */
-  const VERSION       = '1.0.0';
+  /* Version lives ONLY in manifest.json; read it at runtime so the
+     footer can never drift out of sync with the packaged version. */
+  const VERSION       = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getManifest)
+    ? chrome.runtime.getManifest().version
+    : 'dev';
   const DEVELOPER     = 'Hamza Shabbir';
   const GITHUB_URL    = 'https://github.com/mhamzase';
   const GITHUB_HANDLE = '@mhamzase';

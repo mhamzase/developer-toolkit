@@ -118,6 +118,26 @@
       '<path d="M12 3a13 13 0 0 1 0 18"/>' +
       '<path d="M12 3a13 13 0 0 0 0 18"/>',
 
+    /* Grid: four rounded squares (all tools / grid view) */
+    grid:
+      '<rect x="3" y="3" width="7" height="7" rx="1.5"/>' +
+      '<rect x="14" y="3" width="7" height="7" rx="1.5"/>' +
+      '<rect x="3" y="14" width="7" height="7" rx="1.5"/>' +
+      '<rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+
+    /* List: lines with dots (list view) */
+    list:
+      '<line x1="9" y1="6" x2="21" y2="6"/>' +
+      '<line x1="9" y1="12" x2="21" y2="12"/>' +
+      '<line x1="9" y1="18" x2="21" y2="18"/>' +
+      '<circle cx="4.5" cy="6" r=".6" fill="currentColor"/>' +
+      '<circle cx="4.5" cy="12" r=".6" fill="currentColor"/>' +
+      '<circle cx="4.5" cy="18" r=".6" fill="currentColor"/>',
+
+    /* Star (favorites) */
+    star:
+      '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+
     /* Cron — clock with circular arrow (recurring) */
     cron:
       '<circle cx="12" cy="12" r="9"/>' +

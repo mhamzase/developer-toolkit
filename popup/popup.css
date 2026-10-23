@@ -7,7 +7,7 @@
 
 /* Prevent flash of unstyled theme before JS applies data-theme */
 html[data-theme='light'] { background-color: #ffffff; }
-html[data-theme='dark']  { background-color: #0e1014; }
+html[data-theme='dark']  { background-color: #09090b; }
 
 /* Lock the app to the window viewport */
 body {

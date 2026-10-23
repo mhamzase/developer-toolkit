@@ -1,44 +1,29 @@
 /* ============================================================
  * File: css/base.css
  * Module: Base Styles
- * Purpose: Nunito @font-face, CSS reset, typography defaults,
+ * Purpose: Sora + JetBrains Mono @font-face, CSS reset, typography defaults,
  *          scrollbars, focus states, reduced-motion support.
  * Depends on: variables.css (tokens), themes.css (colors)
  * ============================================================ */
 
 /* ------------------------------------------------------------
- * 1. Nunito — local TTF files (assets/fonts/)
- *    Weight map: Regular 400, Medium 500, SemiBold 600, Bold 700
+ * 1. Fonts: local files only (assets/fonts/)
+ *    Sora: variable font, weights 300 to 800 (UI text)
+ *    JetBrains Mono: variable font, weights 400 to 700 (code/data)
  * ------------------------------------------------------------ */
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('../assets/fonts/Nunito-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-family: 'Sora';
+  src: url('../assets/fonts/Sora-Variable.woff2') format('woff2');
+  font-weight: 300 800;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Nunito';
-  src: url('../assets/fonts/Nunito-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Nunito';
-  src: url('../assets/fonts/Nunito-Bold.ttf') format('truetype');
-  font-weight: 700;
+  font-family: 'JetBrains Mono';
+  src: url('../assets/fonts/JetBrainsMono-Variable.woff2') format('woff2');
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
 }

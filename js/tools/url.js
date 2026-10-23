@@ -214,6 +214,7 @@
     icon: "link",
     description: "Encode or decode URLs and components.",
 
+    keywords: "uri encode decode percent encoding query link component parse",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

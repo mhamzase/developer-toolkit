@@ -606,6 +606,7 @@
     icon: "cron",
     description: "Parse cron expressions into human-readable form.",
 
+    keywords: "schedule crontab expression parser job timer linux quartz",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

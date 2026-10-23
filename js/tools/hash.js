@@ -121,6 +121,7 @@
     icon: "key",
     description: "SHA-256, SHA-384, SHA-512.",
 
+    keywords: "sha sha256 sha384 sha512 digest checksum crypto fingerprint md5",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

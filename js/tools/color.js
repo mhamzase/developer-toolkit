@@ -267,6 +267,7 @@
     icon: "palette",
     description: "Convert HEX, RGB, HSL and save swatches.",
 
+    keywords: "hex rgb hsl picker swatch palette eyedropper colour convert shades",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

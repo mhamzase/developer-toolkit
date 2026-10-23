@@ -319,6 +319,7 @@
     icon: "shield",
     description: "Decode JWT header and payload locally.",
 
+    keywords: "token json web token decode header payload claims expiry auth bearer sign",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

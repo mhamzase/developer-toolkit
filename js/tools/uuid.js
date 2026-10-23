@@ -168,6 +168,7 @@
     icon: "hash",
     description: "Generate one or many UUID v4 values.",
 
+    keywords: "guid generate v4 random id unique identifier bulk",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

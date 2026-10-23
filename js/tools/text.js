@@ -198,6 +198,7 @@
     icon: "text",
     description: "Counts, sort lines, dedupe, trim whitespace.",
 
+    keywords: "word count character sort lines dedupe trim string utilities slug",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

@@ -244,6 +244,7 @@
     icon: 'http',
     description: 'Searchable reference for all HTTP status codes.',
 
+    keywords: 'status codes reference 404 500 response api rest headers',
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el('div', { class: 'dt-workspace' });

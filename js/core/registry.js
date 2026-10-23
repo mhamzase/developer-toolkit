@@ -28,6 +28,11 @@
       return DT.tools[id] || null;
     },
 
+    /** URL/CSS-safe slug for a category name, e.g. "Data" -> "data". */
+    categorySlug: function (category) {
+      return String(category || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    },
+
     /** Return unique category list, prefixed with "All". */
     categories: function () {
       const seen = { All: true };
@@ -55,7 +60,9 @@
         list = list.filter(function (t) {
           return (
             (t.name && t.name.toLowerCase().indexOf(q) !== -1) ||
-            (t.description && t.description.toLowerCase().indexOf(q) !== -1)
+            (t.description && t.description.toLowerCase().indexOf(q) !== -1) ||
+            (t.category && t.category.toLowerCase().indexOf(q) !== -1) ||
+            (t.keywords && t.keywords.toLowerCase().indexOf(q) !== -1)
           );
         });
       }

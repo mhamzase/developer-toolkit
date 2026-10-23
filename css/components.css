@@ -1739,7 +1739,7 @@ a.dt-btn--ghost:hover {
 }
 
 .dt-welcome__theme-swatch--dark {
-  background: linear-gradient(135deg, #0e1014 50%, #262c36 50%);
+  background: linear-gradient(135deg, #09090b 50%, #232329 50%);
 }
 
 .dt-welcome__theme-label {
@@ -1773,4 +1773,46 @@ a.dt-btn--ghost:hover {
   .dt-welcome__actions .dt-btn {
     width: 100%;
   }
+}
+/* ------------------------------------------------------------
+ * Settings: theme segmented control (v2)
+ * ------------------------------------------------------------ */
+
+.dt-settings__theme {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+}
+
+.dt-settings__seg {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background-color: var(--color-surface-2);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.dt-settings__seg-btn {
+  flex: 1 1 0;
+  height: 26px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.dt-settings__seg-btn:hover {
+  color: var(--color-text);
+}
+
+.dt-settings__seg-btn--on {
+  color: var(--color-accent);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-xs);
 }

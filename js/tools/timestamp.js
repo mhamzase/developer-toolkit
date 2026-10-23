@@ -436,6 +436,7 @@
     icon: "calendarClock",
     description: "Convert Unix time ↔ readable dates.",
 
+    keywords: "unix epoch date time convert seconds milliseconds iso relative",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

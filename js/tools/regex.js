@@ -351,6 +351,7 @@
     icon: "regex",
     description: "Test patterns with flags, groups, and live highlighting.",
 
+    keywords: "regexp pattern match test regular expression flags groups replace",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

@@ -169,6 +169,7 @@
     icon: "type",
     description: "UPPER, lower, Title, camel, snake, kebab and more.",
 
+    keywords: "upper lower camel snake kebab pascal title convert casing string",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

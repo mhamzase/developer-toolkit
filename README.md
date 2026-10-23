@@ -52,7 +52,7 @@ Built with simplicity as a feature, not a compromise.
 - **HTML, CSS, and vanilla JavaScript** with no framework overhead
 - **Chrome Storage API** for local preferences only
 - **Web Crypto API** for cryptographic operations
-- **Nunito** bundled locally for consistent typography
+- **Sora** for UI text and **JetBrains Mono** for code and data, both bundled locally as variable fonts
 - **No build step** so the source you read is the source that runs
 
 ---
@@ -97,7 +97,7 @@ The codebase is organized by concern so it's easy to navigate and extend:
 - `js/tools/` contains each tool as a self contained module that registers itself on load.
 - `docs/` documents the module map, tool interface contract, QA checklist, and changelog.
 
-Adding a new tool means creating one file in `js/tools/`, one in `css/tools/`, and registering metadata. The shell picks it up automatically.
+Adding a new tool means creating one file in `js/tools/`, one in `css/tools/`, and registering metadata (including `keywords`, so search and the command palette can find it by the words users actually type). The shell picks it up automatically.
 
 ---
 

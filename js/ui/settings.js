@@ -75,6 +75,46 @@
       DT.ui.toast.success(persistRow.input.checked ? "Enabled" : "Disabled");
     });
 
+    /* Theme mode: Light / Dark / System */
+    const themeModes = [
+      { id: 'light', label: 'Light' },
+      { id: 'dark', label: 'Dark' },
+      { id: 'system', label: 'System' },
+    ];
+    const themeBtns = [];
+    const themeGroup = dom.el("div", { class: "dt-settings__seg", role: "group", "aria-label": "Theme" });
+    function paintThemeSeg() {
+      const mode = DT.core.theme.getMode ? DT.core.theme.getMode() : DT.core.theme.current;
+      themeBtns.forEach(function (b) {
+        b.el.classList.toggle("dt-settings__seg-btn--on", b.id === mode);
+      });
+    }
+    themeModes.forEach(function (m) {
+      const btn = dom.el("button", {
+        type: "button",
+        class: "dt-settings__seg-btn",
+        text: m.label,
+      });
+      btn.addEventListener("click", function () {
+        DT.core.theme.setMode(m.id);
+        paintThemeSeg();
+      });
+      themeBtns.push({ id: m.id, el: btn });
+      themeGroup.appendChild(btn);
+    });
+    const themeRow = dom.el("div", { class: "dt-settings__theme" }, [
+      dom.el("div", { class: "dt-settings__row-main" }, [
+        dom.el("div", { class: "dt-settings__row-label", text: "Theme" }),
+        dom.el("div", {
+          class: "dt-settings__row-hint",
+          text: "System follows your OS appearance",
+        }),
+      ]),
+      themeGroup,
+    ]);
+    paintThemeSeg();
+    if (typeof DT.core.theme.on === "function") DT.core.theme.on(paintThemeSeg);
+
     /* Danger zone */
     const clearBtn = dom.el("button", {
       type: "button",
@@ -108,6 +148,8 @@
         dom.el("div", { class: "dt-settings__title", text: "Settings" }),
       ]),
         dom.el('div', { class: 'dt-settings__body' }, [
+        themeRow,
+        dom.el('div', { class: 'dt-settings__divider' }),
         persistRow.el,
         dom.el('div', { class: 'dt-settings__divider' }),
         clearBtn
@@ -145,13 +187,22 @@
     if (isOpen) return;
     isOpen = true;
 
-    /* Position under the anchor */
+    /* Position near the anchor, clamped to the viewport. The anchor
+       now lives in the left sidebar, so position by left edge and
+       flip above the anchor when there is not enough room below. */
     const rect = anchor.getBoundingClientRect();
     menu.style.position = "fixed";
-    menu.style.top = rect.bottom + 6 + "px";
-    menu.style.right = Math.max(8, window.innerWidth - rect.right) + "px";
-
     menu.style.display = "block";
+    const menuW = menu.offsetWidth || 280;
+    const menuH = menu.offsetHeight || 320;
+    const left = Math.max(8, Math.min(rect.left, window.innerWidth - menuW - 8));
+    let top = rect.bottom + 6;
+    if (top + menuH > window.innerHeight - 8) {
+      top = Math.max(8, rect.top - menuH - 6);
+    }
+    menu.style.left = left + "px";
+    menu.style.right = "auto";
+    menu.style.top = top + "px";
     menu.style.pointerEvents = "auto";
     requestAnimationFrame(function () {
       menu.classList.add("dt-settings--open");

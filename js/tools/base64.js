@@ -149,6 +149,7 @@
     icon: "code",
     description: "Encode and decode Base64 (UTF-8 safe).",
 
+    keywords: "encode decode b64 binary text utf8 urlsafe data encoding",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

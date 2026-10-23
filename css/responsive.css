@@ -1,13 +1,14 @@
 /* ============================================================
  * File: css/responsive.css
- * Module: Responsive Rules
- * Purpose: Breakpoints for the app window (detached window mode).
+ * Module: Responsive Rules (v2: Clean Pro shell)
+ * Purpose: How the sidebar shell adapts as the window narrows:
+ *   - Wide:      full 248px sidebar with labels
+ *   - Medium:    68px icon rail (labels hidden, titles remain)
+ *   - Narrow:    shell stacks; sidebar becomes a top bar with a
+ *                horizontally scrolling tool strip
+ *   - Side panel widths (~360-480px) land in the narrow layout.
  * Depends on: variables.css, layout.css, components.css
  * ============================================================ */
-
-/* ------------------------------------------------------------
- * Base app container — fills the Chrome window
- * ------------------------------------------------------------ */
 
 html,
 body {
@@ -19,23 +20,168 @@ body {
 }
 
 /* ------------------------------------------------------------
- * Small widths (< 360px) — tighten spacing, shrink header
+ * MEDIUM (< 900px): icon rail
  * ------------------------------------------------------------ */
 
-@media (max-width: 360px) {
-  :root {
-    --space-3: 10px;
-    --space-4: 12px;
-    --header-height: 48px;
+@media (max-width: 900px) {
+  .dt-sidebar {
+    flex-basis: var(--sidebar-collapsed);
+    width: var(--sidebar-collapsed);
   }
 
-  .dt-header__title {
-    font-size: var(--fs-sm);
+  .dt-header {
+    justify-content: center;
+    padding: var(--space-3) var(--space-2) var(--space-2);
+  }
+
+  .dt-header__brand {
+    flex: 0 0 auto;
+    justify-content: center;
+  }
+
+  .dt-header__title,
+  .dt-header__search,
+  .dt-palette-hint {
+    display: none;
+  }
+
+  .dt-header__actions {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .dt-nav {
+    padding: var(--space-2) var(--space-2) var(--space-3);
+  }
+
+  .dt-side-group {
+    margin-top: var(--space-3);
+    align-items: center;
+  }
+
+  .dt-side-group__label {
+    display: none;
+  }
+
+  .dt-side-item {
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+  }
+
+  .dt-side-item__label,
+  .dt-side-item__count {
+    display: none;
+  }
+
+  .dt-side-item__icon svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 /* ------------------------------------------------------------
- * Compact height (< 500px) — tighten vertical padding, keep full height
+ * NARROW (< 640px): stacked shell, top bar + tool strip
+ * ------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+  .dt-root {
+    flex-direction: column;
+  }
+
+  .dt-sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: var(--border-thin) solid var(--color-border);
+  }
+
+  .dt-header {
+    justify-content: flex-start;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .dt-header__brand {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+  }
+
+  .dt-header__title {
+    display: block;
+  }
+
+  .dt-header__search {
+    display: block;
+  }
+
+  .dt-header__actions {
+    flex-direction: row;
+  }
+
+  .dt-nav {
+    flex: 0 0 auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--space-1) var(--space-2) var(--space-2);
+    scrollbar-width: none;
+  }
+
+  .dt-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dt-nav__track {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    width: max-content;
+  }
+
+  .dt-side-group {
+    display: contents;
+  }
+
+  .dt-side-group__label {
+    display: none;
+  }
+
+  .dt-side-item {
+    width: auto;
+    height: 32px;
+    padding: 0 10px;
+    border: var(--border-thin) solid var(--color-border);
+    border-radius: var(--radius-full);
+    background-color: var(--color-surface);
+  }
+
+  .dt-side-item--active {
+    border-color: var(--color-accent);
+  }
+
+  .dt-side-item__label {
+    display: block;
+  }
+
+  .dt-side-item__count {
+    display: none;
+  }
+
+  .dt-main {
+    padding: var(--space-3);
+  }
+
+  .dt-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .dt-tool-row__cat {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+ * COMPACT HEIGHT (< 500px)
  * ------------------------------------------------------------ */
 
 @media (max-height: 500px) {
@@ -49,10 +195,10 @@ body {
 }
 
 /* ------------------------------------------------------------
- * Wide + tall — allow side-by-side split for tool views
+ * WIDE + TALL: side-by-side split for tool views
  * ------------------------------------------------------------ */
 
-@media (min-width: 560px) and (min-height: 560px) {
+@media (min-width: 860px) and (min-height: 560px) {
   .dt-split {
     flex-direction: row;
     align-items: stretch;

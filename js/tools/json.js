@@ -189,6 +189,7 @@
     icon: "braces",
     description: "Format, validate, and minify JSON.",
 
+    keywords: "format validate minify beautify pretty parse lint object array data",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

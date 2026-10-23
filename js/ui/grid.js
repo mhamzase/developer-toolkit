@@ -2,10 +2,13 @@
  * File: js/ui/grid.js
  * Module: UI — Tool Grid
  * Purpose: Render tool cards with Favorites, Recently Used chips, and All tools.
- * Notes:
- *   - Favorites → full cards
+ * Notes (v2, Clean Pro home):
+ *   - A home head row shows the current view title + count and a
+ *     grid/list view toggle (choice persists in chrome.storage).
+ *   - Favorites → cards/rows of their own; they are NOT repeated
+ *     in the All tools section anymore (a star marks them there).
  *   - Recently used → compact chips
- *   - All tools → full cards, ALL tools every time (no filtering)
+ *   - All tools → every non-favorite tool (no filtering)
  */
 
 (function () {
@@ -13,6 +16,32 @@
 
   const DT = (window.DT = window.DT || {});
   DT.ui = DT.ui || {};
+
+  /* Home view mode: 'grid' (cards) or 'list' (compact rows). */
+  let viewMode = 'grid';
+  let viewModeLoaded = false;
+
+  function loadViewMode() {
+    if (viewModeLoaded) return;
+    viewModeLoaded = true;
+    DT.core.storage.get('dt:homeView', 'grid').then(function (saved) {
+      if ((saved === 'list' || saved === 'grid') && saved !== viewMode) {
+        viewMode = saved;
+        if (DT.core.router.state.view === 'list') DT.core.router.emit();
+      }
+    });
+  }
+
+  function setViewMode(mode) {
+    if (mode === viewMode) return;
+    viewMode = mode;
+    DT.core.storage.set('dt:homeView', mode);
+    DT.core.router.emit();
+  }
+
+  function catSlug(tool) {
+    return DT.core.registry.categorySlug(tool.category);
+  }
 
   /* ---------------- Icons ---------------- */
 
@@ -30,13 +59,38 @@
 
   /* ---------------- Card ---------------- */
 
-  function buildCard(tool) {
+  /* Star toggle (shared by cards and rows) */
+  function buildStar(tool) {
     const dom = DT.ui.dom;
     const isFav = DT.core.prefs.isFavorite(tool.id);
+    const star = dom.el("button", {
+      type: "button",
+      class: "dt-tool-card__star" + (isFav ? " dt-tool-card__star--on" : ""),
+      "aria-label": isFav ? "Remove from favorites" : "Add to favorites",
+      title: isFav ? "Unpin from favorites" : "Pin to favorites",
+    });
+    const starIcon = dom.svg(isFav ? ICON_STAR_FILLED : ICON_STAR_OUTLINE);
+    if (starIcon) star.appendChild(starIcon);
 
-    /* Icon */
+    star.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const nowFav = DT.core.prefs.toggleFavorite(tool.id);
+      DT.ui.toast.success(
+        nowFav ? "Added to favorites" : "Removed from favorites",
+      );
+    });
+    return star;
+  }
+
+  function buildCard(tool) {
+    const dom = DT.ui.dom;
+
+    /* Icon (tile tinted by category) */
     const iconNode = DT.utils.icons.get(tool.icon);
-    const iconWrap = dom.el("div", { class: "dt-tool-card__icon-wrap" });
+    const iconWrap = dom.el("div", {
+      class: "dt-tool-card__icon-wrap",
+      "data-cat": catSlug(tool),
+    });
     if (iconNode) iconWrap.appendChild(iconNode);
 
     /* Card body */
@@ -63,25 +117,61 @@
       DT.core.router.go("tool", { toolId: tool.id });
     });
 
-    /* Star toggle */
-    const star = dom.el("button", {
-      type: "button",
-      class: "dt-tool-card__star" + (isFav ? " dt-tool-card__star--on" : ""),
-      "aria-label": isFav ? "Remove from favorites" : "Add to favorites",
-      title: isFav ? "Unpin from favorites" : "Pin to favorites",
-    });
-    const starIcon = dom.svg(isFav ? ICON_STAR_FILLED : ICON_STAR_OUTLINE);
-    if (starIcon) star.appendChild(starIcon);
+    return dom.el("div", { class: "dt-tool-card-wrap" }, [card, buildStar(tool)]);
+  }
 
-    star.addEventListener("click", function (e) {
-      e.stopPropagation();
-      const nowFav = DT.core.prefs.toggleFavorite(tool.id);
-      DT.ui.toast.success(
-        nowFav ? "Added to favorites" : "Removed from favorites",
-      );
+  /* ---------------- Row (list view) ---------------- */
+
+  function buildRow(tool) {
+    const dom = DT.ui.dom;
+
+    const iconNode = DT.utils.icons.get(tool.icon);
+    const iconWrap = dom.el("div", {
+      class: "dt-tool-row__icon",
+      "data-cat": catSlug(tool),
+    });
+    if (iconNode) iconWrap.appendChild(iconNode);
+
+    const row = dom.el(
+      "button",
+      {
+        type: "button",
+        class: "dt-tool-row",
+        "data-tool-id": tool.id,
+        title: tool.description || tool.name,
+      },
+      [
+        iconWrap,
+        dom.el("div", { class: "dt-tool-row__main" }, [
+          dom.el("div", { class: "dt-tool-row__title", text: tool.name }),
+          dom.el("div", {
+            class: "dt-tool-row__desc",
+            text: tool.description || "",
+          }),
+        ]),
+        dom.el("span", { class: "dt-tool-row__cat", text: tool.category || "" }),
+      ],
+    );
+
+    row.addEventListener("click", function () {
+      DT.core.prefs.recordRecent(tool.id);
+      DT.core.router.go("tool", { toolId: tool.id });
     });
 
-    return dom.el("div", { class: "dt-tool-card-wrap" }, [card, star]);
+    return dom.el("div", { class: "dt-tool-card-wrap" }, [row, buildStar(tool)]);
+  }
+
+  function buildTools(tools) {
+    return viewMode === 'list' ? buildRows(tools) : buildGrid(tools);
+  }
+
+  function buildRows(tools) {
+    const dom = DT.ui.dom;
+    const rows = dom.el("div", { class: "dt-tool-rows" });
+    tools.forEach(function (t) {
+      rows.appendChild(buildRow(t));
+    });
+    return rows;
   }
 
   /* ---------------- Chip ---------------- */
@@ -148,11 +238,41 @@
     return dom.el("div", { class: "dt-grid-section" }, [head, bodyEl]);
   }
 
+  /* ---------------- Home head (title + view toggle) ---------------- */
+
+  function buildHomeHead(title, count) {
+    const dom = DT.ui.dom;
+
+    function toggleBtn(mode, iconName, label) {
+      const btn = dom.el("button", {
+        type: "button",
+        class: "dt-view-toggle__btn" + (viewMode === mode ? " dt-view-toggle__btn--on" : ""),
+        "aria-label": label,
+        title: label,
+      });
+      const icon = DT.utils.icons.get(iconName);
+      if (icon) btn.appendChild(icon);
+      btn.addEventListener("click", function () { setViewMode(mode); });
+      return btn;
+    }
+
+    return dom.el("div", { class: "dt-home-head" }, [
+      dom.el("div", { class: "dt-home-head__title", text: title }),
+      dom.el("span", { class: "dt-home-head__count", text: String(count) }),
+      dom.el("div", { class: "dt-grow" }),
+      dom.el("div", { class: "dt-view-toggle" }, [
+        toggleBtn('grid', 'grid', "Grid view"),
+        toggleBtn('list', 'list', "List view"),
+      ]),
+    ]);
+  }
+
   /* ---------------- Public ---------------- */
 
   DT.ui.grid = {
     render: function (mount) {
       const dom = DT.ui.dom;
+      loadViewMode();
       const state = DT.core.router.state;
       const isDefaultView = state.filter === "All" && !state.query.trim();
 
@@ -174,9 +294,11 @@
         return;
       }
 
-      /* Filtering or searching → flat list of cards */
+      /* Filtering or searching → flat list */
       if (!isDefaultView) {
-        mount.appendChild(buildGrid(all));
+        mount.appendChild(buildHomeHead(
+          state.query ? 'Search results' : state.filter, all.length));
+        mount.appendChild(buildTools(all));
         return;
       }
 
@@ -204,10 +326,12 @@
         })
         .filter(Boolean);
 
+      mount.appendChild(buildHomeHead('All Tools', all.length));
+
       /* -------- Favorites -------- */
       if (favTools.length) {
         mount.appendChild(
-          buildSection("Favorites", favTools.length, buildGrid(favTools)),
+          buildSection("Favorites", favTools.length, buildTools(favTools)),
         );
       }
 
@@ -218,12 +342,15 @@
         );
       }
 
-      /* -------- All tools (always ALL of them) -------- */
+      /* -------- All tools (favorites are NOT repeated here) -------- */
+      const restTools = all.filter(function (t) {
+        return favIds.indexOf(t.id) === -1;
+      });
       const label = favTools.length || recTools.length ? "All tools" : "";
       if (label) {
-        mount.appendChild(buildSection(label, all.length, buildGrid(all)));
+        mount.appendChild(buildSection(label, restTools.length, buildTools(restTools)));
       } else {
-        mount.appendChild(buildGrid(all));
+        mount.appendChild(buildTools(restTools));
       }
     },
   };

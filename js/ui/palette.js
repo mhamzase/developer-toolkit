@@ -192,13 +192,14 @@
       return favs.concat(recs).concat(rest).slice(0, MAX_RESULTS);
     }
 
-    // Filter by name/description/category
+    // Filter by name/description/category/keywords
     return all
       .filter(function (t) {
         return (
           t.name.toLowerCase().indexOf(q) !== -1 ||
           (t.description || "").toLowerCase().indexOf(q) !== -1 ||
-          (t.category || "").toLowerCase().indexOf(q) !== -1
+          (t.category || "").toLowerCase().indexOf(q) !== -1 ||
+          (t.keywords || "").toLowerCase().indexOf(q) !== -1
         );
       })
       .slice(0, MAX_RESULTS);

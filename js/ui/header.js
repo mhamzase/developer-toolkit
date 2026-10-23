@@ -1,7 +1,10 @@
 /**
  * File: js/ui/header.js
- * Module: UI — Header
+ * Module: UI — Sidebar head
  * Purpose: Logo, title, search input, theme toggle.
+ * Notes: Renders the top block of the sidebar in the Clean Pro shell;
+ *        the search field and actions keep their original classes so
+ *        the palette hint and settings menu keep working unchanged.
  */
 
 (function () {
@@ -91,6 +94,11 @@
       }
 
       paintThemeIcon();
+
+      // Repaint when the theme changes elsewhere (settings, system mode)
+      if (typeof DT.core.theme.on === "function") {
+        DT.core.theme.on(function () { paintThemeIcon(); });
+      }
 
       themeBtn.addEventListener("click", function () {
         DT.core.theme.toggle();

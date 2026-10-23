@@ -61,18 +61,20 @@
       ]).then(function () {
         DT.ui.dom.clear(root);
 
-        // Header
-        root.appendChild(DT.ui.header.render());
+        // Sidebar: head (brand, search, actions) + tool navigation
+        const sidebar = DT.ui.dom.el("aside", { class: "dt-sidebar" }, [
+          DT.ui.header.render(),
+          DT.ui.nav.render(),
+        ]);
+        root.appendChild(sidebar);
 
-        // Category tabs
-        root.appendChild(DT.ui.nav.render());
-
-        // Main scrollable area
+        // Content column: main scrollable area + footer
         mainEl = DT.ui.dom.el("main", { class: "dt-main", id: "dt-main" });
-        root.appendChild(mainEl);
-
-        // Footer
-        root.appendChild(DT.ui.footer.render());
+        const content = DT.ui.dom.el("div", { class: "dt-content" }, [
+          mainEl,
+          DT.ui.footer.render(),
+        ]);
+        root.appendChild(content);
 
         // Subscribe to router → render main view
         DT.core.router.on(renderView);

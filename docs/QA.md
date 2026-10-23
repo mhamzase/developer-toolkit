@@ -4,24 +4,28 @@ Run this before every release.
 
 ## 1. Load & boot
 - [ ] Extension loads at `chrome://extensions` with no errors
-- [ ] Popup opens at the correct size (400×600)
+- [ ] App window opens centered at 1000×720 on the active screen
 - [ ] No red errors in popup console at startup
 - [ ] Toolbar icon is the generated logo (not the puzzle piece)
 
 ## 2. Theme
-- [ ] Light theme renders correctly (default)
+- [ ] Light theme renders correctly
 - [ ] Toggle flips to dark
-- [ ] Reload popup → theme persists
-- [ ] All 10 tools readable in both themes
+- [ ] Settings → Theme offers Light / Dark / System; System follows the OS live
+- [ ] Reload window → theme mode persists
+- [ ] All 16 tools readable in both themes
 - [ ] Scrollbars are styled in both themes
 
-## 3. Shell
-- [ ] Header shows logo, title, search, theme toggle
-- [ ] Category tabs work: All, Color, Conversion, Data, Encoding, Generators, Security, Text
-- [ ] Search filters cards in real time
-- [ ] Clicking a card opens the tool with a back button
-- [ ] Back button returns to the list
-- [ ] Footer shows version + "All local"
+## 3. Shell (sidebar)
+- [ ] Sidebar head shows logo, title, search, settings, theme toggle
+- [ ] Sidebar lists All Tools, Favorites (when any), and every category group
+- [ ] Clicking a category label filters the home grid; clicking a sidebar tool opens it directly
+- [ ] Search filters tools in real time, including keyword matches (e.g. "token" finds JWT Decoder)
+- [ ] Home head shows the view title + count and the grid/list toggle; the choice persists
+- [ ] Favorites are not repeated in the All tools section
+- [ ] Clicking a card/row opens the tool; its header shows icon, name, description, favorite star
+- [ ] Sidebar collapses to an icon rail under 900px and to a top bar + tool strip under 640px
+- [ ] Footer version matches manifest.json version (single source)
 
 ## 4. Each tool — smoke test
 
@@ -85,6 +89,35 @@ Run this before every release.
 - [ ] "Use output as input" swaps and clears
 - [ ] Word count matches for `hello world` (2) and `naïve café` (2)
 
+### Regex Tester
+- [ ] Pattern + sample text shows live matches with groups and positions
+- [ ] Flags g/i/m/s/u/y toggle correctly
+- [ ] Invalid pattern shows a friendly error, Load sample works
+
+### Diff Checker
+- [ ] Added/removed lines highlight on the correct sides
+- [ ] Copy diff produces +/- prefixed output
+- [ ] Oversized input shows the too-large message instead of freezing
+
+### Password Generator
+- [ ] Generated passwords use crypto randomness and match selected sets
+- [ ] Ambiguous characters are excluded when the option is on
+- [ ] Strength meter entropy changes with length and pool size
+
+### Lorem Ipsum
+- [ ] Paragraphs, sentences, and words modes generate the requested amount
+- [ ] Custom word bank is honored
+- [ ] Copy and download work
+
+### HTTP Status Codes
+- [ ] Search finds codes by number and by name
+- [ ] Class filters (1xx to 5xx) work
+
+### Cron Parser
+- [ ] `*/5 * * * *` describes as every 5 minutes with correct next runs
+- [ ] Aliases (@daily, @hourly) parse
+- [ ] Invalid expressions show a clear field-level error
+
 ## 5. Keyboard
 - [ ] Tab order is logical in every tool
 - [ ] Focus rings are visible
@@ -100,7 +133,7 @@ Run this before every release.
 ## 7. Security / privacy
 - [ ] DevTools Network tab shows ZERO requests when using any tool
 - [ ] No `eval`, no `new Function`, no remote scripts
-- [ ] `manifest.json` still requests only `storage`
+- [ ] `manifest.json` requests only `storage` and `system.display`
 - [ ] No user data written outside `chrome.storage.local`
 
 ## 8. Performance

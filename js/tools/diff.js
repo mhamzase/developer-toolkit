@@ -337,6 +337,7 @@
     icon: "diff",
     description: "Compare two texts line by line.",
 
+    keywords: "compare difference changes line checker text compare merge",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

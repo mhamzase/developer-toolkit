@@ -349,6 +349,7 @@
     icon: "lock",
     description: "Strong crypto-random passwords with strength meter.",
 
+    keywords: "generate random strong secure entropy passphrase pin generator",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
