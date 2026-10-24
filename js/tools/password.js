@@ -502,9 +502,7 @@
         style: { padding: "8px 12px" },
       });
       const outputPanel = dom.el("div", { class: "dt-panel" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Passwords" }),
-        ]),
+        DT.ui.panel.head("Passwords", [btnCopyAll]),
         outputSlot,
       ]);
 

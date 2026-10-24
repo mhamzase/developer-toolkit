@@ -656,15 +656,15 @@
         btnClear,
       ]);
 
+      const exprStats = DT.ui.panel.bindStats(input);
       const inputPanel = dom.el("div", { class: "dt-panel" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Expression" }),
-        ]),
+        DT.ui.panel.head("Expression", [DT.ui.panel.pasteBtn(input)]),
         dom.el(
           "div",
           { class: "dt-panel__body", style: { padding: "12px 16px" } },
           [input],
         ),
+        dom.el("div", { class: "dt-panel__foot" }, [exprStats.el]),
       ]);
 
       /* --- Presets row --- */
@@ -724,10 +724,12 @@
 
       input.value = "0 9 * * 1-5";
       render();
+      exprStats.paint();
 
       DT.utils.persist.bind("cron", input, {
         onRestore: function () {
           render();
+          exprStats.paint();
         },
       });
 

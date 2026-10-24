@@ -106,10 +106,8 @@
   }
 
   function paintStats(inText, outText) {
-    refs.inputStats.textContent =
-      (inText ? String(inText).length : 0) + " chars";
-    refs.outputStats.textContent =
-      (outText ? String(outText).length : 0) + " chars";
+    DT.ui.panel.paintStats(refs.inputStats, inText ? String(inText) : "");
+    DT.ui.panel.paintStats(refs.outputStats, outText ? String(outText) : "");
   }
 
   function clearAnalysis() {
@@ -272,14 +270,19 @@
       input.style.whiteSpace = "pre-wrap";
       input.style.wordBreak = "break-all";
 
-      const inputStats = dom.el("div", { class: "dt-help", text: "0 chars" });
+      const inputStats = DT.ui.panel.stats();
 
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
+        DT.ui.panel.head("Input", [
+          DT.ui.panel.pasteBtn(input, function () {
+            paintStats(input.value, output.value);
+          }),
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
-        dom.el("div", { class: "dt-panel__foot" }, [inputStats]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          inputStats,
+          DT.ui.panel.hint("Ctrl+Enter to encode"),
+        ]),
       ]);
 
       const output = dom.el("textarea", {
@@ -293,7 +296,7 @@
       output.style.whiteSpace = "pre-wrap";
       output.style.wordBreak = "break-all";
 
-      const outputStats = dom.el("div", { class: "dt-help", text: "0 chars" });
+      const outputStats = DT.ui.panel.stats();
       const btnCopy = dom.el("button", {
         type: "button",
         class: "dt-btn dt-btn--secondary dt-btn--sm",

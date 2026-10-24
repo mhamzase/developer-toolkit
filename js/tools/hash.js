@@ -182,16 +182,21 @@
       input.style.fontSize = "var(--fs-sm)";
 
       const inputStats = dom.el("div", {
-        class: "dt-help",
+        class: "dt-panel__stats",
         text: "0 chars · 0 bytes",
       });
 
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
+        DT.ui.panel.head("Input", [
+          DT.ui.panel.pasteBtn(input, function () {
+            paintStats(input.value);
+          }),
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
-        dom.el("div", { class: "dt-panel__foot" }, [inputStats]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          inputStats,
+          DT.ui.panel.hint("Hashes as you type"),
+        ]),
       ]);
 
       const output = dom.el("textarea", {
@@ -218,8 +223,8 @@
         mime: "text/plain;charset=utf-8",
         label: "Download",
       });
-      const outputStats = dom.el("div", { class: "dt-help", text: "0 chars" });
-      const meta = dom.el("div", { class: "dt-help", text: "" });
+      const outputStats = dom.el("div", { class: "dt-panel__stats", text: "0 chars" });
+      const meta = dom.el("div", { class: "dt-panel__stats", text: "" });
 
       const outputPanel = dom.el(
         "div",
@@ -237,10 +242,96 @@
         ],
       );
 
+      /* --- File hash panel (shared file component) --- */
+      const fileHashOut = dom.el("textarea", {
+        class: "dt-textarea",
+        id: "dt-hash-file-output",
+        rows: "2",
+        spellcheck: "false",
+        readonly: "readonly",
+        placeholder: "The file's hash appears here…",
+      });
+      fileHashOut.style.whiteSpace = "pre-wrap";
+      fileHashOut.style.wordBreak = "break-all";
+      fileHashOut.style.fontFamily = "var(--font-mono)";
+      fileHashOut.style.fontSize = "var(--fs-xs)";
+      const fileMeta = dom.el("div", {
+        class: "dt-panel__stats",
+        text: "No file chosen",
+      });
+      const btnFileHashCopy = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Copy",
+      });
+
+      const fileState = { file: null };
+      function computeFileHash() {
+        const file = fileState.file;
+        if (!file) return;
+        file
+          .arrayBuffer()
+          .then(function (buf) {
+            return crypto.subtle.digest(refs.algo.value, buf);
+          })
+          .then(function (digest) {
+            const bytes = new Uint8Array(digest);
+            // Note: the module-level format() helper is shadowed inside
+            // mount() by the format <select>, so pick the encoder here.
+            fileHashOut.value =
+              refs.format.value === "base64"
+                ? bytesToBase64(bytes)
+                : bytesToHex(bytes);
+            fileMeta.textContent =
+              file.name +
+              " · " +
+              DT.ui.fileDrop.formatSize(file.size) +
+              " · " +
+              refs.algo.value;
+          })
+          .catch(function () {
+            DT.ui.toast.error("Could not hash that file");
+          });
+      }
+      const hashDrop = DT.ui.fileDrop({
+        label: "Drop any file here, or click to browse (max 50 MB)",
+        maxBytes: 50 * 1024 * 1024,
+        onFile: function (file) {
+          fileState.file = file;
+          computeFileHash();
+        },
+      });
+      const hashDropWrap = dom.el(
+        "div",
+        { style: { padding: "12px 16px" } },
+        [hashDrop.el],
+      );
+      const filePanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
+        DT.ui.panel.head("File hash", [btnFileHashCopy]),
+        dom.el("div", { class: "dt-panel__body" }, [hashDropWrap, fileHashOut]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          fileMeta,
+          DT.ui.panel.hint("Uses the Algorithm + Format above"),
+        ]),
+      ]);
+      on(btnFileHashCopy, "click", function () {
+        if (!fileHashOut.value) {
+          DT.ui.toast.info("Choose a file first");
+          return;
+        }
+        DT.utils.clipboard
+          .copy(fileHashOut.value)
+          .then(() => DT.ui.toast.success("Copied"))
+          .catch(() => DT.ui.toast.error("Copy failed"));
+      });
+      on(algo, "change", computeFileHash);
+      on(format, "change", computeFileHash);
+
       workspace.appendChild(notice);
       workspace.appendChild(toolbar);
       workspace.appendChild(inputPanel);
       workspace.appendChild(outputPanel);
+      workspace.appendChild(filePanel);
       container.appendChild(workspace);
 
       refs = { input, output, algo, format, inputStats, outputStats, meta };

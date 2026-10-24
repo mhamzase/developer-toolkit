@@ -201,11 +201,14 @@
       input.style.fontFamily = "var(--font-sans)";
       input.style.fontSize = "var(--fs-sm)";
 
+      const inputStats = DT.ui.panel.bindStats(input);
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
-        ]),
+        DT.ui.panel.head("Input", [DT.ui.panel.pasteBtn(input)]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          inputStats.el,
+          DT.ui.panel.hint("Updates live as you type"),
+        ]),
       ]);
 
       const listSlot = dom.el("div", { id: "dt-case-list" });

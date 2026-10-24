@@ -285,3 +285,98 @@
   color: var(--color-text);
   box-shadow: var(--shadow-xs);
 }
+/* ------------------------------------------------------------
+ * PHASE 2A: shared panel kit pieces (js/ui/panel.js)
+ * ------------------------------------------------------------ */
+
+/* Stats: one format everywhere ("N chars · M lines") */
+.dt-panel__stats {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+/* Keyboard hint on the right side of a panel foot */
+.dt-panel__hint {
+  font-size: 11px;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+/* Inline error slot (the alert inside carries the styling) */
+.dt-panel__error {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A panel in its error state gets a danger frame */
+.dt-panel--error {
+  border-color: var(--color-danger);
+}
+
+.dt-panel--error:focus-within {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+}
+
+/* Wrap toggle: outputs are soft-wrapped until data-wrap="off" */
+.dt-panel--editor .dt-textarea[data-wrap='off'] {
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.dt-panel__wrap-btn--off {
+  color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+}
+
+/* ------------------------------------------------------------
+ * PHASE 2A: file drop (js/ui/filedrop.js)
+ * ------------------------------------------------------------ */
+
+.dt-filedrop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  padding: var(--space-5) var(--space-4);
+
+  border: var(--border-thick) dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-subtle);
+
+  cursor: pointer;
+  text-align: center;
+
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.dt-filedrop:hover {
+  border-color: var(--color-accent);
+}
+
+.dt-filedrop--over {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+}
+
+.dt-filedrop--has-file {
+  border-style: solid;
+  border-color: var(--color-border);
+}
+
+.dt-filedrop__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.dt-filedrop__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text);
+}

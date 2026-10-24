@@ -418,20 +418,20 @@
       right.style.fontFamily = "var(--font-mono)";
       right.style.fontSize = "var(--fs-xs)";
 
-      const leftCount = dom.el("div", { class: "dt-help", text: "0 lines" });
-      const rightCount = dom.el("div", { class: "dt-help", text: "0 lines" });
+      const leftCount = dom.el("div", { class: "dt-panel__stats", text: "0 lines" });
+      const rightCount = dom.el("div", { class: "dt-panel__stats", text: "0 lines" });
 
       const leftPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Original" }),
+        DT.ui.panel.head("Original", [
+          DT.ui.panel.pasteBtn(left),
           leftCount,
         ]),
         dom.el("div", { class: "dt-panel__body" }, [left]),
       ]);
 
       const rightPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Modified" }),
+        DT.ui.panel.head("Modified", [
+          DT.ui.panel.pasteBtn(right),
           rightCount,
         ]),
         dom.el("div", { class: "dt-panel__body" }, [right]),

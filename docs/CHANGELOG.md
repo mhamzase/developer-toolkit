@@ -2,6 +2,32 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.2.0] — 2026-10-24
+Phase 2A: one uniform frame for every tool screen.
+
+### Added
+- Shared panel kit (`js/ui/panel.js`): standard panel heads, one stats
+  format everywhere ("N chars · M lines"), Paste buttons in input
+  heads, Wrap toggles on plain-text outputs, a Ctrl+Enter hint in
+  panel feet, and a shared inline error box that frames its panel.
+- Shared file component (`js/ui/filedrop.js`): click to browse or
+  drag and drop, with size limits and a file meta line.
+- Base64: "File to Base64" panel (any file up to 5 MB, optional
+  Data URL prefix, copy / download / wrap).
+- Hash: "File hash" panel (any file up to 50 MB, hashed with the
+  selected algorithm and format).
+
+### Changed
+- Every tool now sits on the same panel frame: JSON (Clear moved into
+  the Input head, error box replaces the ad-hoc slot), Base64, URL,
+  Hash and Text (Paste in the Input head, shared stats), Diff (Paste
+  on both sides, counts in the shared stats style), Regex, JWT and
+  Cron (Paste + live stats), Case (Paste + stats), Timestamp (Paste
+  on the Unix panel), Lorem (Wrap toggle), Password ("Copy all" moved
+  into the Passwords panel head) and UUID (the list now lives in a
+  real panel with Copy all / Download in its head and a count in its
+  foot).
+
 ## [1.1.0] — 2026-10-24
 
 ### Changed (Clean Pro redesign, Phase 1)

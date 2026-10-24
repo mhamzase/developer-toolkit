@@ -231,8 +231,8 @@
     ]);
 
     const inputPanel = dom.el("div", { class: "dt-panel" }, [
-      dom.el("div", { class: "dt-panel__head" }, [
-        dom.el("div", { class: "dt-panel__title", text: "Unix timestamp" }),
+      DT.ui.panel.head("Unix timestamp", [
+        DT.ui.panel.pasteBtn(tsInput, function () { convert(); }),
       ]),
       dom.el("div", { class: "dt-panel__body", style: { padding: "16px" } }, [
         tsInput,

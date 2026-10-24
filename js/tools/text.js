@@ -232,8 +232,10 @@
 
       const inputStats = dom.el("div", { class: "dt-stats" });
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
+        DT.ui.panel.head("Input", [
+          DT.ui.panel.pasteBtn(input, function () {
+            paintStats(inputStats, input.value);
+          }),
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
         dom.el("div", { class: "dt-panel__foot" }, [inputStats]),

@@ -396,11 +396,16 @@
       input.style.whiteSpace = "pre-wrap";
       input.style.wordBreak = "break-all";
 
+      const tokenStats = DT.ui.panel.bindStats(input);
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Token" }),
+        DT.ui.panel.head("Token", [
+          DT.ui.panel.pasteBtn(input, function () { decodeNow(); }),
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          tokenStats.el,
+          DT.ui.panel.hint("Ctrl+Enter to decode"),
+        ]),
       ]);
 
       const resultSlot = dom.el("div", {

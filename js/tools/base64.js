@@ -136,10 +136,8 @@
   }
 
   function paintStats(inText, outText) {
-    refs.inputStats.textContent =
-      (inText ? String(inText).length : 0) + " chars";
-    refs.outputStats.textContent =
-      (outText ? String(outText).length : 0) + " chars";
+    DT.ui.panel.paintStats(refs.inputStats, inText ? String(inText) : "");
+    DT.ui.panel.paintStats(refs.outputStats, outText ? String(outText) : "");
   }
 
   DT.tools.base64 = {
@@ -214,14 +212,19 @@
         placeholder:
           "Text or Base64…  (Ctrl+Enter = Encode, Ctrl+Shift+Enter = Decode)",
       });
-      const inputStats = dom.el("div", { class: "dt-help", text: "0 chars" });
+      const inputStats = DT.ui.panel.stats();
 
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
+        DT.ui.panel.head("Input", [
+          DT.ui.panel.pasteBtn(input, function () {
+            paintStats(input.value, output.value);
+          }),
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
-        dom.el("div", { class: "dt-panel__foot" }, [inputStats]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          inputStats,
+          DT.ui.panel.hint("Ctrl+Enter to encode"),
+        ]),
       ]);
 
       const output = dom.el("textarea", {
@@ -232,7 +235,7 @@
         readonly: "readonly",
         placeholder: "Result appears here…",
       });
-      const outputStats = dom.el("div", { class: "dt-help", text: "0 chars" });
+      const outputStats = DT.ui.panel.stats();
       const btnCopy = dom.el("button", {
         type: "button",
         class: "dt-btn dt-btn--secondary dt-btn--sm",
@@ -252,6 +255,7 @@
           dom.el("div", { class: "dt-panel__head" }, [
             dom.el("div", { class: "dt-panel__title", text: "Output" }),
             dom.el("div", { class: "dt-panel__actions" }, [
+              DT.ui.panel.wrapBtn(output),
               btnCopy,
               btnDownload,
             ]),
@@ -261,9 +265,124 @@
         ],
       );
 
+      /* --- File to Base64 panel (shared file component) --- */
+      const fileOut = dom.el("textarea", {
+        class: "dt-textarea",
+        id: "dt-b64-file-output",
+        rows: "4",
+        spellcheck: "false",
+        readonly: "readonly",
+        placeholder: "The file's Base64 appears here…",
+      });
+      const fileStats = DT.ui.panel.stats();
+      const dataUrlChk = dom.el("input", {
+        type: "checkbox",
+        id: "dt-b64-file-dataurl",
+      });
+      const dataUrlLabel = dom.el(
+        "label",
+        {
+          class: "dt-toolbar__label",
+          for: "dt-b64-file-dataurl",
+          style: {
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            cursor: "pointer",
+            textTransform: "none",
+            letterSpacing: "0",
+          },
+        },
+        [dataUrlChk, dom.txt("Data URL prefix")],
+      );
+      const btnFileCopy = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Copy",
+      });
+      const btnFileDownload = DT.ui.dlButton({
+        getText: () => fileOut.value,
+        filename: () => DT.utils.download.withTimestamp("file-base64", "txt"),
+        mime: "text/plain;charset=utf-8",
+        label: "Download",
+        emptyMsg: "Choose a file first",
+      });
+
+      const fileState = { raw: "", type: "" };
+      function paintFileOut() {
+        if (!fileState.raw) {
+          fileOut.value = "";
+          DT.ui.panel.paintStats(fileStats, "");
+          return;
+        }
+        fileOut.value =
+          dataUrlChk.checked && fileState.type
+            ? "data:" + fileState.type + ";base64," + fileState.raw
+            : fileState.raw;
+        DT.ui.panel.paintStats(fileStats, fileOut.value);
+      }
+      const fileDrop = DT.ui.fileDrop({
+        label: "Drop any file here, or click to browse (max 5 MB)",
+        maxBytes: 5 * 1024 * 1024,
+        onFile: function (file) {
+          file
+            .arrayBuffer()
+            .then(function (buf) {
+              fileState.raw = DT.ui.fileDrop.bytesToBase64(buf);
+              fileState.type = file.type || "";
+              paintFileOut();
+              DT.ui.toast.success("File encoded");
+            })
+            .catch(function () {
+              DT.ui.toast.error("Could not read that file");
+            });
+        },
+      });
+      const fileDropWrap = dom.el(
+        "div",
+        { style: { padding: "12px 16px" } },
+        [fileDrop.el],
+      );
+      const fileOptionsRow = dom.el(
+        "div",
+        {
+          class: "dt-row",
+          style: { padding: "0 16px 12px" },
+        },
+        [dataUrlLabel],
+      );
+      const filePanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
+        DT.ui.panel.head("File to Base64", [
+          DT.ui.panel.wrapBtn(fileOut),
+          btnFileCopy,
+          btnFileDownload,
+        ]),
+        dom.el("div", { class: "dt-panel__body" }, [
+          fileDropWrap,
+          fileOptionsRow,
+          fileOut,
+        ]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          fileStats,
+          DT.ui.panel.hint("Processed locally, nothing is uploaded"),
+        ]),
+      ]);
+      on(dataUrlChk, "change", paintFileOut);
+      on(btnFileCopy, "click", function () {
+        if (!fileOut.value) {
+          DT.ui.toast.info("Choose a file first");
+          return;
+        }
+        DT.utils.clipboard
+          .copy(fileOut.value)
+          .then(() => DT.ui.toast.success("Copied"))
+          .catch(() => DT.ui.toast.error("Copy failed"));
+      });
+
       workspace.appendChild(toolbar);
       workspace.appendChild(inputPanel);
       workspace.appendChild(outputPanel);
+      workspace.appendChild(filePanel);
       container.appendChild(workspace);
 
       refs = { input, output, urlSafe, inputStats, outputStats };

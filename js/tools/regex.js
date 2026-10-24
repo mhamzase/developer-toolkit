@@ -461,9 +461,7 @@
       text.style.whiteSpace = "pre-wrap";
 
       const textPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Test string" }),
-        ]),
+        DT.ui.panel.head("Test string", [DT.ui.panel.pasteBtn(text)]),
         dom.el("div", { class: "dt-panel__body" }, [text]),
       ]);
 
@@ -484,7 +482,7 @@
         id: "dt-regex-matches",
         style: { padding: "8px 12px" },
       });
-      const matchStats = dom.el("div", { class: "dt-stats" });
+      const matchStats = dom.el("div", { class: "dt-panel__stats" });
       const matchesPanel = dom.el("div", { class: "dt-panel" }, [
         dom.el("div", { class: "dt-panel__head" }, [
           dom.el("div", { class: "dt-panel__title", text: "Matches" }),

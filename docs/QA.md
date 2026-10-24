@@ -48,6 +48,8 @@ Run this before every release.
 - [ ] UTF-8 encode/decode round-trips (`héllo 世界`)
 - [ ] URL-safe mode strips padding and swaps `+/` for `-_`
 - [ ] Invalid input shows error
+- [ ] File panel: dropping a small file fills the Base64 output; Data URL prefix toggles on and off
+- [ ] Paste button in the Input head fills the input from the clipboard
 
 ### URL Encoder
 - [ ] Component mode encodes `&=?/#`
@@ -56,6 +58,7 @@ Run this before every release.
 - [ ] Malformed `%` shows error
 
 ### UUID Generator
+- [ ] UUID list renders inside its panel; the foot count updates on Generate and Clear
 - [ ] All generated UUIDs match v4 pattern
 - [ ] Batch of 500 finishes without freeze
 - [ ] Copy all produces newline-separated list
@@ -82,6 +85,7 @@ Run this before every release.
 - [ ] SHA-384 and SHA-512 also match known vectors
 - [ ] Base64 format works
 - [ ] Live hashing debounces smoothly
+- [ ] File panel: dropping a file shows its hash for the chosen algorithm; switching algorithm re-hashes the same file
 
 ### Text Utilities
 - [ ] Stats update live
@@ -117,6 +121,13 @@ Run this before every release.
 - [ ] `*/5 * * * *` describes as every 5 minutes with correct next runs
 - [ ] Aliases (@daily, @hourly) parse
 - [ ] Invalid expressions show a clear field-level error
+
+## 4b. Uniform frame (Phase 2A)
+- [ ] Input heads carry a Paste button on the text tools (JSON, Base64, URL, Hash, Text, Diff both sides, Regex test string, JWT, Cron, Case, Timestamp)
+- [ ] Stats read "N chars · M lines" in JSON / Base64 / URL panel feet
+- [ ] Wrap toggle on JSON, Base64, Lorem and Base64-file outputs switches horizontal scrolling on and off
+- [ ] Invalid JSON frames the Input panel in red until fixed
+- [ ] File drop zones highlight while dragging over them
 
 ## 5. Keyboard
 - [ ] Tab order is logical in every tool

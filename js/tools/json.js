@@ -71,37 +71,20 @@
   }
 
   function paintStats(el, text) {
-    const chars = text ? text.length : 0;
-    const lines = text ? countLines(text) : 0;
-    el.textContent = chars + " chars · " + lines + " lines";
+    DT.ui.panel.paintStats(el, text);
   }
 
   function showError(info) {
-    const slot = refs.errorSlot;
-    DT.ui.dom.clear(slot);
-    if (!info) return;
-
-    const kids = [
-      DT.ui.dom.el("div", {
-        style: { fontWeight: "600" },
-        text: "Invalid JSON",
-      }),
-      DT.ui.dom.el("div", { text: info.error }),
-    ];
-    if (info.line != null) {
-      kids.push(
-        DT.ui.dom.el("div", {
-          style: { marginTop: "2px", opacity: "0.9" },
-          text:
-            "Line " +
-            info.line +
-            (info.col != null ? ", column " + info.col : ""),
-        }),
-      );
+    if (!refs.errorBox) return;
+    if (!info) {
+      refs.errorBox.clear();
+      return;
     }
-    slot.appendChild(
-      DT.ui.dom.el("div", { class: "dt-alert dt-alert--error" }, kids),
-    );
+    let msg = info.error;
+    if (info.line != null) {
+      msg += " (Line " + info.line + (info.col != null ? ", column " + info.col : "") + ")";
+    }
+    refs.errorBox.show("Invalid JSON", msg);
   }
 
   function applyResult(result, transform, toastMsg) {
@@ -238,7 +221,6 @@
           btnMinify,
           btnValidate,
         ]),
-        btnClear,
       ]);
 
       /* --- Input panel --- */
@@ -249,21 +231,26 @@
         spellcheck: "false",
         placeholder: "Paste JSON here…  (Ctrl+Enter to format)",
       });
-      const inputStats = dom.el("div", {
-        class: "dt-help",
-        text: "0 chars · 0 lines",
-      });
+      const inputStats = DT.ui.panel.stats();
 
       const inputPanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
-        dom.el("div", { class: "dt-panel__head" }, [
-          dom.el("div", { class: "dt-panel__title", text: "Input" }),
+        DT.ui.panel.head("Input", [
+          DT.ui.panel.pasteBtn(input, function () {
+            paintStats(inputStats, input.value);
+          }),
+          btnClear,
         ]),
         dom.el("div", { class: "dt-panel__body" }, [input]),
-        dom.el("div", { class: "dt-panel__foot" }, [inputStats]),
+        dom.el("div", { class: "dt-panel__foot" }, [
+          inputStats,
+          DT.ui.panel.hint("Ctrl+Enter to format"),
+        ]),
       ]);
 
-      /* --- Error slot --- */
-      const errorSlot = dom.el("div", { id: "dt-json-error" });
+      /* --- Error box (shared panel kit) --- */
+      const errorBox = DT.ui.panel.error(inputPanel);
+      errorBox.el.id = "dt-json-error";
+      const errorSlot = errorBox.el;
 
       /* --- Output panel --- */
       const output = dom.el("textarea", {
@@ -274,10 +261,7 @@
         spellcheck: "false",
         placeholder: "Result appears here…",
       });
-      const outputStats = dom.el("div", {
-        class: "dt-help",
-        text: "0 chars · 0 lines",
-      });
+      const outputStats = DT.ui.panel.stats();
       const btnCopy = dom.el("button", {
         type: "button",
         class: "dt-btn dt-btn--secondary dt-btn--sm",
@@ -297,6 +281,7 @@
           dom.el("div", { class: "dt-panel__head" }, [
             dom.el("div", { class: "dt-panel__title", text: "Output" }),
             dom.el("div", { class: "dt-panel__actions" }, [
+              DT.ui.panel.wrapBtn(output),
               btnCopy,
               btnDownload,
             ]),
@@ -313,7 +298,7 @@
       workspace.appendChild(outputPanel);
       container.appendChild(workspace);
 
-      refs = { input, output, indent, errorSlot, inputStats, outputStats };
+      refs = { input, output, indent, errorSlot, errorBox, inputStats, outputStats };
 
       /* --- Events --- */
       on(input, "input", () => paintStats(inputStats, input.value));

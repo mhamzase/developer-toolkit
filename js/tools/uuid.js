@@ -113,6 +113,9 @@
       wrap.appendChild(row);
     });
     refs.listSlot.appendChild(wrap);
+    if (refs.listStats) {
+      refs.listStats.textContent = ids.length + " UUID" + (ids.length === 1 ? "" : "s");
+    }
   }
 
   function parseCount() {
@@ -152,6 +155,7 @@
     refs.currentIds = [];
     clearList();
     refs.listSlot.appendChild(emptyState());
+    if (refs.listStats) refs.listStats.textContent = "0 UUIDs";
 
     DT.ui.toast.undo(
       "Cleared " + snap.length + " UUID" + (snap.length === 1 ? "" : "s"),
@@ -218,8 +222,6 @@
           countLabel,
           count,
           btnGen,
-          btnCopyAll,
-          btnDownload,
         ]),
         btnClear,
       ]);
@@ -231,16 +233,29 @@
 
       const listSlot = dom.el("div", {
         id: "dt-uuid-list",
-        style: { display: "flex", flexDirection: "column", gap: "12px" },
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          padding: "12px 16px",
+        },
       });
       listSlot.appendChild(emptyState());
 
+      const listStats = DT.ui.panel.stats();
+      listStats.textContent = "0 UUIDs";
+      const listPanel = dom.el("div", { class: "dt-panel" }, [
+        DT.ui.panel.head("UUIDs", [btnCopyAll, btnDownload]),
+        listSlot,
+        dom.el("div", { class: "dt-panel__foot" }, [listStats]),
+      ]);
+
       workspace.appendChild(toolbar);
       workspace.appendChild(hint);
-      workspace.appendChild(listSlot);
+      workspace.appendChild(listPanel);
       container.appendChild(workspace);
 
-      refs = { count, listSlot, currentIds: [] };
+      refs = { count, listSlot, listStats, currentIds: [] };
 
       on(btnGen, "click", generateNow);
       on(btnCopyAll, "click", copyAll);

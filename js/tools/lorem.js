@@ -439,6 +439,7 @@
           dom.el("div", { class: "dt-panel__head" }, [
             dom.el("div", { class: "dt-panel__title", text: "Output" }),
             dom.el("div", { class: "dt-panel__actions" }, [
+              DT.ui.panel.wrapBtn(output),
               btnCopy,
               btnDownload,
             ]),

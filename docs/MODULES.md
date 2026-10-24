@@ -22,6 +22,8 @@ Everything lives under `window.DT`:
 - `DT.core.router`     — view state + navigation
 - `DT.core.app`        — bootstrap
 - `DT.ui.dom`          — element creation helpers
+- `DT.ui.panel`        — shared panel kit (heads, stats, paste/wrap buttons, error box)
+- `DT.ui.fileDrop`     — shared file picker (browse + drag and drop)
 - `DT.ui.toast`        — toast notifications
 - `DT.ui.header`       — top bar
 - `DT.ui.nav`          — category tabs
