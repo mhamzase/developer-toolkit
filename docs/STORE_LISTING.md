@@ -15,46 +15,98 @@ Free developer tools: JSON formatter, JWT decoder & signer, regex tester, Base64
 
 ## Detailed description
 
-Developer Toolkit puts the small tools you reach for every day into
-one fast, private place, right inside Chrome.
+Developer Toolkit is a free, all-in-one toolbox for developers: a
+JSON formatter and validator, JWT decoder and signer, Base64 and
+URL encoder, regex tester, hash generator, UUID generator,
+password generator, QR code generator and 26 everyday utilities in
+total, all in one fast extension that works 100% offline.
 
-FORMAT AND CONVERT
-JSON formatter and validator with sort keys, a collapsible tree view, and CSV,
-YAML and XML conversion. SQL formatter. Markdown editor with live
-preview and HTML export. Number base converter (binary, octal,
-decimal, hex, base 36) with full BigInt precision.
+Stop pasting sensitive code, tokens and API keys into random
+websites full of ads and trackers. Every tool in Developer Toolkit
+runs entirely in your browser. No servers, no accounts, no
+analytics, no network requests. Your data never leaves your
+machine.
 
-DECODE AND INSPECT
-JWT decoder with expiry state, plus a JWT signer (HS256, HS384,
-HS512) for creating test tokens, and AES-256-GCM text encryption
-and decryption with a password. Base64 and URL encoder/decoder with
-file support. A regex tester with a pattern library and live
-replace. A line and word level diff checker. A cron parser with a
-plain-English description, next runs and a point-and-click builder.
+FORMAT, CONVERT AND VALIDATE
+- JSON Formatter and Validator: format, minify and validate JSON,
+  sort keys, explore a collapsible tree view, and convert JSON to
+  CSV, YAML or XML (and back)
+- JSON to Types: turn any JSON sample into TypeScript interfaces,
+  Go structs or Python dataclasses
+- SQL Formatter: clean, readable SQL with proper indentation
+- Markdown Editor: write Markdown with a live preview and copy
+  the HTML
+- Number Base Converter: binary, octal, decimal, hexadecimal and
+  every base up to 36, with exact BigInt precision
 
-GENERATE
-Secure password generator (random, passphrase and PIN modes),
-UUID v4 and v7, ULID and Nano ID with a parse and validate panel,
-Lorem Ipsum, and a fully offline QR code generator.
+DECODE, ENCODE AND INSPECT
+- JWT Decoder: decode JSON Web Tokens, inspect the header and
+  claims, and see expiry at a glance
+- JWT Signer: create and sign test tokens with HS256, HS384 or
+  HS512
+- Base64 Encoder and Decoder: for text, plus file to Base64
+  conversion
+- URL Encoder and Decoder: with a query string parameter editor
+- Regex Tester: test regular expressions live, with a built-in
+  pattern library and replace preview
+- Diff Checker: compare text line by line with word level
+  highlighting
+- Cron Parser and Builder: plain English explanations, next run
+  times and a point and click schedule builder
 
-REFERENCE AND UTILITIES
-Color tools with HEX, RGB, HSL and OKLCH, shades and tints, and a
-WCAG contrast checker. A chmod calculator (checkboxes, octal and
-symbolic views). HTTP status code reference. Timestamp converter
-with timezones. An image compressor and resizer (PNG, JPEG,
-WebP), a JSON to TypeScript / Go / Python types generator, and
-an SEO meta tag generator with Open Graph and Twitter cards.
+GENERATE IN ONE CLICK
+- Password Generator: strong random passwords, memorable
+  passphrases and PINs, with an honest strength estimate
+- UUID and ID Generator: UUID v4 and v7, ULID and Nano ID, plus a
+  parse and validate panel
+- QR Code Generator: create QR codes and download them as PNG,
+  generated entirely on your device
+- Lorem Ipsum Generator: placeholder text by paragraph, sentence
+  or word
 
-WORK THE WAY YOU LIKE
-Open it as a window, dock it in Chrome's Side Panel, jump in with
-Alt+Shift+D, right-click selected text anywhere and send it
-straight to the JWT, Base64, URL or Hash tool, or type "dt" in the
-address bar and pick a tool. Light, dark and system themes, a
-command palette (Ctrl+K), favorites and full-text tool search.
+SECURITY AND HASHING
+- Hash Generator: MD5, SHA-1, SHA-256, SHA-384 and SHA-512, HMAC
+  support, and file hashing
+- AES Encryption: encrypt and decrypt text with AES-256-GCM and a
+  password
+
+REFERENCE AND EVERYDAY UTILITIES
+- Color Converter: HEX, RGB, HSL and OKLCH, shades and tints, and
+  a WCAG contrast checker for accessible color pairs
+- Timestamp Converter: Unix epoch to human dates and back, across
+  11 time zones
+- Image Compressor: compress and resize PNG, JPEG and WebP images
+  without uploading them anywhere
+- Meta Tag Generator: SEO, Open Graph and Twitter card tags with
+  live character counters and a social preview
+- chmod Calculator: permissions by checkbox, octal or symbolic
+  notation
+- Case Converter and Text Tools: upper, lower, camelCase,
+  snake_case, word and character counts, and a slug generator
+- HTTP Status Codes: a fast, searchable reference
+
+BUILT FOR YOUR WORKFLOW
+- Open it in a resizable window or docked in Chrome's Side Panel
+- Press Alt+Shift+D to launch it from anywhere, or type "dt" in
+  the address bar and jump straight to a tool
+- Right-click any selected text on a page and send it directly to
+  the JWT, Base64, URL or Hash tool
+- Command palette (Ctrl+K), full text search, favorites and recent
+  tools keep your most used utilities one keystroke away
+- Light, dark and system themes in a clean, responsive interface
 
 PRIVATE BY DESIGN
-Every tool runs 100% locally in your browser. No analytics, no
-accounts, no network calls, no data ever leaves your machine.
+Developer Toolkit collects nothing. There is no sign up, no
+tracking and no remote code: every script ships inside the
+extension package and runs locally. It is the safe place to paste
+a JWT, decode a token or hash a file.
+
+Whether you are a frontend or backend developer, a QA engineer, a
+DevOps engineer or a student learning to code, Developer Toolkit
+keeps the tools you reach for every day in one private, offline
+home.
+
+Install it, pin it, and make it yours.
 
 ## Permission justifications (dashboard asks per permission)
 
