@@ -21,6 +21,12 @@ internal build milestones).
 - Meta Tag Generator: SEO, Open Graph and Twitter tags with
   live character counters (60 / 160) and a social preview card.
 
+### Fixed
+- Sidebar: clicking a tool no longer makes the navigation jump
+  back to the top. Route changes now move only the highlight;
+  the sidebar rebuilds solely when the favorites set changes,
+  and even then it restores the scroll position.
+
 ## [2.0.0] — 2026-10-26
 Phase 3: five new tools, platform integrations, store readiness.
 
