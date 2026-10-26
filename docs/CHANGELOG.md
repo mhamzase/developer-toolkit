@@ -2,6 +2,45 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.3.0] — 2026-10-26
+Phase 2B: upgrades inside the existing tools.
+
+### Added
+- Hash: MD5 (built-in implementation, Web Crypto has none) and
+  SHA-1 join SHA-256/384/512, plus an optional HMAC key that turns
+  any algorithm into HMAC for both text and files.
+- JSON: Sort keys, a collapsible Tree view (expand/collapse all),
+  To CSV, To YAML, CSV to JSON (with typed values), and string
+  Escape / Unescape, all on a second Convert toolbar.
+- UUID & ID Generator: UUID v7, ULID and Nano ID join v4 (type
+  picker in the toolbar), plus a Parse / validate panel that names
+  the type, checks validity and extracts creation time from v7
+  and ULID values.
+- Color: OKLCH value with copy, a Shades & tints panel (click a
+  swatch to use and copy it) and a WCAG contrast checker with
+  AA/AAA badges against any background, with a Swap button.
+- Diff: word-level highlights inside edited line pairs, plus
+  Ignore whitespace and Ignore case options that the unified
+  copy/download output also respects.
+- Cron: 6-field expressions with a leading seconds field, Quartz
+  "?" support, and a Builder panel (frequency, time, weekday,
+  date, optional seconds) that fills the expression in for you.
+- Regex: a Common patterns library (email, URL, IPv4, dates, hex
+  colors, UUID and more) and a Replace panel with $1 group
+  references and a live replacement count.
+- Password: Passphrase mode (269-word list, separator, capitalize,
+  trailing number, honest entropy meter) and PIN mode join Random.
+- Timestamp: a "Show in" timezone picker adds the converted time
+  in any of 11 IANA zones to the result card.
+- URL: query parameters in the breakdown are now editable. Change
+  values, remove rows or add new params and copy the rebuilt URL.
+- Text: Slugify operation.
+
+### Fixed
+- Timestamp: the Clear button in the Timestamp-to-date section
+  referenced the other section's input and threw an error; it now
+  clears its own field, with undo, like the rest of the app.
+
 ## [1.2.0] — 2026-10-24
 Phase 2A: one uniform frame for every tool screen.
 

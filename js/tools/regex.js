@@ -272,11 +272,67 @@
     slot.appendChild(pre);
   }
 
+/* ---------------- Phase 2B: common patterns library ---------------- */
+  const PATTERN_LIBRARY = [
+    { name: "Email", pattern: "[\\w.+-]+@[\\w-]+\\.[\\w.]+", flags: "g" },
+    { name: "URL", pattern: "https?:\\/\\/[\\w.-]+(?:\\.[a-z]{2,})(?:[\\w\\/?#=&%.-]*)", flags: "gi" },
+    { name: "IPv4", pattern: "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b", flags: "g" },
+    { name: "ISO date", pattern: "\\b\\d{4}-\\d{2}-\\d{2}\\b", flags: "g" },
+    { name: "Time (24h)", pattern: "\\b(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d)?\\b", flags: "g" },
+    { name: "Hex color", pattern: "#(?:[0-9a-f]{3}){1,2}\\b", flags: "gi" },
+    { name: "Slug", pattern: "\\b[a-z0-9]+(?:-[a-z0-9]+)+\\b", flags: "g" },
+    { name: "UUID", pattern: "\\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\b", flags: "gi" },
+    { name: "Phone (intl)", pattern: "\\+\\d[\\d\\s-]{7,}\\d", flags: "g" },
+    { name: "HTML tag", pattern: "<\\/?[a-z][\\w-]*(\\s[^>]*)?>", flags: "gi" },
+    { name: "Words", pattern: "\\b\\w+\\b", flags: "g" },
+    { name: "Numbers", pattern: "-?\\d+(?:\\.\\d+)?", flags: "g" },
+  ];
+
+  function loadPattern(preset) {
+    refs.pattern.value = preset.pattern;
+    FLAGS.forEach(function (f) {
+      refs.flags[f.id].checked = preset.flags.indexOf(f.id) !== -1;
+    });
+    update();
+    refs.pattern.focus();
+  }
+
+  /* ---------------- Phase 2B: replace preview ---------------- */
+  function renderReplace(result) {
+    if (!refs || !refs.replaceOut) return;
+    const statsEl = refs.replaceStats;
+    if (!result || !result.ok) {
+      refs.replaceOut.value = "";
+      statsEl.textContent = result ? "Fix the pattern to preview the replacement" : "";
+      return;
+    }
+    if (!refs.pattern.value) {
+      refs.replaceOut.value = "";
+      statsEl.textContent = "0 replacements";
+      return;
+    }
+    let re;
+    try {
+      re = new RegExp(refs.pattern.value, flagsString());
+    } catch (e) {
+      refs.replaceOut.value = "";
+      statsEl.textContent = "Invalid pattern";
+      return;
+    }
+    const replacement = refs.replaceInput.value;
+    const out = refs.text.value.replace(re, replacement);
+    refs.replaceOut.value = out;
+    const n = re.global ? result.matches.length : (result.matches.length ? 1 : 0);
+    statsEl.textContent =
+      n + " replacement" + (n === 1 ? "" : "s") + " · $1, $2 … refer to groups, $$ is a literal $";
+  }
+
   function update() {
     const result = runMatch();
     paintStats(result);
     renderMatches(result);
     renderHighlight(result);
+    renderReplace(result);
   }
 
   /* ---------------- Actions ---------------- */
@@ -349,9 +405,9 @@
     name: "Regex Tester",
     category: "Regex",
     icon: "regex",
-    description: "Test patterns with flags, groups, and live highlighting.",
+    description: "Test patterns with flags, groups, highlighting and replace.",
 
-    keywords: "regexp pattern match test regular expression flags groups replace",
+    keywords: "regexp pattern match test regular expression flags groups replace library email url phone date",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
@@ -491,11 +547,66 @@
         dom.el("div", { class: "dt-panel__foot" }, [matchStats]),
       ]);
 
+      /* --- Common patterns library --- */
+      const libWrap = dom.el("div", { class: "dt-chips" });
+      PATTERN_LIBRARY.forEach(function (preset) {
+        const chip = dom.el("button", {
+          type: "button",
+          class: "dt-btn dt-btn--secondary dt-btn--sm",
+          text: preset.name,
+          title: "/" + preset.pattern + "/" + preset.flags,
+        });
+        chip.addEventListener("click", function () { loadPattern(preset); });
+        libWrap.appendChild(chip);
+      });
+      const libPanel = dom.el("div", { class: "dt-panel" }, [
+        dom.el("div", { class: "dt-panel__head" }, [
+          dom.el("div", { class: "dt-panel__title", text: "Common patterns" }),
+        ]),
+        dom.el("div", { class: "dt-panel__body", style: { padding: "12px 16px" } }, [libWrap]),
+      ]);
+
+      /* --- Replace panel --- */
+      const replaceInput = dom.el("input", {
+        type: "text",
+        class: "dt-input dt-input--mono",
+        id: "dt-regex-replace",
+        autocomplete: "off",
+        spellcheck: "false",
+        placeholder: "Replacement text ($1 = group 1)…",
+      });
+      const replaceOut = dom.el("textarea", {
+        class: "dt-textarea",
+        id: "dt-regex-replace-out",
+        rows: "4",
+        spellcheck: "false",
+        readonly: "readonly",
+        placeholder: "The replaced text appears here…",
+      });
+      replaceOut.style.whiteSpace = "pre-wrap";
+      const replaceStats = dom.el("div", { class: "dt-panel__stats", text: "0 replacements" });
+      const btnReplaceCopy = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Copy result",
+      });
+      const replacePanel = dom.el("div", { class: "dt-panel dt-panel--editor" }, [
+        DT.ui.panel.head("Replace", [btnReplaceCopy]),
+        dom.el("div", {
+          class: "dt-panel__body",
+          style: { padding: "12px 16px 0" },
+        }, [replaceInput]),
+        dom.el("div", { class: "dt-panel__body" }, [replaceOut]),
+        dom.el("div", { class: "dt-panel__foot" }, [replaceStats]),
+      ]);
+
       workspace.appendChild(patternPanel);
+      workspace.appendChild(libPanel);
       workspace.appendChild(toolbar);
       workspace.appendChild(textPanel);
       workspace.appendChild(highlightPanel);
       workspace.appendChild(matchesPanel);
+      workspace.appendChild(replacePanel);
       container.appendChild(workspace);
 
       refs = {
@@ -505,6 +616,9 @@
         highlightSlot: highlightSlot,
         matchesSlot: matchesSlot,
         matchStats: matchStats,
+        replaceInput: replaceInput,
+        replaceOut: replaceOut,
+        replaceStats: replaceStats,
       };
 
       /* Events */
@@ -515,6 +629,17 @@
         on(flags[f.id], "change", update);
       });
 
+      on(replaceInput, "input", updateDebounced);
+      on(btnReplaceCopy, "click", function () {
+        if (!replaceOut.value) {
+          DT.ui.toast.info("Nothing to copy");
+          return;
+        }
+        DT.utils.clipboard
+          .copy(replaceOut.value)
+          .then(function () { DT.ui.toast.success("Replaced text copied"); })
+          .catch(function () { DT.ui.toast.error("Copy failed"); });
+      });
       on(btnCopy, "click", copyMatches);
       on(btnSample, "click", loadSample);
       on(btnClear, "click", clearAll);

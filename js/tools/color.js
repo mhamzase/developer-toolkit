@@ -101,6 +101,122 @@
     };
   }
 
+/* ------------------------------------------------------------
+   * Phase 2B: OKLCH, luminance, contrast, shades
+   * ------------------------------------------------------------ */
+  function formatOklch(rgb) {
+    function lin(c) {
+      const s = c / 255;
+      return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    }
+    const r = lin(rgb.r), g = lin(rgb.g), b = lin(rgb.b);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+    const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+    const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    const C = Math.sqrt(a * a + bb * bb);
+    let H = (Math.atan2(bb, a) * 180) / Math.PI;
+    if (H < 0) H += 360;
+    return (
+      "oklch(" +
+      (L * 100).toFixed(1) + "% " +
+      C.toFixed(3) + " " +
+      H.toFixed(1) + ")"
+    );
+  }
+
+  /** WCAG relative luminance of an {r,g,b} color. */
+  function luminance(rgb) {
+    function lin(c) {
+      const s = c / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    }
+    return 0.2126 * lin(rgb.r) + 0.7152 * lin(rgb.g) + 0.0722 * lin(rgb.b);
+  }
+  function contrastRatio(a, b) {
+    const la = luminance(a), lb = luminance(b);
+    const hi = Math.max(la, lb), lo = Math.min(la, lb);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+
+  function mixRgb(rgb, target, t) {
+    return {
+      r: Math.round(rgb.r + (target.r - rgb.r) * t),
+      g: Math.round(rgb.g + (target.g - rgb.g) * t),
+      b: Math.round(rgb.b + (target.b - rgb.b) * t),
+    };
+  }
+
+  let contrastBg = { r: 255, g: 255, b: 255 };
+
+  function renderShades() {
+    if (!refs || !refs.shadesSlot) return;
+    const dom = DT.ui.dom;
+    DT.ui.dom.clear(refs.shadesSlot);
+    DT.ui.dom.clear(refs.tintsSlot);
+    const BLACK = { r: 0, g: 0, b: 0 }, WHITE = { r: 255, g: 255, b: 255 };
+    function row(slot, target) {
+      [0.15, 0.3, 0.45, 0.6, 0.75].forEach(function (t) {
+        const c = mixRgb(state, target, t);
+        const hex = rgbToHex(c.r, c.g, c.b);
+        const sw = dom.el("button", {
+          type: "button",
+          class: "dt-swatch dt-swatch--sm",
+          title: hex + " (click to use + copy)",
+          style: { backgroundColor: hex },
+        });
+        sw.addEventListener("click", function () {
+          setFromRgb(c);
+          DT.utils.clipboard.copy(hex).then(function () {
+            DT.ui.toast.success(hex + " copied");
+          }).catch(function () {});
+        });
+        slot.appendChild(sw);
+      });
+    }
+    row(refs.shadesSlot, BLACK);
+    row(refs.tintsSlot, WHITE);
+  }
+
+  function contrastBadge(label, ratio, needed) {
+    const dom = DT.ui.dom;
+    const pass = ratio >= needed;
+    return dom.el("span", {
+      class: "dt-contrast-badge " + (pass ? "dt-contrast-badge--pass" : "dt-contrast-badge--fail"),
+      text: label + " " + (pass ? "Pass" : "Fail"),
+      title: "Needs " + needed + ":1",
+    });
+  }
+
+  function renderContrast() {
+    if (!refs || !refs.contrastSlot) return;
+    const dom = DT.ui.dom;
+    DT.ui.dom.clear(refs.contrastSlot);
+    const ratio = contrastRatio(state, contrastBg);
+    refs.contrastSlot.appendChild(
+      dom.el("div", { class: "dt-contrast-ratio", text: ratio.toFixed(2) + " : 1" }),
+    );
+    const badges = dom.el("div", { class: "dt-row", style: { gap: "6px", flexWrap: "wrap" } }, [
+      contrastBadge("AA normal", ratio, 4.5),
+      contrastBadge("AA large", ratio, 3),
+      contrastBadge("AAA normal", ratio, 7),
+      contrastBadge("AAA large", ratio, 4.5),
+    ]);
+    refs.contrastSlot.appendChild(badges);
+    refs.contrastSlot.appendChild(
+      dom.el("div", {
+        class: "dt-help",
+        text: "Text size counts as large from 18pt (or 14pt bold).",
+      }),
+    );
+    if (refs.bgPicker) refs.bgPicker.value = rgbToHex(contrastBg.r, contrastBg.g, contrastBg.b);
+    if (refs.bgHex) refs.bgHex.value = rgbToHex(contrastBg.r, contrastBg.g, contrastBg.b);
+    if (refs.fgSwatch) refs.fgSwatch.style.backgroundColor = formatHex(state);
+    if (refs.bgSwatch) refs.bgSwatch.style.backgroundColor = rgbToHex(contrastBg.r, contrastBg.g, contrastBg.b);
+  }
+
   function formatHex(rgb) {
     return rgbToHex(rgb.r, rgb.g, rgb.b);
   }
@@ -116,8 +232,11 @@
     refs.hex.value = formatHex(state);
     refs.rgb.value = formatRgb(state);
     refs.hsl.value = formatHsl(state);
+    if (refs.oklch) refs.oklch.value = formatOklch(state);
     refs.preview.style.backgroundColor = formatHex(state);
     refs.picker.value = formatHex(state);
+    renderShades();
+    renderContrast();
   }
 
   function setFromRgb(rgb) {
@@ -265,9 +384,9 @@
     name: "Color Tools",
     category: "Color",
     icon: "palette",
-    description: "Convert HEX, RGB, HSL and save swatches.",
+    description: "Convert HEX, RGB, HSL, OKLCH. Contrast checker and shades.",
 
-    keywords: "hex rgb hsl picker swatch palette eyedropper colour convert shades",
+    keywords: "hex rgb hsl oklch picker swatch palette eyedropper colour convert shades tints contrast wcag accessibility",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
@@ -358,6 +477,20 @@
         hslCopy,
       ]);
 
+      const oklch = dom.el("input", {
+        type: "text",
+        class: "dt-input",
+        id: "dt-color-oklch",
+        readonly: "readonly",
+        spellcheck: "false",
+      });
+      const oklchCopy = copyIconButton("OKLCH");
+      const oklchRow = dom.el("div", { class: "dt-result__row" }, [
+        dom.el("div", { class: "dt-result__label", text: "OKLCH" }),
+        oklch,
+        oklchCopy,
+      ]);
+
       const fieldsPanel = dom.el("div", { class: "dt-panel" }, [
         dom.el("div", { class: "dt-panel__head" }, [
           dom.el("div", { class: "dt-panel__title", text: "Values" }),
@@ -365,8 +498,79 @@
         dom.el(
           "div",
           { class: "dt-panel__body", style: { padding: "8px 16px" } },
-          [hexRow, rgbRow, hslRow],
+          [hexRow, rgbRow, hslRow, oklchRow],
         ),
+      ]);
+
+      /* --- Shades & tints panel --- */
+      const shadesSlot = dom.el("div", { class: "dt-shades-row", id: "dt-color-shades" });
+      const tintsSlot = dom.el("div", { class: "dt-shades-row", id: "dt-color-tints" });
+      const shadesPanel = dom.el("div", { class: "dt-panel" }, [
+        dom.el("div", { class: "dt-panel__head" }, [
+          dom.el("div", { class: "dt-panel__title", text: "Shades & tints" }),
+        ]),
+        dom.el("div", {
+          class: "dt-panel__body",
+          style: { padding: "12px 16px", display: "flex", flexDirection: "column", gap: "10px" },
+        }, [
+          dom.el("div", { class: "dt-result__row" }, [
+            dom.el("div", { class: "dt-result__label", text: "Shades" }),
+            shadesSlot,
+          ]),
+          dom.el("div", { class: "dt-result__row" }, [
+            dom.el("div", { class: "dt-result__label", text: "Tints" }),
+            tintsSlot,
+          ]),
+        ]),
+      ]);
+
+      /* --- Contrast panel (WCAG) --- */
+      const fgSwatch = dom.el("div", { class: "dt-contrast-swatch", title: "Text / foreground (current color)" });
+      const bgSwatch = dom.el("div", { class: "dt-contrast-swatch", title: "Background" });
+      const bgPicker = dom.el("input", {
+        type: "color",
+        class: "dt-color-picker dt-color-picker--sm",
+        id: "dt-color-bg-picker",
+        value: "#ffffff",
+        "aria-label": "Pick background color",
+      });
+      const bgHex = dom.el("input", {
+        type: "text",
+        class: "dt-input",
+        id: "dt-color-bg-hex",
+        autocomplete: "off",
+        spellcheck: "false",
+        value: "#ffffff",
+      });
+      bgHex.style.width = "110px";
+      const btnSwap = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Swap",
+      });
+      const contrastSlot = dom.el("div", {
+        id: "dt-color-contrast",
+        style: { display: "flex", flexDirection: "column", gap: "8px" },
+      });
+      const contrastPanel = dom.el("div", { class: "dt-panel" }, [
+        dom.el("div", { class: "dt-panel__head" }, [
+          dom.el("div", { class: "dt-panel__title", text: "Contrast (WCAG)" }),
+        ]),
+        dom.el("div", {
+          class: "dt-panel__body",
+          style: { padding: "12px 16px", display: "flex", flexDirection: "column", gap: "12px" },
+        }, [
+          dom.el("div", { class: "dt-row", style: { gap: "10px", alignItems: "center", flexWrap: "wrap" } }, [
+            dom.el("span", { class: "dt-toolbar__label", text: "Text" }),
+            fgSwatch,
+            dom.el("span", { class: "dt-toolbar__label", text: "On" }),
+            bgSwatch,
+            bgPicker,
+            bgHex,
+            btnSwap,
+          ]),
+          contrastSlot,
+        ]),
       ]);
 
       const btnSave = dom.el("button", {
@@ -404,11 +608,16 @@
 
       workspace.appendChild(previewRow);
       workspace.appendChild(fieldsPanel);
+      workspace.appendChild(shadesPanel);
+      workspace.appendChild(contrastPanel);
       workspace.appendChild(actions);
       workspace.appendChild(swatchPanel);
       container.appendChild(workspace);
 
-      refs = { preview, picker, hex, rgb, hsl, swatchSlot };
+      refs = {
+        preview, picker, hex, rgb, hsl, oklch, swatchSlot,
+        shadesSlot, tintsSlot, contrastSlot, bgPicker, bgHex, fgSwatch, bgSwatch,
+      };
       paintInputs();
 
       function attachCopy(btn, getVal, label) {
@@ -427,6 +636,22 @@
       attachCopy(hexCopy, () => formatHex(state), "HEX");
       attachCopy(rgbCopy, () => formatRgb(state), "RGB");
       attachCopy(hslCopy, () => formatHsl(state), "HSL");
+      attachCopy(oklchCopy, () => formatOklch(state), "OKLCH");
+
+      on(bgPicker, "input", () => {
+        const c = hexToRgb(bgPicker.value);
+        if (c) { contrastBg = c; renderContrast(); }
+      });
+      on(bgHex, "input", () => {
+        const c = hexToRgb(bgHex.value.trim());
+        if (c) { contrastBg = c; renderContrast(); }
+      });
+      on(btnSwap, "click", () => {
+        const prevFg = { r: state.r, g: state.g, b: state.b };
+        const prevBg = contrastBg;
+        contrastBg = prevFg;
+        setFromRgb(prevBg);
+      });
 
       on(picker, "input", () => setFromHex(picker.value));
       /* --- Eyedropper click --- */

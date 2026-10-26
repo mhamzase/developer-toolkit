@@ -188,3 +188,7 @@
 [data-theme='dark'] .dt-stat--remove .dt-stat__value {
   color: #fca5a5;
 }
+/* Word-level highlights inside an edited line pair */
+.dt-diff-word { border-radius: 2px; padding: 0 1px; }
+.dt-diff-word--add { background-color: rgba(22, 163, 74, 0.38); }
+.dt-diff-word--del { background-color: rgba(220, 38, 38, 0.34); }

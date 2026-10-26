@@ -3,11 +3,13 @@
  * Module: Tool — Cron Parser
  * Purpose: Parse cron expressions, describe them, and predict next runs.
  * Notes:
- *   - Supports standard 5-field cron (minute hour day month weekday).
+ *   - Supports standard 5-field cron (minute hour day month weekday)
+ *     and 6-field cron with a leading seconds field.
  *   - Supports wildcards, ranges, steps, and comma lists.
  *   - Step syntax uses a slash, e.g. "star-slash-5" means every 5 units.
  *   - Common aliases: @yearly, @monthly, @weekly, @daily, @hourly.
- *   - Does NOT handle seconds, @reboot, or L/W/# extensions.
+ *   - Quartz "?" in the day / weekday fields is treated as "*".
+ *   - Does NOT handle @reboot, year fields, or L/W/# extensions.
  *   - All processing local.
  */
 
@@ -38,6 +40,8 @@
   };
 
   /* ---------------- Field definitions ---------------- */
+
+  const SECOND_FIELD = { key: "second", name: "Second", min: 0, max: 59 };
 
   const FIELDS = [
     { key: "minute", name: "Minute", min: 0, max: 59 },
@@ -186,27 +190,35 @@
     }
 
     const tokens = src.split(/\s+/);
-    if (tokens.length !== 5) {
+    if (tokens.length !== 5 && tokens.length !== 6) {
       return {
         ok: false,
         error:
-          "Expected 5 fields (minute hour day month weekday), got " +
+          "Expected 5 fields (minute hour day month weekday) or 6 with seconds first, got " +
           tokens.length +
           ".",
       };
     }
 
+    const hasSeconds = tokens.length === 6;
+    const defs = hasSeconds ? [SECOND_FIELD].concat(FIELDS) : FIELDS;
+
     const out = {};
-    for (let i = 0; i < FIELDS.length; i++) {
-      const field = FIELDS[i];
-      const token = tokens[i];
+    for (let i = 0; i < defs.length; i++) {
+      const field = defs[i];
+      let token = tokens[i];
+      // Quartz uses "?" for "no specific value" in day / weekday.
+      if ((field.key === "day" || field.key === "weekday") && token === "?") {
+        token = "*";
+      }
       const parsed = parseField(token, field);
       if (!parsed.ok)
         return { ok: false, error: field.name + ": " + parsed.error };
       out[field.key] = parsed.values;
     }
+    if (!hasSeconds) out.second = [0];
 
-    return { ok: true, fields: out, expr: src };
+    return { ok: true, fields: out, expr: src, hasSeconds: hasSeconds, defs: defs };
   }
 
   /* ---------------- Description ---------------- */
@@ -283,7 +295,15 @@
       parts.push("every day");
     }
 
-    return parts.join(" ").replace(/^./, (c) => c.toUpperCase()) + ".";
+    let text = parts.join(" ");
+    if (fields.second && fields.second.length < 60) {
+      text +=
+        " (at second" +
+        (fields.second.length === 1 ? " " : "s ") +
+        compactList(fields.second) +
+        " of the minute)";
+    }
+    return text.replace(/^./, (c) => c.toUpperCase()) + ".";
   }
 
   function compactList(arr) {
@@ -307,16 +327,24 @@
     const results = [];
     const maxIterations = 60 * 24 * 366 * 4; // 4 years of minutes, hard cap
 
-    const start = new Date();
-    start.setSeconds(0, 0);
-    start.setMinutes(start.getMinutes() + 1);
+    const now = new Date();
+    const cur = new Date(now);
+    cur.setSeconds(0, 0);
 
-    const cur = new Date(start);
     let iterations = 0;
-
     while (results.length < count && iterations < maxIterations) {
       iterations++;
-      if (matches(fields, cur)) results.push(new Date(cur));
+      if (matches(fields, cur)) {
+        // The minute matches; resolve the seconds inside it.
+        for (let s = 0; s < fields.second.length; s++) {
+          const cand = new Date(cur);
+          cand.setSeconds(fields.second[s]);
+          if (cand > now) {
+            results.push(cand);
+            if (results.length >= count) break;
+          }
+        }
+      }
       cur.setMinutes(cur.getMinutes() + 1);
     }
 
@@ -344,7 +372,7 @@
 
   /* ---------------- Formatting ---------------- */
 
-  function formatDate(d) {
+  function formatDate(d, withSeconds) {
     const days = [
       "Sunday",
       "Monday",
@@ -379,7 +407,8 @@
       "  " +
       pad(d.getHours()) +
       ":" +
-      pad(d.getMinutes())
+      pad(d.getMinutes()) +
+      (withSeconds ? ":" + pad(d.getSeconds()) : "")
     );
   }
 
@@ -451,7 +480,7 @@
     const breakdown = dom.el("div", { class: "dt-cron-fields" });
     const tokens = parsed.expr.split(/\s+/);
 
-    FIELDS.forEach((f, i) => {
+    parsed.defs.forEach((f, i) => {
       breakdown.appendChild(
         dom.el("div", { class: "dt-cron-field" }, [
           dom.el("div", { class: "dt-cron-field__name", text: f.name }),
@@ -502,7 +531,7 @@
               class: "dt-cron-run__index",
               text: String(i + 1),
             }),
-            dom.el("span", { class: "dt-cron-run__date", text: formatDate(d) }),
+            dom.el("span", { class: "dt-cron-run__date", text: formatDate(d, parsed.hasSeconds) }),
             dom.el("span", { class: "dt-cron-run__rel", text: humanize(d) }),
           ]),
         );
@@ -523,6 +552,7 @@
   }
 
   function summarizeValues(field, values) {
+    if (field.key === "second" && values.length === 60) return "every second";
     if (field.key === "minute" && values.length === 60) return "every minute";
     if (field.key === "hour" && values.length === 24) return "every hour";
     if (field.key === "day" && values.length === 31) return "every day";
@@ -604,9 +634,9 @@
     name: "Cron Parser",
     category: "Reference",
     icon: "cron",
-    description: "Parse cron expressions into human-readable form.",
+    description: "Parse cron expressions into human-readable form. Builder included.",
 
-    keywords: "schedule crontab expression parser job timer linux quartz",
+    keywords: "schedule crontab expression parser job timer linux quartz seconds builder",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
@@ -667,6 +697,105 @@
         dom.el("div", { class: "dt-panel__foot" }, [exprStats.el]),
       ]);
 
+/* --- Builder: pick a schedule, get an expression --- */
+      function numOptions(max, padTwo) {
+        const out = [];
+        for (let i = 0; i <= max; i++) {
+          out.push(dom.el("option", {
+            value: String(i),
+            text: padTwo ? String(i).padStart(2, "0") : String(i),
+          }));
+        }
+        return out;
+      }
+      const bFreq = dom.el("select", { class: "dt-select dt-select--sm", id: "dt-cron-b-freq" }, [
+        dom.el("option", { value: "minute", text: "Every minute" }),
+        dom.el("option", { value: "hour", text: "Hourly" }),
+        dom.el("option", { value: "daily", text: "Daily" }),
+        dom.el("option", { value: "weekdays", text: "Weekdays (Mon-Fri)" }),
+        dom.el("option", { value: "weekly", text: "Weekly" }),
+        dom.el("option", { value: "monthly", text: "Monthly" }),
+      ]);
+      const bHour = dom.el("select", { class: "dt-select dt-select--sm", id: "dt-cron-b-hour" }, numOptions(23, true));
+      bHour.value = "9";
+      const bMinute = dom.el("select", { class: "dt-select dt-select--sm", id: "dt-cron-b-minute" }, numOptions(59, true));
+      const bDow = dom.el("select", { class: "dt-select dt-select--sm", id: "dt-cron-b-dow" }, [
+        dom.el("option", { value: "0", text: "Sunday" }),
+        dom.el("option", { value: "1", text: "Monday" }),
+        dom.el("option", { value: "2", text: "Tuesday" }),
+        dom.el("option", { value: "3", text: "Wednesday" }),
+        dom.el("option", { value: "4", text: "Thursday" }),
+        dom.el("option", { value: "5", text: "Friday" }),
+        dom.el("option", { value: "6", text: "Saturday" }),
+      ]);
+      bDow.value = "1";
+      const bDom = dom.el("select", { class: "dt-select dt-select--sm", id: "dt-cron-b-dom" },
+        Array.from({ length: 28 }, function (_, i) {
+          return dom.el("option", { value: String(i + 1), text: String(i + 1) });
+        }));
+      const bSeconds = dom.el("input", { type: "checkbox", id: "dt-cron-b-seconds" });
+      const bSecondsLabel = dom.el("label", {
+        class: "dt-toolbar__label",
+        for: "dt-cron-b-seconds",
+        style: { display: "inline-flex", alignItems: "center", gap: "6px", cursor: "pointer", textTransform: "none", letterSpacing: "0" },
+      }, [bSeconds, dom.txt("Seconds field")]);
+      const bDowWrap = dom.el("span", { class: "dt-toolbar__group" }, [
+        dom.el("span", { class: "dt-toolbar__label", text: "Day" }),
+        bDow,
+      ]);
+      const bDomWrap = dom.el("span", { class: "dt-toolbar__group" }, [
+        dom.el("span", { class: "dt-toolbar__label", text: "Date" }),
+        bDom,
+      ]);
+      const bTimeWrap = dom.el("span", { class: "dt-toolbar__group" }, [
+        dom.el("span", { class: "dt-toolbar__label", text: "At" }),
+        bHour,
+        dom.el("span", { text: ":" }),
+        bMinute,
+      ]);
+      function applyBuilder() {
+        const f = bFreq.value;
+        const m = bMinute.value, h = bHour.value;
+        let expr;
+        if (f === "minute") expr = "* * * * *";
+        else if (f === "hour") expr = m + " * * * *";
+        else if (f === "daily") expr = m + " " + h + " * * *";
+        else if (f === "weekdays") expr = m + " " + h + " * * 1-5";
+        else if (f === "weekly") expr = m + " " + h + " * * " + bDow.value;
+        else expr = m + " " + h + " " + bDom.value + " * *";
+        if (bSeconds.checked) expr = "0 " + expr;
+        bTimeWrap.style.display = f === "minute" ? "none" : "";
+        bDowWrap.style.display = f === "weekly" ? "" : "none";
+        bDomWrap.style.display = f === "monthly" ? "" : "none";
+        refs.input.value = expr;
+        render();
+        exprStats.paint();
+      }
+      const builderPanel = dom.el("div", { class: "dt-panel" }, [
+        DT.ui.panel.head("Builder"),
+        dom.el("div", {
+          class: "dt-panel__body",
+          style: { padding: "12px 16px" },
+        }, [
+          dom.el("div", { class: "dt-toolbar" }, [
+            dom.el("div", { class: "dt-toolbar__group" }, [
+              bFreq,
+              bTimeWrap,
+              bDowWrap,
+              bDomWrap,
+              bSecondsLabel,
+            ]),
+            DT.ui.panel.hint("Fills the expression above"),
+          ]),
+        ]),
+      ]);
+      bTimeWrap.style.display = "none";
+      bDowWrap.style.display = "none";
+      bDomWrap.style.display = "none";
+      [bFreq, bHour, bMinute, bDow, bDom, bSeconds].forEach(function (el) {
+        el.addEventListener("change", applyBuilder);
+      });
+
       /* --- Presets row --- */
       const presetsWrap = dom.el("div", { class: "dt-chips" });
       PRESETS.forEach((p) => {
@@ -700,6 +829,7 @@
       /* --- Assemble --- */
       workspace.appendChild(toolbar);
       workspace.appendChild(inputPanel);
+      workspace.appendChild(builderPanel);
       workspace.appendChild(presetsPanel);
       workspace.appendChild(resultSlot);
       container.appendChild(workspace);

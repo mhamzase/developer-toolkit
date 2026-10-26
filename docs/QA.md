@@ -36,6 +36,10 @@ Run this before every release.
 - [ ] Validate toasts correctly
 - [ ] Copy works
 - [ ] Ctrl+Enter triggers Format
+- [ ] Sort keys orders keys at every depth
+- [ ] Tree view opens; nodes collapse; Expand/Collapse all work
+- [ ] To CSV / To YAML produce sane text; CSV to JSON round-trips with typed numbers
+- [ ] Escape then Unescape returns the original text
 
 ### JWT Decoder
 - [ ] Sample loads and decodes
@@ -55,6 +59,7 @@ Run this before every release.
 - [ ] Component mode encodes `&=?/#`
 - [ ] Full URL mode preserves URL structure
 - [ ] Valid URL produces breakdown card
+- [ ] Editing a param value, removing a row and adding a param all update the Rebuilt URL
 - [ ] Malformed `%` shows error
 
 ### UUID Generator
@@ -62,12 +67,16 @@ Run this before every release.
 - [ ] All generated UUIDs match v4 pattern
 - [ ] Batch of 500 finishes without freeze
 - [ ] Copy all produces newline-separated list
+- [ ] Type picker: v7 sorts by time, ULID is 26 Crockford chars, Nano ID is 21 chars
+- [ ] Parse panel names the type; a v7 / ULID shows its creation time; garbage shows invalid
 
 ### Timestamp Converter
 - [ ] Sec and ms both convert correctly
 - [ ] Auto-detect by digit count works
 - [ ] Now button fills current time
 - [ ] Date → Timestamp matches round trip
+- [ ] "Show in" timezone adds a zone row with the correctly shifted time
+- [ ] Clear in the Timestamp section clears its own field (no error)
 
 ### Case Converter
 - [ ] All 9 variants update live
@@ -79,12 +88,16 @@ Run this before every release.
 - [ ] Typing hex/rgb/hsl updates preview
 - [ ] Save swatch persists after popup close + reopen
 - [ ] Right-click swatch removes it
+- [ ] OKLCH row updates and copies
+- [ ] Shades/tints swatches apply on click; black on white reads 21:1 with all badges Pass; Swap flips the pair
 
 ### Hash Generator
 - [ ] `abc` SHA-256 = `ba7816bf...f20015ad`
 - [ ] SHA-384 and SHA-512 also match known vectors
 - [ ] Base64 format works
 - [ ] Live hashing debounces smoothly
+- [ ] `abc` MD5 = `900150983cd24fb0...`, SHA-1 = `a9993e36...`
+- [ ] HMAC key changes the output and the meta line reads HMAC-<algo>
 - [ ] File panel: dropping a file shows its hash for the chosen algorithm; switching algorithm re-hashes the same file
 
 ### Text Utilities
@@ -92,21 +105,28 @@ Run this before every release.
 - [ ] Each operation produces correct output
 - [ ] "Use output as input" swaps and clears
 - [ ] Word count matches for `hello world` (2) and `naïve café` (2)
+- [ ] Slugify turns `Héllo Wörld!` into `hello-world`
 
 ### Regex Tester
 - [ ] Pattern + sample text shows live matches with groups and positions
 - [ ] Flags g/i/m/s/u/y toggle correctly
 - [ ] Invalid pattern shows a friendly error, Load sample works
+- [ ] A library chip loads its pattern and flags; email sample text matches
+- [ ] Replace panel: `(\w+)@(\w+)` with `$2/$1` swaps the parts and the count updates
 
 ### Diff Checker
 - [ ] Added/removed lines highlight on the correct sides
 - [ ] Copy diff produces +/- prefixed output
 - [ ] Oversized input shows the too-large message instead of freezing
+- [ ] An edited line pair highlights only the changed words
+- [ ] Ignore whitespace / Ignore case turn whitespace-only or case-only edits into "Identical"
 
 ### Password Generator
 - [ ] Generated passwords use crypto randomness and match selected sets
 - [ ] Ambiguous characters are excluded when the option is on
 - [ ] Strength meter entropy changes with length and pool size
+- [ ] Passphrase mode: chosen word count, separator honored, entropy scales with words
+- [ ] PIN mode produces digits only, at the chosen length
 
 ### Lorem Ipsum
 - [ ] Paragraphs, sentences, and words modes generate the requested amount
@@ -121,6 +141,8 @@ Run this before every release.
 - [ ] `*/5 * * * *` describes as every 5 minutes with correct next runs
 - [ ] Aliases (@daily, @hourly) parse
 - [ ] Invalid expressions show a clear field-level error
+- [ ] `30 */15 * * * *` parses as 6 fields; next runs land on second 30
+- [ ] Builder: Weekly + Monday + 09:30 fills `30 9 * * 1`; Seconds field prefixes `0 `
 
 ## 4b. Uniform frame (Phase 2A)
 - [ ] Input heads carry a Paste button on the text tools (JSON, Base64, URL, Hash, Text, Diff both sides, Regex test string, JWT, Cron, Case, Timestamp)

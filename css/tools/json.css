@@ -7,3 +7,25 @@
  * ============================================================ */
 
 /* (intentionally empty for now) */
+/* --- Tree view --- */
+.dt-json-tree {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+  overflow-x: auto;
+}
+.dt-json-node { white-space: nowrap; }
+.dt-json-kids { padding-left: 18px; border-left: 1px solid var(--color-border); margin-left: 6px; }
+.dt-json-row { display: flex; align-items: center; gap: 2px; }
+.dt-json-toggle {
+  appearance: none; background: transparent; border: none; cursor: pointer;
+  width: 16px; height: 16px; padding: 0; flex: 0 0 16px;
+  color: var(--color-text-muted); font-size: 10px; line-height: 1;
+}
+.dt-json-toggle-spacer { flex: 0 0 16px; }
+.dt-json-key { color: var(--color-accent); }
+.dt-json-type { color: var(--color-text-subtle); font-style: italic; }
+.dt-json-value--string { color: var(--color-success); }
+.dt-json-value--number { color: var(--color-info, #2563eb); }
+.dt-json-value--boolean { color: var(--color-warning, #b45309); }
+.dt-json-value--null { color: var(--color-text-subtle); font-style: italic; }

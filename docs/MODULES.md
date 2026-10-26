@@ -41,6 +41,24 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
+## Tool highlights (v1.3.0)
+
+- `hash.js` carries a pure-JS MD5 (`md5Bytes` + `hmacMd5`) because
+  Web Crypto lacks MD5; everything else goes through one
+  `digestBytes(algo, bytes, key)` entry point shared by text,
+  files and HMAC.
+- `json.js` conversions live beside the formatter: `sortKeysDeep`,
+  `toCsv` / `csvToJson`, `toYaml`, and a collapsible tree built by
+  `buildTreeNode` (capped at 2000 nodes).
+- `uuid.js` generates v4, v7, ULID and Nano ID from one
+  `generateOne()` switch and parses any of them back with
+  `parseId()` (timestamps extracted for v7 and ULID).
+- `cron.js` accepts 5 or 6 fields; `parsed.defs` records which
+  field definitions were used, and next-run search steps by
+  minute, resolving matching seconds inside the minute.
+- `password.js` has three modes behind one segmented control;
+  strength is always honest entropy (`paintStrength(bits)`).
+
 ## Tool contract
 
 Every tool exposes:

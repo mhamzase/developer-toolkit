@@ -62,6 +62,49 @@
       "Saturday",
     ][d.getDay()];
   }
+  /** Format a date inside an IANA timezone, same shape as Local. */
+  function formatInZone(d, timeZone) {
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: timeZone,
+        weekday: "long",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }).formatToParts(d);
+      const get = function (t) {
+        const p = parts.find(function (x) { return x.type === t; });
+        return p ? p.value : "";
+      };
+      const hour = pad(parseInt(get("hour"), 10) % 24);
+      return (
+        get("weekday") + ", " +
+        get("year") + "-" + get("month") + "-" + get("day") + " " +
+        hour + ":" + get("minute") + ":" + get("second")
+      );
+    } catch (e) {
+      return "Unsupported timezone";
+    }
+  }
+
+  const TIMEZONES = [
+    "UTC",
+    "Asia/Karachi",
+    "Asia/Kolkata",
+    "Asia/Dubai",
+    "Asia/Tokyo",
+    "Europe/London",
+    "Europe/Berlin",
+    "America/New_York",
+    "America/Chicago",
+    "America/Los_Angeles",
+    "Australia/Sydney",
+  ];
+
   function tzName() {
     try {
       return Intl.DateTimeFormat().resolvedOptions().timeZone || "Local";
@@ -225,8 +268,24 @@
       text: "Clear",
     });
 
+    const tzSel = dom.el("select", {
+      class: "dt-select dt-select--sm",
+      id: "dt-ts-tz",
+      "aria-label": "Also show in timezone",
+    }, [
+      dom.el("option", { value: "", text: "Local only" }),
+    ].concat(TIMEZONES.map(function (z) {
+      return dom.el("option", { value: z, text: z });
+    })));
+    tzSel.style.width = "170px";
+
     const inputRow = dom.el("div", { class: "dt-toolbar" }, [
-      dom.el("div", { class: "dt-toolbar__group" }, [unitGroup, btnNow]),
+      dom.el("div", { class: "dt-toolbar__group" }, [
+        unitGroup,
+        dom.el("span", { class: "dt-toolbar__label", text: "Show in" }),
+        tzSel,
+        btnNow,
+      ]),
       btnClear,
     ]);
 
@@ -279,18 +338,20 @@
         return;
       }
 
-      renderResultCard(
-        resultSlot,
-        [
-          ["Local", dayOfWeekLocal(d) + ", " + formatLocal(d)],
-          ["Timezone", tzName() + " (" + tzOffset(d) + ")"],
-          ["UTC", formatUTC(d)],
-          ["ISO 8601", d.toISOString()],
-          ["Relative", relFromNow(ms), false],
-        ],
-        "Result",
-      );
+      const rows = [
+        ["Local", dayOfWeekLocal(d) + ", " + formatLocal(d)],
+        ["Timezone", tzName() + " (" + tzOffset(d) + ")"],
+        ["UTC", formatUTC(d)],
+        ["ISO 8601", d.toISOString()],
+        ["Relative", relFromNow(ms), false],
+      ];
+      if (tzSel.value) {
+        rows.splice(1, 0, ["In " + tzSel.value, formatInZone(d, tzSel.value)]);
+      }
+      renderResultCard(resultSlot, rows, "Result");
     }
+
+    on(tzSel, "change", convert);
 
     on(tsInput, "input", convert);
     on(tsInput, "keydown", (e) => {
@@ -305,14 +366,14 @@
       else tsInput.value = String(Math.floor(now / 1000));
       convert();
     });
-      on(btnClear, 'click', () => {
-      const snap = dtInput.value;
-      if (!snap) { dtInput.focus(); return; }
-      dtInput.value = '';
+    on(btnClear, "click", () => {
+      const snap = tsInput.value;
+      if (!snap) { tsInput.focus(); return; }
+      tsInput.value = "";
       DT.ui.dom.clear(resultSlot);
-      dtInput.focus();
-      DT.ui.toast.undo('Cleared', function () {
-        dtInput.value = snap;
+      tsInput.focus();
+      DT.ui.toast.undo("Cleared", function () {
+        tsInput.value = snap;
         convert();
       });
     });
@@ -436,7 +497,7 @@
     icon: "calendarClock",
     description: "Convert Unix time ↔ readable dates.",
 
-    keywords: "unix epoch date time convert seconds milliseconds iso relative",
+    keywords: "unix epoch date time convert seconds milliseconds iso relative timezone utc",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

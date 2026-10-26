@@ -38,9 +38,11 @@
    * @param {string[]} b
    * @returns {Array<{type:'same'|'add'|'remove', a?:string, b?:string, aIdx?:number, bIdx?:number}>}
    */
-  function diffLines(a, b) {
+  function diffLines(a, b, keyFn) {
     const n = a.length,
       m = b.length;
+    const key = keyFn || function (x) { return x; };
+    const ka = a.map(key), kb = b.map(key);
 
     // Guard for very large inputs
     if (n * m > 4_000_000) {
@@ -60,7 +62,7 @@
 
     for (let i = 1; i <= n; i++) {
       for (let j = 1; j <= m; j++) {
-        if (a[i - 1] === b[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;
+        if (ka[i - 1] === kb[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;
         else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
       }
     }
@@ -70,7 +72,7 @@
     let i = n,
       j = m;
     while (i > 0 || j > 0) {
-      if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
+      if (i > 0 && j > 0 && ka[i - 1] === kb[j - 1]) {
         out.unshift({
           type: "same",
           a: a[i - 1],
@@ -90,6 +92,74 @@
     }
 
     return out;
+  }
+
+/* ---------------- Phase 2B: comparison options + word level ---------------- */
+
+  /** The key a line is compared by (display always uses the raw line). */
+  function comparisonKey(line) {
+    let k = String(line);
+    if (refs && refs.ignoreWs && refs.ignoreWs.checked) {
+      k = k.replace(/\s+/g, " ").trim();
+    }
+    if (refs && refs.ignoreCase && refs.ignoreCase.checked) {
+      k = k.toLowerCase();
+    }
+    return k;
+  }
+
+  function tokenizeLine(line) {
+    return String(line).split(/(\s+)/).filter(function (t) { return t !== ""; });
+  }
+
+  /**
+   * Word-level diff of one changed line pair. Returns per-side token
+   * lists flagged as changed, or null when the pair is too large.
+   */
+  function wordDiff(aLine, bLine) {
+    const a = tokenizeLine(aLine), b = tokenizeLine(bLine);
+    if (a.length * b.length > 250000) return null;
+    const n = a.length, m = b.length;
+    const dp = new Array(n + 1);
+    for (let i = 0; i <= n; i++) dp[i] = new Uint32Array(m + 1);
+    for (let i = 1; i <= n; i++) {
+      for (let j = 1; j <= m; j++) {
+        dp[i][j] = a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1] + 1
+          : Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+    const aOut = [], bOut = [];
+    let i = n, j = m;
+    while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
+        aOut.unshift({ text: a[i - 1], changed: false });
+        bOut.unshift({ text: b[j - 1], changed: false });
+        i--; j--;
+      } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+        bOut.unshift({ text: b[j - 1], changed: true });
+        j--;
+      } else {
+        aOut.unshift({ text: a[i - 1], changed: true });
+        i--;
+      }
+    }
+    return { a: aOut, b: bOut };
+  }
+
+  /** Fill a cell content span with word-diff spans for a paired line. */
+  function fillWordContent(span, tokens, kind) {
+    const dom = DT.ui.dom;
+    tokens.forEach(function (t) {
+      if (t.changed && t.text.trim() !== "") {
+        span.appendChild(dom.el("span", {
+          class: "dt-diff-word dt-diff-word--" + kind,
+          text: t.text,
+        }));
+      } else {
+        span.appendChild(dom.txt(t.text));
+      }
+    });
   }
 
   /* ---------------- Stats ---------------- */
@@ -137,7 +207,7 @@
     }
 
     /* Compute */
-    const diff = diffLines(aLines, bLines);
+    const diff = diffLines(aLines, bLines, comparisonKey);
 
     if (diff.length && diff[0].type === "error") {
       slot.appendChild(
@@ -194,12 +264,28 @@
     const MAX_ROWS = 3000;
     const rows = diff.slice(0, MAX_ROWS);
 
-    rows.forEach((d) => {
-      const leftCell = buildCell(d, "left");
-      const rightCell = buildCell(d, "right");
-      body.appendChild(leftCell);
-      body.appendChild(rightCell);
-    });
+    const wordOn = refs.wordLevel && refs.wordLevel.checked;
+    for (let ri = 0; ri < rows.length; ri++) {
+      const d = rows[ri];
+      // A remove directly followed by an add is one edited line:
+      // highlight the changed words inside both cells.
+      if (
+        wordOn &&
+        d.type === "remove" &&
+        ri + 1 < rows.length &&
+        rows[ri + 1].type === "add"
+      ) {
+        const wd = wordDiff(d.a, rows[ri + 1].b);
+        if (wd) {
+          body.appendChild(buildCell(d, "left", wd.a));
+          body.appendChild(buildCell(rows[ri + 1], "right", wd.b));
+          ri++;
+          continue;
+        }
+      }
+      body.appendChild(buildCell(d, "left"));
+      body.appendChild(buildCell(d, "right"));
+    }
 
     if (diff.length > MAX_ROWS) {
       const truncL = dom.el("div", {
@@ -217,7 +303,7 @@
     slot.appendChild(body);
   }
 
-  function buildCell(d, side) {
+  function buildCell(d, side, wordTokens) {
     const dom = DT.ui.dom;
     const cell = dom.el("div", { class: "dt-diff-cell" });
 
@@ -231,7 +317,8 @@
       } else if (d.type === "remove") {
         cell.classList.add("dt-diff-cell--remove");
         num.textContent = String(d.aIdx);
-        content.textContent = d.a;
+        if (wordTokens) fillWordContent(content, wordTokens, "del");
+        else content.textContent = d.a;
       } else {
         // 'add' → empty on left side
         cell.classList.add("dt-diff-cell--empty");
@@ -243,7 +330,8 @@
       } else if (d.type === "add") {
         cell.classList.add("dt-diff-cell--add");
         num.textContent = String(d.bIdx);
-        content.textContent = d.b;
+        if (wordTokens) fillWordContent(content, wordTokens, "add");
+        else content.textContent = d.b;
       } else {
         // 'remove' → empty on right side
         cell.classList.add("dt-diff-cell--empty");
@@ -290,7 +378,7 @@
   function copyUnified() {
     const aLines = splitLines(refs.left.value);
     const bLines = splitLines(refs.right.value);
-    const diff = diffLines(aLines, bLines);
+    const diff = diffLines(aLines, bLines, comparisonKey);
 
     const lines = ["--- Original", "+++ Modified"];
     diff.forEach((d) => {
@@ -335,9 +423,9 @@
     name: "Diff Checker",
     category: "Text",
     icon: "diff",
-    description: "Compare two texts line by line.",
+    description: "Compare two texts line by line, with word-level highlights.",
 
-    keywords: "compare difference changes line checker text compare merge",
+    keywords: "compare difference changes line word checker text compare merge ignore whitespace case",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
@@ -370,7 +458,7 @@
           const aLines = splitLines(refs.left.value);
           const bLines = splitLines(refs.right.value);
           if (!aLines.length && !bLines.length) return "";
-          const diff = diffLines(aLines, bLines);
+          const diff = diffLines(aLines, bLines, comparisonKey);
           const lines = ["--- Original", "+++ Modified"];
           diff.forEach(function (d) {
             if (d.type === "same") lines.push(" " + d.a);
@@ -393,6 +481,39 @@
           btnSample,
         ]),
         btnClear,
+      ]);
+
+      /* Comparison options */
+      function optionToggle(id, label, checked) {
+        const box = dom.el("input", { type: "checkbox", id: id });
+        if (checked) box.checked = true;
+        const lbl = dom.el(
+          "label",
+          {
+            class: "dt-toolbar__label",
+            for: id,
+            style: {
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              cursor: "pointer",
+              textTransform: "none",
+              letterSpacing: "0",
+            },
+          },
+          [box, dom.txt(label)],
+        );
+        return { box, lbl };
+      }
+      const optWs = optionToggle("dt-diff-opt-ws", "Ignore whitespace", false);
+      const optCase = optionToggle("dt-diff-opt-case", "Ignore case", false);
+      const optWord = optionToggle("dt-diff-opt-word", "Word highlight", true);
+      const optionsRow = dom.el("div", { class: "dt-toolbar" }, [
+        dom.el("div", { class: "dt-toolbar__group" }, [
+          optWs.lbl,
+          optCase.lbl,
+          optWord.lbl,
+        ]),
       ]);
 
       /* --- Inputs (two side-by-side panels) --- */
@@ -458,11 +579,15 @@
       ]);
 
       workspace.appendChild(toolbar);
+      workspace.appendChild(optionsRow);
       workspace.appendChild(inputs);
       workspace.appendChild(diffPanel);
       container.appendChild(workspace);
 
-      refs = { left, right, leftCount, rightCount, diffSlot, statsSlot };
+      refs = {
+        left, right, leftCount, rightCount, diffSlot, statsSlot,
+        ignoreWs: optWs.box, ignoreCase: optCase.box, wordLevel: optWord.box,
+      };
 
       /* --- Events --- */
       const updateDebounced = DT.utils.debounce(renderDiff, 250);
@@ -483,6 +608,9 @@
         }
       });
 
+      on(optWs.box, "change", renderDiff);
+      on(optCase.box, "change", renderDiff);
+      on(optWord.box, "change", renderDiff);
       on(btnSwap, "click", swap);
       on(btnCopy, "click", copyUnified);
       on(btnSample, "click", loadSample);

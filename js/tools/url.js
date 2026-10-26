@@ -155,44 +155,141 @@
       );
     });
 
-    const search = url.searchParams;
-    const keys = [];
-    search.forEach((_, k) => {
-      if (keys.indexOf(k) === -1) keys.push(k);
-    });
-    if (keys.length) {
+    /* Query params are editable: change a value or remove a row and
+       the rebuilt URL below updates (the original input is untouched). */
+    const entries = [];
+    url.searchParams.forEach((v, k) => entries.push({ key: k, value: v }));
+    if (entries.length) {
       body.appendChild(
         dom.el("div", {
           class: "dt-label",
-          text: "Query params",
+          text: "Query params (editable)",
           style: { marginTop: "10px", marginBottom: "4px" },
         }),
       );
-      keys.forEach((k) => {
-        search.getAll(k).forEach((v) => {
-          body.appendChild(
+      const rebuiltValue = dom.el("span", {
+        class: "dt-help",
+        style: { wordBreak: "break-all" },
+        text: "",
+      });
+      function rebuild() {
+        const qs = entries
+          .filter((e) => e.key !== "")
+          .map((e) => encodeURIComponent(e.key) + "=" + encodeURIComponent(e.value))
+          .join("&");
+        const out =
+          url.origin + url.pathname + (qs ? "?" + qs : "") + url.hash;
+        rebuiltValue.textContent = out;
+        return out;
+      }
+      const rowsSlot = dom.el("div", {});
+      function renderEntryRows() {
+        DT.ui.dom.clear(rowsSlot);
+        entries.forEach((entry, idx) => {
+          const valInput = dom.el("input", {
+            type: "text",
+            class: "dt-input dt-input--mono",
+            value: entry.value,
+            "aria-label": "Value of " + entry.key,
+          });
+          valInput.style.flex = "1 1 auto";
+          valInput.addEventListener("change", function () {
+            entry.value = valInput.value;
+            rebuild();
+          });
+          const btnRemove = dom.el("button", {
+            type: "button",
+            class: "dt-btn dt-btn--ghost dt-btn--icon dt-btn--sm",
+            text: "\u00d7",
+            title: "Remove " + entry.key,
+            "aria-label": "Remove " + entry.key,
+          });
+          btnRemove.addEventListener("click", function () {
+            entries.splice(idx, 1);
+            renderEntryRows();
+            rebuild();
+          });
+          rowsSlot.appendChild(
             dom.el(
               "div",
               {
                 class: "dt-row",
-                style: {
-                  gap: "10px",
-                  alignItems: "baseline",
-                  padding: "4px 0",
-                },
+                style: { gap: "10px", alignItems: "center", padding: "4px 0" },
               },
               [
-                dom.el("span", { class: "dt-badge dt-badge--accent", text: k }),
-                dom.el("span", {
-                  class: "dt-help",
-                  style: { wordBreak: "break-all" },
-                  text: v || "(empty)",
-                }),
+                dom.el("span", { class: "dt-badge dt-badge--accent", text: entry.key }),
+                valInput,
+                btnRemove,
               ],
             ),
           );
         });
+      }
+      renderEntryRows();
+      body.appendChild(rowsSlot);
+
+      /* Add-a-param row */
+      const addKey = dom.el("input", {
+        type: "text",
+        class: "dt-input",
+        placeholder: "new key",
       });
+      addKey.style.width = "130px";
+      const addVal = dom.el("input", {
+        type: "text",
+        class: "dt-input",
+        placeholder: "value",
+      });
+      addVal.style.flex = "1 1 auto";
+      const btnAdd = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Add param",
+      });
+      btnAdd.addEventListener("click", function () {
+        const k = addKey.value.trim();
+        if (!k) return;
+        entries.push({ key: k, value: addVal.value });
+        addKey.value = "";
+        addVal.value = "";
+        renderEntryRows();
+        rebuild();
+      });
+      body.appendChild(
+        dom.el(
+          "div",
+          { class: "dt-row", style: { gap: "10px", alignItems: "center", padding: "6px 0" } },
+          [addKey, addVal, btnAdd],
+        ),
+      );
+
+      /* Rebuilt URL row */
+      const btnCopyRebuilt = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--secondary dt-btn--sm",
+        text: "Copy URL",
+      });
+      btnCopyRebuilt.addEventListener("click", function () {
+        DT.utils.clipboard
+          .copy(rebuild())
+          .then(() => DT.ui.toast.success("Copied"))
+          .catch(() => DT.ui.toast.error("Copy failed"));
+      });
+      body.appendChild(
+        dom.el(
+          "div",
+          {
+            class: "dt-row",
+            style: { gap: "10px", alignItems: "center", padding: "8px 0 2px" },
+          },
+          [
+            dom.el("span", { class: "dt-badge", text: "Rebuilt" }),
+            rebuiltValue,
+            btnCopyRebuilt,
+          ],
+        ),
+      );
+      rebuild();
     }
 
     refs.analysisSlot.appendChild(
@@ -210,9 +307,9 @@
     name: "URL Encoder",
     category: "Encoding",
     icon: "link",
-    description: "Encode or decode URLs and components.",
+    description: "Encode or decode URLs. Edit query params in the breakdown.",
 
-    keywords: "uri encode decode percent encoding query link component parse",
+    keywords: "uri encode decode percent encoding query params link component parse edit",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });

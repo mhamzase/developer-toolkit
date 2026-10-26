@@ -29,9 +29,98 @@
     for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
     return btoa(bin);
   }
+  /* ------------------------------------------------------------
+   * MD5 (RFC 1321), implemented in pure JS because Web Crypto
+   * does not offer it. SHA-1 and the SHA-2 family come from
+   * crypto.subtle. MD5 is for checksums and legacy comparisons,
+   * never for new security work.
+   * ------------------------------------------------------------ */
+  const MD5_S = [
+    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+    5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
+    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21,
+  ];
+  function md5K(i) {
+    return Math.floor(Math.abs(Math.sin(i + 1)) * 4294967296);
+  }
+  function md5Bytes(input) {
+    const bitLen = input.length * 8;
+    const padZeros = (56 - ((input.length + 1) % 64) + 64) % 64;
+    const total = input.length + 1 + padZeros + 8;
+    const msg = new Uint8Array(total);
+    msg.set(input);
+    msg[input.length] = 0x80;
+    const view = new DataView(msg.buffer);
+    view.setUint32(total - 8, bitLen >>> 0, true);
+    view.setUint32(total - 4, Math.floor(bitLen / 4294967296), true);
+
+    let a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
+    const M = new Uint32Array(16);
+    for (let off = 0; off < total; off += 64) {
+      for (let j = 0; j < 16; j++) M[j] = view.getUint32(off + j * 4, true);
+      let A = a0, B = b0, C = c0, D = d0;
+      for (let i = 0; i < 64; i++) {
+        let f, g;
+        if (i < 16) { f = (B & C) | (~B & D); g = i; }
+        else if (i < 32) { f = (D & B) | (~D & C); g = (5 * i + 1) % 16; }
+        else if (i < 48) { f = B ^ C ^ D; g = (3 * i + 5) % 16; }
+        else { f = C ^ (B | ~D); g = (7 * i) % 16; }
+        f = (f + A + md5K(i) + M[g]) >>> 0;
+        A = D; D = C; C = B;
+        const rot = ((f << MD5_S[i]) | (f >>> (32 - MD5_S[i]))) >>> 0;
+        B = (B + rot) >>> 0;
+      }
+      a0 = (a0 + A) >>> 0; b0 = (b0 + B) >>> 0;
+      c0 = (c0 + C) >>> 0; d0 = (d0 + D) >>> 0;
+    }
+    const out = new Uint8Array(16);
+    const ov = new DataView(out.buffer);
+    ov.setUint32(0, a0, true); ov.setUint32(4, b0, true);
+    ov.setUint32(8, c0, true); ov.setUint32(12, d0, true);
+    return out;
+  }
+  function concatBytes(a, b) {
+    const out = new Uint8Array(a.length + b.length);
+    out.set(a); out.set(b, a.length);
+    return out;
+  }
+  function hmacMd5(key, msgBytes) {
+    const BLOCK = 64;
+    let k = key;
+    if (k.length > BLOCK) k = md5Bytes(k);
+    const ipad = new Uint8Array(BLOCK).fill(0x36);
+    const opad = new Uint8Array(BLOCK).fill(0x5c);
+    for (let i = 0; i < k.length; i++) { ipad[i] ^= k[i]; opad[i] ^= k[i]; }
+    return md5Bytes(concatBytes(opad, md5Bytes(concatBytes(ipad, msgBytes))));
+  }
+
+  /**
+   * One digest entry point for text, files and HMAC.
+   * @param {string} algo  MD5 | SHA-1 | SHA-256 | SHA-384 | SHA-512
+   * @param {Uint8Array} bytes
+   * @param {Uint8Array|null} keyBytes  non-null means HMAC
+   * @returns {Promise<Uint8Array>}
+   */
+  function digestBytes(algo, bytes, keyBytes) {
+    if (keyBytes) {
+      if (algo === "MD5") return Promise.resolve(hmacMd5(keyBytes, bytes));
+      return crypto.subtle
+        .importKey("raw", keyBytes, { name: "HMAC", hash: algo }, false, ["sign"])
+        .then((key) => crypto.subtle.sign("HMAC", key, bytes))
+        .then((sig) => new Uint8Array(sig));
+    }
+    if (algo === "MD5") return Promise.resolve(md5Bytes(bytes));
+    return crypto.subtle.digest(algo, bytes).then((buf) => new Uint8Array(buf));
+  }
   function digest(algo, text) {
     const data = new TextEncoder().encode(String(text));
-    return crypto.subtle.digest(algo, data).then((buf) => new Uint8Array(buf));
+    return digestBytes(algo, data, hmacKeyBytes());
+  }
+  function hmacKeyBytes() {
+    if (!refs || !refs.hmacKey) return null;
+    const key = refs.hmacKey.value;
+    return key ? new TextEncoder().encode(key) : null;
   }
   function format(bytes) {
     return refs.format.value === "base64"
@@ -68,7 +157,10 @@
         refs.output.value = out;
         refs.outputStats.textContent = out.length + " chars";
         refs.meta.textContent =
-          algo + " · " + (refs.format.value === "base64" ? "base64" : "hex");
+          (hmacKeyBytes() ? "HMAC-" : "") +
+          algo +
+          " · " +
+          (refs.format.value === "base64" ? "base64" : "hex");
       })
       .catch((e) => {
         if (!refs || token !== hashToken) return;
@@ -119,9 +211,9 @@
     name: "Hash Generator",
     category: "Security",
     icon: "key",
-    description: "SHA-256, SHA-384, SHA-512.",
+    description: "MD5, SHA-1, SHA-2 hashes + HMAC, for text and files.",
 
-    keywords: "sha sha256 sha384 sha512 digest checksum crypto fingerprint md5",
+    keywords: "sha sha1 sha256 sha384 sha512 md5 hmac digest checksum crypto fingerprint",
     mount(container) {
       const dom = DT.ui.dom;
       const workspace = dom.el("div", { class: "dt-workspace" });
@@ -129,7 +221,7 @@
       const notice = dom.el("div", { class: "dt-alert dt-alert--info" }, [
         dom.el("div", { style: { fontWeight: "600" }, text: "Local hashing" }),
         dom.el("div", {
-          text: "Your input never leaves the browser. Uses Web Crypto (crypto.subtle).",
+          text: "Your input never leaves the browser. SHA runs on Web Crypto; MD5 runs on a built-in implementation (checksums and legacy use, not security). Add an HMAC key below to sign instead of plain hashing.",
         }),
       ]);
 
@@ -137,6 +229,8 @@
         "select",
         { class: "dt-select dt-select--sm", id: "dt-hash-algo" },
         [
+          dom.el("option", { value: "MD5", text: "MD5" }),
+          dom.el("option", { value: "SHA-1", text: "SHA-1" }),
           dom.el("option", { value: "SHA-256", text: "SHA-256" }),
           dom.el("option", { value: "SHA-384", text: "SHA-384" }),
           dom.el("option", { value: "SHA-512", text: "SHA-512" }),
@@ -169,6 +263,26 @@
         ]),
         btnClear,
       ]);
+
+      /* HMAC key row: an empty key means a plain hash. */
+      const hmacKey = dom.el("input", {
+        type: "text",
+        class: "dt-input dt-input--mono",
+        id: "dt-hash-hmac-key",
+        autocomplete: "off",
+        spellcheck: "false",
+        placeholder: "HMAC key (optional). Leave empty for a plain hash.",
+      });
+      const hmacRow = dom.el("div", { class: "dt-toolbar" }, [
+        dom.el("div", {
+          class: "dt-toolbar__group",
+          style: { flex: "1 1 auto" },
+        }, [
+          dom.el("span", { class: "dt-toolbar__label", text: "HMAC key" }),
+          hmacKey,
+        ]),
+      ]);
+      hmacKey.style.flex = "1 1 auto";
 
       const input = dom.el("textarea", {
         class: "dt-textarea",
@@ -272,10 +386,9 @@
         file
           .arrayBuffer()
           .then(function (buf) {
-            return crypto.subtle.digest(refs.algo.value, buf);
+            return digestBytes(refs.algo.value, new Uint8Array(buf), hmacKeyBytes());
           })
-          .then(function (digest) {
-            const bytes = new Uint8Array(digest);
+          .then(function (bytes) {
             // Note: the module-level format() helper is shadowed inside
             // mount() by the format <select>, so pick the encoder here.
             fileHashOut.value =
@@ -287,6 +400,7 @@
               " · " +
               DT.ui.fileDrop.formatSize(file.size) +
               " · " +
+              (hmacKeyBytes() ? "HMAC-" : "") +
               refs.algo.value;
           })
           .catch(function () {
@@ -311,7 +425,7 @@
         dom.el("div", { class: "dt-panel__body" }, [hashDropWrap, fileHashOut]),
         dom.el("div", { class: "dt-panel__foot" }, [
           fileMeta,
-          DT.ui.panel.hint("Uses the Algorithm + Format above"),
+          DT.ui.panel.hint("Uses the Algorithm, Format and HMAC key above"),
         ]),
       ]);
       on(btnFileHashCopy, "click", function () {
@@ -329,12 +443,13 @@
 
       workspace.appendChild(notice);
       workspace.appendChild(toolbar);
+      workspace.appendChild(hmacRow);
       workspace.appendChild(inputPanel);
       workspace.appendChild(outputPanel);
       workspace.appendChild(filePanel);
       container.appendChild(workspace);
 
-      refs = { input, output, algo, format, inputStats, outputStats, meta };
+      refs = { input, output, algo, format, hmacKey, inputStats, outputStats, meta };
 
       const computeDebounced = DT.utils.debounce(compute, 180);
       on(input, "input", () => {
@@ -349,6 +464,8 @@
       });
       on(algo, "change", compute);
       on(format, "change", compute);
+      on(hmacKey, "input", computeDebounced);
+      on(hmacKey, "change", computeFileHash);
       on(btnCopy, "click", copyOutput);
       on(btnClear, "click", clearAll);
 

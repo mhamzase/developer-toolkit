@@ -96,6 +96,16 @@
           .join("\n");
       },
     },
+    slugify: {
+      label: "Slugify",
+      fn: (t) =>
+        String(t || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, ""),
+    },
     removeNumbering: {
       label: "Strip line numbers",
       fn: (t) =>
