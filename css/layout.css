@@ -324,6 +324,22 @@ button.dt-side-group__label:hover {
   align-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
+
+  /* Sticky (Hamza's ask): the head with the view title, the tool
+     count and the grid/list toggle stays pinned while the tool
+     sections below scroll. The negative top margin plus matching
+     top padding pull the bar into the main area's top padding, so
+     at rest nothing moves, and once scrolled the title row sits
+     flush at the top with its background covering the content
+     passing underneath. */
+  position: sticky;
+  top: calc(var(--space-5) * -1);
+  z-index: 6;
+  margin-top: calc(var(--space-5) * -1);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-3);
+  background-color: var(--color-bg);
+  border-bottom: var(--border-thin) solid var(--color-border);
 }
 
 .dt-home-head__title {
