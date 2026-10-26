@@ -46,7 +46,7 @@ Install it, pin it, and retire the dozen ad filled utility sites for good.
 
 ## Graphics checklist
 
-- [x] Store icon: `assets/icons/icon128.png` (128x128)
+- [x] Store icon: `assets/icons/icon128.png` (128x128), new 3D style mark from `assets/icons/icon.svg`
 - [x] Screenshots (1280x800, designed compositions rendered
   from the real app, kept in ~/workspace/store-screenshots/):
   1. 1-hero-home.png: home grid, light theme, gradient headline
@@ -54,7 +54,9 @@ Install it, pin it, and retire the dozen ad filled utility sites for good.
   3. 3-qr-generator.png: QR generator with a code rendered
   4. 4-side-panel-jwt.png: Side Panel dock with a decoded JWT
   5. 5-cron-dark.png: dark theme, Cron meaning and fields
-- [TODO, optional] Small promo tile 440x280 and marquee 1400x560.
+- [x] Small promo tile 440x280 and marquee 1400x560 (in
+  ~/workspace/store-screenshots/: promo-small-440x280.png,
+  promo-marquee-1400x560.png)
 
 ## Submission notes
 

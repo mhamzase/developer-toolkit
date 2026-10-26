@@ -21,6 +21,12 @@ internal build milestones).
 - Meta Tag Generator: SEO, Open Graph and Twitter tags with
   live character counters (60 / 160) and a social preview card.
 
+### Changed
+- New app icon: a glossy indigo to violet tile with a lifted
+  code mark and an amber slash. One master SVG
+  (assets/icons/icon.svg) renders all four package sizes, and
+  the in-app header logo picks it up automatically.
+
 ### Fixed
 - Sidebar: clicking a tool no longer makes the navigation jump
   back to the top. Route changes now move only the highlight;
