@@ -32,10 +32,8 @@ Install it, pin it, and retire the dozen ad filled utility sites for good.
   you left it. Nothing is synced or sent anywhere.
 - **system.display:** Used only to center the toolkit window on the
   monitor you are actively using when you open it.
-- **contextMenus:** Adds the right-click menu: open the toolkit, or
-  send selected text to the JWT, Base64, URL or Hash tool.
-- **sidePanel:** Lets the toolkit open docked in Chrome's Side
-  Panel, as an alternative to the popup window.
+- **contextMenus:** The contextMenus permission is used to add a right-click menu for the extension. It provides two things: a shortcut to open the Developer Toolkit window or Side Panel, and, when the user selects text on a page, an option to send that selected text directly into a relevant tool such as the JWT decoder, Base64 decoder, URL decoder, or hash generator. The menu is created entirely locally. The selected text is passed only to the extension's own pages on the user's device; it is never transmitted, stored on a server, or shared with any third party.
+- **sidePanel:** The sidePanel permission is used to let the user open the Developer Toolkit docked in Chrome's Side Panel, as an alternative to the standalone popup window. This allows developers to keep a tool visible next to the page they are working on, for example while reading API documentation. The Side Panel displays the extension's own interface only. It does not read, capture, or interact with the content of any web page, and no data is transmitted anywhere. Use of the Side Panel is entirely optional and is only activated by the user.
 
 ## Privacy practices answers
 
