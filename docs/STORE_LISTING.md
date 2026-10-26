@@ -47,12 +47,13 @@ Install it, pin it, and retire the dozen ad filled utility sites for good.
 ## Graphics checklist
 
 - [x] Store icon: `assets/icons/icon128.png` (128x128)
-- [TODO] Screenshots (1280x800 or 640x400), capture in this order:
-  1. Home grid (light theme)
-  2. JSON tool with the tree view open
-  3. QR generator with a code rendered
-  4. The app docked in the Side Panel next to a web page
-  5. Dark theme, Cron builder
+- [x] Screenshots (1280x800, designed compositions rendered
+  from the real app, kept in ~/workspace/store-screenshots/):
+  1. 1-hero-home.png: home grid, light theme, gradient headline
+  2. 2-json-formatter.png: formatted output plus tree view
+  3. 3-qr-generator.png: QR generator with a code rendered
+  4. 4-side-panel-jwt.png: Side Panel dock with a decoded JWT
+  5. 5-cron-dark.png: dark theme, Cron meaning and fields
 - [TODO, optional] Small promo tile 440x280 and marquee 1400x560.
 
 ## Submission notes
