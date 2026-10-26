@@ -11,7 +11,7 @@ Copy for the Developer Dashboard, ready to paste. Anything marked
 
 ## Summary (132 characters max)
 
-Free developer tools: JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR generator. 26 tools, 100% offline, no tracking.
+JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR codes and more. Free, 100% offline, no tracking.
 
 ## Detailed description
 

@@ -3,7 +3,7 @@
   "name": "Developer Toolkit: JSON, JWT, Regex & More",
   "short_name": "Dev Toolkit",
   "version": "1.0.1",
-  "description": "Fast, private developer tools for the work you do every day. All local, always growing.",
+  "description": "JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR codes and more. Free, 100% offline, no tracking.",
   "action": {
     "default_title": "Open Developer Toolkit"
   },
