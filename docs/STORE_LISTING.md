@@ -15,59 +15,15 @@ Free developer tools: JSON formatter, JWT decoder & signer, regex tester, Base64
 
 ## Detailed description
 
-Developer Toolkit is a free, all-in-one toolbox for developers: a JSON formatter and validator, JWT decoder and signer, Base64 and URL encoder, regex tester, hash generator, UUID generator, password generator, QR code generator and 26 everyday utilities in total, all in one fast extension that works 100% offline.
+Your browser is where you do your work, so the tools you use every day should live there too.
 
-Stop pasting sensitive code, tokens and API keys into random websites full of ads and trackers. Every tool in Developer Toolkit runs entirely in your browser. No servers, no accounts, no analytics, no network requests. Your data never leaves your machine.
+Inside Developer Toolkit you will find a JSON formatter and validator, a JWT decoder and signer, Base64 and URL encoders, a regex tester, hash, UUID and password generators, a QR code generator, a text diff checker, a cron builder, SQL and Markdown tools, timestamp and color converters, an image compressor, and quick references for the small things you should never have to Google. And that list is not final: the toolkit keeps growing, with new tools added regularly.
 
-FORMAT, CONVERT AND VALIDATE
-- JSON Formatter and Validator: format, minify and validate JSON, sort keys, explore a collapsible tree view, and convert JSON to CSV, YAML or XML (and back)
-- JSON to Types: turn any JSON sample into TypeScript interfaces, Go structs or Python dataclasses
-- SQL Formatter: clean, readable SQL with proper indentation
-- Markdown Editor: write Markdown with a live preview and copy the HTML
-- Number Base Converter: binary, octal, decimal, hexadecimal and every base up to 36, with exact BigInt precision
+It is built to feel like a real app, not a cramped little popup. Open it in its own resizable window or dock it in Chrome's Side Panel. Choose a light, dark or system theme, pin the tools you use most as favorites, and reach anything instantly with search, a command palette, the keyboard, or a right click on selected text. Every tool is designed the same calm way, so once you know one, you know them all. It even opens where you left it, the way a tool you rely on should.
 
-DECODE, ENCODE AND INSPECT
-- JWT Decoder: decode JSON Web Tokens, inspect the header and claims, and see expiry at a glance
-- JWT Signer: create and sign test tokens with HS256, HS384 or
-  HS512
-- Base64 Encoder and Decoder: for text, plus file to Base64 conversion
-- URL Encoder and Decoder: with a query string parameter editor
-- Regex Tester: test regular expressions live, with a built-in pattern library and replace preview
-- Diff Checker: compare text line by line with word level highlighting
-- Cron Parser and Builder: plain English explanations, next run times and a point and click schedule builder
+Most importantly, it respects your data. Every tool runs entirely in your browser: no accounts, no analytics, no network requests, nothing uploaded anywhere. Paste a token, a key or a private snippet, and it never leaves your machine.
 
-GENERATE IN ONE CLICK
-- Password Generator: strong random passwords, memorable passphrases and PINs, with an honest strength estimate
-- UUID and ID Generator: UUID v4 and v7, ULID and Nano ID, plus a parse and validate panel
-- QR Code Generator: create QR codes and download them as PNG, generated entirely on your device
-- Lorem Ipsum Generator: placeholder text by paragraph, sentence or word
-
-SECURITY AND HASHING
-- Hash Generator: MD5, SHA-1, SHA-256, SHA-384 and SHA-512, HMAC support, and file hashing
-- AES Encryption: encrypt and decrypt text with AES-256-GCM and a password
-
-REFERENCE AND EVERYDAY UTILITIES
-- Color Converter: HEX, RGB, HSL and OKLCH, shades and tints, and a WCAG contrast checker for accessible color pairs
-- Timestamp Converter: Unix epoch to human dates and back, across 11 time zones
-- Image Compressor: compress and resize PNG, JPEG and WebP images without uploading them anywhere
-- Meta Tag Generator: SEO, Open Graph and Twitter card tags with live character counters and a social preview
-- chmod Calculator: permissions by checkbox, octal or symbolic notation
-- Case Converter and Text Tools: upper, lower, camelCase, snake_case, word and character counts, and a slug generator
-- HTTP Status Codes: a fast, searchable reference
-
-BUILT FOR YOUR WORKFLOW
-- Open it in a resizable window or docked in Chrome's Side Panel
-- Press Alt+Shift+D to launch it from anywhere, or type "dt" in the address bar and jump straight to a tool
-- Right-click any selected text on a page and send it directly to the JWT, Base64, URL or Hash tool
-- Command palette (Ctrl+K), full text search, favorites and recent tools keep your most used utilities one keystroke away
-- Light, dark and system themes in a clean, responsive interface
-
-PRIVATE BY DESIGN Developer Toolkit collects nothing. There is no sign up, no tracking and no remote code: every script ships inside the extension package and runs locally. It is the safe place to paste a JWT, decode a token or hash a file.
-
-Whether you are a frontend or backend developer, a QA engineer, a DevOps engineer or a student learning to code, Developer Toolkit keeps the tools you reach for every day in one private, offline home.
-
-Install it, pin it, and make it yours.
-
+Install it, pin it, and retire the dozen ad filled utility sites for good.
 
 ## Permission justifications (dashboard asks per permission)
 
