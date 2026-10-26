@@ -1,0 +1,42 @@
+/* ============================================================
+ * File: css/tools/markdown.css
+ * Module: Tool CSS — Markdown Preview
+ * Purpose: Typography for the rendered preview (.dt-md).
+ * ============================================================ */
+
+.dt-md { color: var(--color-text); font-size: var(--fs-md); line-height: 1.65; overflow-wrap: break-word; }
+.dt-md h1, .dt-md h2, .dt-md h3, .dt-md h4, .dt-md h5, .dt-md h6 {
+  margin: 0.7em 0 0.4em; line-height: 1.3; font-weight: var(--fw-bold);
+}
+.dt-md h1 { font-size: 1.6em; }
+.dt-md h2 { font-size: 1.35em; }
+.dt-md h3 { font-size: 1.15em; }
+.dt-md p { margin: 0.5em 0; }
+.dt-md ul, .dt-md ol { margin: 0.5em 0; padding-left: 1.4em; }
+.dt-md li { margin: 0.2em 0; }
+.dt-md a { color: var(--color-accent); text-decoration: underline; }
+.dt-md code {
+  font-family: var(--font-mono); font-size: 0.88em;
+  background-color: var(--color-surface-2); padding: 1px 5px; border-radius: 4px;
+}
+.dt-md pre {
+  background-color: var(--color-surface-2);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px; overflow-x: auto; margin: 0.6em 0;
+}
+.dt-md pre code { background: transparent; padding: 0; }
+.dt-md blockquote {
+  margin: 0.6em 0; padding: 2px 14px;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-text-muted);
+}
+.dt-md blockquote p { margin: 0.3em 0; }
+.dt-md table { border-collapse: collapse; margin: 0.6em 0; }
+.dt-md th, .dt-md td {
+  border: var(--border-thin) solid var(--color-border);
+  padding: 5px 10px; text-align: left;
+}
+.dt-md th { background-color: var(--color-surface-2); }
+.dt-md img { max-width: 100%; border-radius: var(--radius-md); }
+.dt-md hr { border: none; border-top: var(--border-thin) solid var(--color-border); margin: 1em 0; }

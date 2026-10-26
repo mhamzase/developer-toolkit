@@ -41,6 +41,21 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
+## Tool highlights (v2.0.0)
+
+- Five new tools: `base.js` (BigInt base conversion), `chmod.js`,
+  `sql.js` (token-based formatter), `markdown.js` (escape-first
+  renderer), `qr.js` (from-scratch QR encoder: GF(256)
+  Reed-Solomon, penalty-scored masks, SVG output).
+- Platform integrations live in `background.js` (context menus,
+  omnibox keyword "dt", Alt+Shift+D command, side panel options)
+  and meet the page in `js/core/app.js`: the worker stores
+  `{ toolId, text }` under `dt:pendingNav`, the app consumes it on
+  boot and live via `storage.onChanged`, routes, and prefills the
+  tool's primary field (`PREFILL` map).
+- `npm test` runs `tests/smoke.js`, a jsdom rendered suite
+  (jsdom is a dev-only dependency; the extension ships no build).
+
 ## Tool highlights (v1.3.0)
 
 - `hash.js` carries a pure-JS MD5 (`md5Bytes` + `hmacMd5`) because

@@ -19,13 +19,15 @@ Some tools, such as JWT Decoder, Hash Generator, and Password Generator, do not 
 
 ## Permissions
 
-The extension requests two permissions:
+The extension requests four permissions:
 
 - **storage** — used only to save preferences locally.
 - **system.display** — used only to open the extension window centered on your active screen.
+- **contextMenus** — adds right-click entries: open the toolkit, open it in the Side Panel, or send selected text to a tool. The selected text is only used when you pick one of those entries and is passed locally to the tool.
+- **sidePanel** — lets the toolkit open docked in Chrome's Side Panel when you ask for it.
 
 ## Contact
 
 For questions or issues, open an issue at https://github.com/mhamzase/developer-toolkit/issues
 
-Last updated: 2026
+Last updated: 2026-10-26

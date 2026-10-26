@@ -1,0 +1,1 @@
+{"description":"Dev-only test harness. The extension itself has no build step and no runtime dependencies.","devDependencies":{"jsdom":">=24 <30"},"name":"developer-toolkit","private":true,"scripts":{"test":"node tests/smoke.js"},"version":"2.0.0"}

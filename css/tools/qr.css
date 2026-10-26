@@ -1,0 +1,12 @@
+/* ============================================================
+ * File: css/tools/qr.css
+ * Module: Tool CSS — QR Code Generator
+ * Purpose: Keep the generated SVG crisp and framed.
+ * ============================================================ */
+
+#dt-qr-preview svg {
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  max-width: 100%;
+  height: auto;
+}

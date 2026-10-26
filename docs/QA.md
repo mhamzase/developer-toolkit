@@ -13,7 +13,7 @@ Run this before every release.
 - [ ] Toggle flips to dark
 - [ ] Settings → Theme offers Light / Dark / System; System follows the OS live
 - [ ] Reload window → theme mode persists
-- [ ] All 16 tools readable in both themes
+- [ ] All 21 tools readable in both themes
 - [ ] Scrollbars are styled in both themes
 
 ## 3. Shell (sidebar)
@@ -40,6 +40,8 @@ Run this before every release.
 - [ ] Tree view opens; nodes collapse; Expand/Collapse all work
 - [ ] To CSV / To YAML produce sane text; CSV to JSON round-trips with typed numbers
 - [ ] Escape then Unescape returns the original text
+- [ ] To XML nests objects and repeats array items as sibling tags
+- [ ] XML to JSON: attributes land in "@attrs", repeated tags become arrays, numeric text becomes a number
 
 ### JWT Decoder
 - [ ] Sample loads and decodes
@@ -151,6 +153,34 @@ Run this before every release.
 - [ ] Invalid JSON frames the Input panel in red until fixed
 - [ ] File drop zones highlight while dragging over them
 
+### Number Base Converter
+- [ ] 255 in decimal shows FF hex and grouped binary; FF from Hex shows 255
+- [ ] A 30-digit decimal converts exactly (no floating point drift); an invalid digit for the base shows the digit help error
+
+### chmod Calculator
+- [ ] Default 755: symbolic reads rwxr-xr-x; unticking Group write updates octal, symbolic, command and meaning together
+- [ ] Typing 600 in the octal field checks only the Owner read/write boxes; presets apply on click
+
+### SQL Formatter
+- [ ] The Sample formats to clause lines: SELECT / FROM / LEFT JOIN on one line / WHERE with indented AND / GROUP BY / ORDER BY / LIMIT
+- [ ] A string containing the word 'from' is not split or recased; lower keyword mode works; Minify collapses to one line
+
+### Markdown Preview
+- [ ] Headings, bold, lists, a pipe table and a code fence render; a pasted <script> shows as text, never executes
+- [ ] Copy HTML copies the generated markup; a javascript: link becomes href="#"
+
+### QR Code Generator
+- [ ] Typing a URL renders a code and the meta line (version, byte count); scanning it with a phone returns the exact text
+- [ ] 107+ byte input shows the too-long message; SVG and PNG downloads open as valid images
+
+## 4c. Platform integrations (Phase 3, Chrome only)
+- [ ] `npm install && npm test` smoke suite is green
+- [ ] Settings shows "Open in Side Panel"; the app docks and every tool works at panel width
+- [ ] Right-clicking the toolbar icon offers Open and Open in Side Panel
+- [ ] Selecting text on a page, right-click, Developer Toolkit, Decode as JWT opens the tool with the text decoded
+- [ ] Address bar: typing `dt json` and Enter opens the JSON tool
+- [ ] Alt+Shift+D opens or focuses the app window
+
 ## 5. Keyboard
 - [ ] Tab order is logical in every tool
 - [ ] Focus rings are visible
@@ -166,7 +196,7 @@ Run this before every release.
 ## 7. Security / privacy
 - [ ] DevTools Network tab shows ZERO requests when using any tool
 - [ ] No `eval`, no `new Function`, no remote scripts
-- [ ] `manifest.json` requests only `storage` and `system.display`
+- [ ] `manifest.json` requests only `storage`, `system.display`, `contextMenus` and `sidePanel` (each justified in docs/STORE_LISTING.md)
 - [ ] No user data written outside `chrome.storage.local`
 
 ## 8. Performance

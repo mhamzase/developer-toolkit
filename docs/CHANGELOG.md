@@ -2,6 +2,39 @@
 
 All notable changes to Developer Toolkit.
 
+## [2.0.0] — 2026-10-26
+Phase 3: five new tools, platform integrations, store readiness.
+
+### Added
+- Number Base Converter: bases 2 to 36 with BigInt precision
+  (no rounding on huge integers), grouped binary output, bit count.
+- chmod Calculator: rwx checkbox grid with live octal, symbolic,
+  command and per-group meaning, plus an octal field and presets.
+- SQL Formatter: clause line breaks, AND/OR indentation, subquery
+  indentation, keyword case control and minify. Strings and
+  comments are preserved exactly.
+- Markdown Preview: live preview for the everyday Markdown subset
+  (headings, emphasis, code, links, lists, quotes, tables) with a
+  Copy HTML action. Raw HTML in the source is always escaped.
+- QR Code Generator: a from-scratch local encoder (byte mode, ECC
+  level M, versions 1 to 6, up to 106 bytes) rendering SVG with
+  SVG and PNG downloads. Its output was verified module-for-module
+  against a reference implementation and decoded by OpenCV.
+- JSON: To XML and XML to JSON join the Convert toolbar
+  (attributes under "@attrs", text under "#text", repeated
+  elements become arrays).
+- Platform: Side Panel mode (Settings button and toolbar-icon
+  right-click menu), selection context menus that send text to the
+  JWT, Base64, URL or Hash tool prefilled, an omnibox keyword
+  ("dt"), and an Alt+Shift+D command to open the app.
+- Repo: `npm test` runs a jsdom smoke suite (tests/smoke.js);
+  `docs/STORE_LISTING.md` holds the ready-to-paste store copy,
+  permission justifications and the graphics checklist.
+
+### Notes
+- New permissions: contextMenus and sidePanel, both justified in
+  the store listing doc. Still no network, no tracking.
+
 ## [1.3.0] — 2026-10-26
 Phase 2B: upgrades inside the existing tools.
 

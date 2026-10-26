@@ -138,6 +138,32 @@
     star:
       '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
 
+    /* Calculator — number base converter */
+    calculator:
+      '<rect x="4" y="2" width="16" height="20" rx="2"/>' +
+      '<path d="M8 6h8"/>' +
+      '<path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/>',
+
+    /* Database — SQL formatter */
+    database:
+      '<ellipse cx="12" cy="5" rx="8" ry="3"/>' +
+      '<path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/>' +
+      '<path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+
+    /* Eye — markdown preview */
+    eye:
+      '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>' +
+      '<circle cx="12" cy="12" r="3"/>',
+
+    /* QR code */
+    qr:
+      '<rect x="3" y="3" width="7" height="7" rx="1"/>' +
+      '<rect x="14" y="3" width="7" height="7" rx="1"/>' +
+      '<rect x="3" y="14" width="7" height="7" rx="1"/>' +
+      '<path d="M14 14h3v3h-3z"/>' +
+      '<path d="M21 17v4h-4"/>' +
+      '<path d="M17 21h.01"/>',
+
     /* Cron — clock with circular arrow (recurring) */
     cron:
       '<circle cx="12" cy="12" r="9"/>' +

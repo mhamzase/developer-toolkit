@@ -38,6 +38,74 @@
     }
   }
 
+  /* --------------------------------------------------------------
+   * Pending navigation (Phase 3): the service worker (context
+   * menus, omnibox) stores { toolId, text } under dt:pendingNav;
+   * the app consumes it on boot and live via storage.onChanged,
+   * routes to the tool and prefills its primary field.
+   * -------------------------------------------------------------- */
+  const PENDING_KEY = "dt:pendingNav";
+  const PREFILL = {
+    jwt: "#dt-jwt-input",
+    base64: "#dt-b64-input",
+    url: "#dt-url-input",
+    hash: "#dt-hash-input",
+    qr: "#dt-qr-input",
+    json: "#dt-json-input",
+    markdown: "#dt-md-input",
+  };
+
+  function handlePending(pending) {
+    if (!pending || !pending.toolId) return;
+    if (!DT.core.registry.get(pending.toolId)) return;
+    DT.core.router.go("tool", { toolId: pending.toolId });
+    if (!pending.text) return;
+    const selector = PREFILL[pending.toolId];
+    if (!selector) return;
+    let tries = 0;
+    const timer = setInterval(function () {
+      tries++;
+      const field = document.querySelector(selector);
+      if (field) {
+        field.value = pending.text;
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        // Tools that act on demand (JWT decode, JSON/SQL format)
+        // listen for Ctrl+Enter; fire it so a context-menu send
+        // lands fully processed, not just pasted.
+        field.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", ctrlKey: true, bubbles: true }),
+        );
+        field.focus();
+        clearInterval(timer);
+      } else if (tries > 20) {
+        clearInterval(timer);
+      }
+    }, 50);
+  }
+
+  function consumePendingNav() {
+    try {
+      if (!window.chrome || !chrome.storage || !chrome.storage.local) return;
+      chrome.storage.local.get(PENDING_KEY, function (res) {
+        const pending = res && res[PENDING_KEY];
+        if (pending) {
+          chrome.storage.local.remove(PENDING_KEY);
+          handlePending(pending);
+        }
+      });
+      chrome.storage.onChanged.addListener(function (changes, area) {
+        if (area !== "local") return;
+        const change = changes[PENDING_KEY];
+        if (change && change.newValue) {
+          chrome.storage.local.remove(PENDING_KEY);
+          handlePending(change.newValue);
+        }
+      });
+    } catch (e) {
+      // Not running in an extension context; nothing to consume.
+    }
+  }
+
   DT.core.app = {
     init: function () {
       /* Safety: remove any orphaned overlays from a previous failed boot */
@@ -98,6 +166,9 @@
 
         // ALWAYS open on the home grid with "All" category selected
         DT.core.router.go("list", { filter: "All", query: "" });
+
+        // Then honor any pending navigation (context menu / omnibox)
+        consumePendingNav();
       });
     },
   };

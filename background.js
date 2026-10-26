@@ -8,7 +8,8 @@
  *   - Focuses existing window if already open.
  * Notes:
  *   - Uses chrome.windows.getLastFocused() + system.display.getInfo()
- *   - No network. Permissions: storage, system.display.
+ *   - No network. Permissions: storage, system.display,
+ *     contextMenus, sidePanel.
  */
 
 const APP_URL    = chrome.runtime.getURL('popup/popup.html');
@@ -242,6 +243,167 @@ chrome.windows.onRemoved.addListener(async function (closedId) {
   }
 });
 
+/* --------------------------------------------------------------
+ * Phase 3 integrations: context menus, omnibox, commands,
+ * side panel. The page side of pending navigation lives in
+ * js/core/app.js (dt:pendingNav).
+ * -------------------------------------------------------------- */
+
+const PENDING_KEY = 'dt:pendingNav';
+
+/** Ask the app to open a tool, optionally prefilled with text. */
+async function openTool(toolId, text) {
+  try {
+    await chrome.storage.local.set({ [PENDING_KEY]: { toolId: toolId, text: text || '' } });
+  } catch (e) {
+    // Storage failure should not block opening the window.
+  }
+  await openOrFocusApp();
+}
+
+const MENU_SELECTION = {
+  'dt-sel-jwt': 'jwt',
+  'dt-sel-base64': 'base64',
+  'dt-sel-url': 'url',
+  'dt-sel-hash': 'hash'
+};
+
+function createContextMenus() {
+  if (!chrome.contextMenus) return;
+  chrome.contextMenus.removeAll(function () {
+    chrome.contextMenus.create({
+      id: 'dt-open',
+      title: 'Open Developer Toolkit',
+      contexts: ['action']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sidepanel',
+      title: 'Open Developer Toolkit in Side Panel',
+      contexts: ['action']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sel-parent',
+      title: 'Developer Toolkit',
+      contexts: ['selection']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sel-jwt',
+      parentId: 'dt-sel-parent',
+      title: 'Decode as JWT',
+      contexts: ['selection']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sel-base64',
+      parentId: 'dt-sel-parent',
+      title: 'Decode as Base64',
+      contexts: ['selection']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sel-url',
+      parentId: 'dt-sel-parent',
+      title: 'Decode as URL',
+      contexts: ['selection']
+    });
+    chrome.contextMenus.create({
+      id: 'dt-sel-hash',
+      parentId: 'dt-sel-parent',
+      title: 'Hash with SHA-256',
+      contexts: ['selection']
+    });
+  });
+}
+
 chrome.runtime.onInstalled.addListener(function () {
-  // Placeholder for future onboarding.
+  createContextMenus();
+  try {
+    if (chrome.sidePanel && chrome.sidePanel.setOptions) {
+      chrome.sidePanel.setOptions({ path: 'popup/popup.html', enabled: true });
+    }
+  } catch (e) {
+    // Side panel is optional; the window flow still works.
+  }
+});
+
+chrome.contextMenus.onClicked.addListener(function (info, tab) {
+  if (info.menuItemId === 'dt-open') {
+    openOrFocusApp().catch(function () {});
+    return;
+  }
+  if (info.menuItemId === 'dt-sidepanel') {
+    try {
+      if (chrome.sidePanel && chrome.sidePanel.open && tab && tab.windowId != null) {
+        chrome.sidePanel.open({ windowId: tab.windowId });
+      }
+    } catch (e) {
+      // Opening from a menu is best-effort.
+    }
+    return;
+  }
+  const toolId = MENU_SELECTION[info.menuItemId];
+  if (toolId && info.selectionText) {
+    openTool(toolId, info.selectionText.trim()).catch(function () {});
+  }
+});
+
+/* Omnibox: type "dt" in the address bar, then a tool name. */
+const OMNIBOX_TOOLS = [
+  ['json', 'JSON Formatter', 'format validate minify sort keys tree csv yaml xml'],
+  ['jwt', 'JWT Decoder', 'token decode header payload'],
+  ['base64', 'Base64', 'encode decode'],
+  ['url', 'URL Encoder', 'uri encode decode query'],
+  ['uuid', 'UUID and ID Generator', 'guid v4 v7 ulid nano id'],
+  ['timestamp', 'Timestamp Converter', 'unix epoch date timezone'],
+  ['case', 'Case Converter', 'camel snake kebab pascal'],
+  ['color', 'Color Tools', 'hex rgb hsl oklch contrast palette'],
+  ['hash', 'Hash Generator', 'md5 sha1 sha256 hmac'],
+  ['text', 'Text Utilities', 'word count sort lines slug'],
+  ['regex', 'Regex Tester', 'regular expression match replace patterns'],
+  ['diff', 'Diff Checker', 'compare text word'],
+  ['password', 'Password Generator', 'random passphrase pin strong'],
+  ['lorem', 'Lorem Ipsum', 'placeholder text filler'],
+  ['http', 'HTTP Status Codes', 'reference 200 404 500'],
+  ['cron', 'Cron Parser', 'schedule expression builder'],
+  ['base', 'Number Base Converter', 'binary octal decimal hex'],
+  ['chmod', 'chmod Calculator', 'unix permissions octal rwx'],
+  ['sql', 'SQL Formatter', 'query format beautify'],
+  ['markdown', 'Markdown Preview', 'md render html'],
+  ['qr', 'QR Code Generator', 'qr code link offline']
+];
+
+if (chrome.omnibox) {
+  chrome.omnibox.setDefaultSuggestion({
+    description: 'Developer Toolkit: type a tool name, e.g. json, jwt, cron'
+  });
+  chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
+    const q = String(text || '').trim().toLowerCase();
+    if (!q) return;
+    const hits = OMNIBOX_TOOLS.filter(function (t) {
+      return t[1].toLowerCase().includes(q) || t[2].includes(q) || t[0].includes(q);
+    }).slice(0, 6);
+    suggest(hits.map(function (t) {
+      return { content: t[0], description: t[1] + ' - Developer Toolkit' };
+    }));
+  });
+  chrome.omnibox.onInputEntered.addListener(function (text) {
+    const q = String(text || '').trim().toLowerCase();
+    const byId = OMNIBOX_TOOLS.find(function (t) { return t[0] === q; });
+    const byName = OMNIBOX_TOOLS.find(function (t) {
+      return t[1].toLowerCase().includes(q) || t[2].includes(q);
+    });
+    const hit = byId || byName;
+    if (hit) {
+      openTool(hit[0], '').catch(function () {});
+    } else {
+      openOrFocusApp().catch(function () {});
+    }
+  });
+}
+
+/* Keyboard command (Alt+Shift+D) opens the app window. */
+chrome.commands.onCommand.addListener(function (command) {
+  if (command === 'open-toolkit') {
+    openOrFocusApp().catch(function (e) {
+      console.error('[DT] Command open failed:', e);
+    });
+  }
 });

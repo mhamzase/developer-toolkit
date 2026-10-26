@@ -1,0 +1,28 @@
+/* ============================================================
+ * File: css/tools/chmod.css
+ * Module: Tool CSS — chmod Calculator
+ * Purpose: The rwx checkbox grid.
+ * ============================================================ */
+
+.dt-chmod-grid {
+  display: grid;
+  grid-template-columns: 90px repeat(3, 1fr);
+  gap: 6px 10px;
+  align-items: center;
+  max-width: 480px;
+}
+.dt-chmod-cell { display: flex; align-items: center; justify-content: center; }
+.dt-chmod-cell--head {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.dt-chmod-cell--rowhead {
+  justify-content: flex-start;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+.dt-chmod-check { display: inline-flex; padding: 6px; cursor: pointer; }
+.dt-chmod-check input { width: 18px; height: 18px; accent-color: var(--color-accent); cursor: pointer; }

@@ -345,6 +345,101 @@
     });
   }
 
+/* --- XML conversion (Phase 3) --- */
+  function escapeXmlText(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+  function xmlName(key) {
+    const name = String(key).replace(/[^A-Za-z0-9_.-]/g, "_");
+    return /^[A-Za-z_]/.test(name) ? name : "_" + name;
+  }
+  function toXml(value, name, depth) {
+    const pad = "  ".repeat(depth);
+    const tag = xmlName(name);
+    if (value === null || value === undefined) {
+      return pad + "<" + tag + "/>";
+    }
+    if (Array.isArray(value)) {
+      if (!value.length) return pad + "<" + tag + "/>";
+      return value.map(function (item) { return toXml(item, tag, depth); }).join("\n");
+    }
+    if (typeof value === "object") {
+      const kids = Object.keys(value);
+      if (!kids.length) return pad + "<" + tag + "/>";
+      const inner = kids.map(function (k) { return toXml(value[k], k, depth + 1); }).join("\n");
+      return pad + "<" + tag + ">\n" + inner + "\n" + pad + "</" + tag + ">";
+    }
+    return pad + "<" + tag + ">" + escapeXmlText(value) + "</" + tag + ">";
+  }
+
+  /** DOM element to plain JSON: attributes under "@attrs", text under "#text". */
+  function elementToJson(el) {
+    const obj = {};
+    if (el.attributes && el.attributes.length) {
+      const attrs = {};
+      for (let i = 0; i < el.attributes.length; i++) {
+        attrs[el.attributes[i].name] = el.attributes[i].value;
+      }
+      obj["@attrs"] = attrs;
+    }
+    const childEls = [];
+    let text = "";
+    el.childNodes.forEach(function (node) {
+      if (node.nodeType === 1) childEls.push(node);
+      else if (node.nodeType === 3) text += node.nodeValue;
+    });
+    text = text.trim();
+    if (!childEls.length) {
+      if (text) obj["#text"] = /^-?\d+(\.\d+)?$/.test(text) ? Number(text) : text;
+      if (Object.keys(obj).length === 1 && obj["@attrs"]) return obj;
+      if (!Object.keys(obj).length) return "";
+      if (Object.keys(obj).length === 1 && "#text" in obj && !obj["@attrs"]) return obj["#text"];
+      return obj;
+    }
+    childEls.forEach(function (child) {
+      const key = child.tagName;
+      const val = elementToJson(child);
+      if (obj[key] === undefined) obj[key] = val;
+      else if (Array.isArray(obj[key])) obj[key].push(val);
+      else obj[key] = [obj[key], val];
+    });
+    if (text) obj["#text"] = text;
+    return obj;
+  }
+  function convertToXml() {
+    const result = parse(refs.input.value);
+    if (!result.ok) { showError(result); return; }
+    showError(null);
+    const text = '<?xml version="1.0" encoding="UTF-8"?>\n' + toXml(result.value, "root", 0);
+    refs.output.value = text;
+    paintStats(refs.outputStats, text);
+    DT.ui.toast.success("Converted to XML");
+  }
+
+  function convertFromXml() {
+    const raw = refs.input.value;
+    if (!raw || !raw.trim()) { showError({ error: "Input is empty." }); return; }
+    const doc = new DOMParser().parseFromString(raw, "text/xml");
+    const parseError = doc.querySelector("parsererror");
+    if (parseError) {
+      showError({ error: "Invalid XML: " + parseError.textContent.trim().split("\n")[0] });
+      DT.ui.toast.error("Cannot parse XML");
+      return;
+    }
+    showError(null);
+    const rootEl = doc.documentElement;
+    const wrapped = {};
+    wrapped[rootEl.tagName] = elementToJson(rootEl);
+    const text = JSON.stringify(wrapped, null, indentOf(refs.indent.value));
+    refs.output.value = text;
+    paintStats(refs.outputStats, text);
+    renderTree(wrapped);
+    DT.ui.toast.success("Converted to JSON");
+  }
+
 /* --- Phase 2B conversion actions --- */
   function sortKeys() {
     const result = parse(refs.input.value);
@@ -523,6 +618,8 @@
       const btnToCsv = convBtn("To CSV");
       const btnToYaml = convBtn("To YAML");
       const btnFromCsv = convBtn("CSV to JSON");
+      const btnToXml = convBtn("To XML");
+      const btnFromXml = convBtn("XML to JSON");
       const btnEscape = convBtn("Escape");
       const btnUnescape = convBtn("Unescape");
       const convertBar = dom.el("div", { class: "dt-toolbar" }, [
@@ -533,6 +630,8 @@
           btnToCsv,
           btnToYaml,
           btnFromCsv,
+          btnToXml,
+          btnFromXml,
           btnEscape,
           btnUnescape,
         ]),
@@ -654,6 +753,8 @@
       on(btnToCsv, "click", convertCsv);
       on(btnToYaml, "click", convertYaml);
       on(btnFromCsv, "click", convertFromCsv);
+      on(btnToXml, "click", convertToXml);
+      on(btnFromXml, "click", convertFromXml);
       on(btnEscape, "click", escapeString);
       on(btnUnescape, "click", unescapeString);
       on(btnExpandAll, "click", () => setTreeOpen(treeSlot, true));

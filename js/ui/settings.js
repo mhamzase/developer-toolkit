@@ -115,6 +115,31 @@
     paintThemeSeg();
     if (typeof DT.core.theme.on === "function") DT.core.theme.on(paintThemeSeg);
 
+    /* Side Panel: open the same app docked in Chrome's side panel */
+    let sidePanelRow = null;
+    try {
+      if (window.chrome && chrome.sidePanel && chrome.sidePanel.open) {
+        const sideBtn = dom.el("button", {
+          type: "button",
+          class: "dt-btn dt-btn--secondary dt-btn--sm dt-btn--block",
+          text: "Open in Side Panel",
+        });
+        sideBtn.addEventListener("click", function () {
+          chrome.windows.getCurrent(function (win) {
+            chrome.sidePanel
+              .open({ windowId: win.id })
+              .then(function () { close(); })
+              .catch(function () {
+                DT.ui.toast.error("Side Panel could not be opened");
+              });
+          });
+        });
+        sidePanelRow = sideBtn;
+      }
+    } catch (e) {
+      sidePanelRow = null;
+    }
+
     /* Danger zone */
     const clearBtn = dom.el("button", {
       type: "button",
@@ -148,12 +173,15 @@
         dom.el("div", { class: "dt-settings__title", text: "Settings" }),
       ]),
         dom.el('div', { class: 'dt-settings__body' }, [
-        themeRow,
-        dom.el('div', { class: 'dt-settings__divider' }),
-        persistRow.el,
-        dom.el('div', { class: 'dt-settings__divider' }),
-        clearBtn
-      ])
+          themeRow,
+          dom.el('div', { class: 'dt-settings__divider' }),
+          persistRow.el,
+          ...(sidePanelRow
+            ? [dom.el('div', { class: 'dt-settings__divider' }), sidePanelRow]
+            : []),
+          dom.el('div', { class: 'dt-settings__divider' }),
+          clearBtn
+        ])
     ]);
 
     el.style.display = "none";
