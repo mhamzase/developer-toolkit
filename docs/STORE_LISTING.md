@@ -1,4 +1,4 @@
-# Chrome Web Store listing (v2.0.0)
+# Chrome Web Store listing (v1.0.1)
 
 Copy for the Developer Dashboard, ready to paste. Anything marked
 [TODO] needs a human action (screenshots, dashboard answers).
@@ -11,7 +11,7 @@ Copy for the Developer Dashboard, ready to paste. Anything marked
 
 ## Summary (132 characters max)
 
-21 fast, private developer tools: JSON, JWT, regex, hashes, QR codes and more. Everything runs locally. No accounts, no tracking.
+Free developer tools: JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR generator. 26 tools, 100% offline, no tracking.
 
 ## Detailed description
 
@@ -19,13 +19,15 @@ Developer Toolkit puts the small tools you reach for every day into
 one fast, private place, right inside Chrome.
 
 FORMAT AND CONVERT
-JSON formatter with sort keys, a collapsible tree view, and CSV,
+JSON formatter and validator with sort keys, a collapsible tree view, and CSV,
 YAML and XML conversion. SQL formatter. Markdown editor with live
 preview and HTML export. Number base converter (binary, octal,
 decimal, hex, base 36) with full BigInt precision.
 
 DECODE AND INSPECT
-JWT decoder with expiry state. Base64 and URL encoder/decoder with
+JWT decoder with expiry state, plus a JWT signer (HS256, HS384,
+HS512) for creating test tokens, and AES-256-GCM text encryption
+and decryption with a password. Base64 and URL encoder/decoder with
 file support. A regex tester with a pattern library and live
 replace. A line and word level diff checker. A cron parser with a
 plain-English description, next runs and a point-and-click builder.
@@ -39,7 +41,9 @@ REFERENCE AND UTILITIES
 Color tools with HEX, RGB, HSL and OKLCH, shades and tints, and a
 WCAG contrast checker. A chmod calculator (checkboxes, octal and
 symbolic views). HTTP status code reference. Timestamp converter
-with timezones.
+with timezones. An image compressor and resizer (PNG, JPEG,
+WebP), a JSON to TypeScript / Go / Python types generator, and
+an SEO meta tag generator with Open Graph and Twitter cards.
 
 WORK THE WAY YOU LIKE
 Open it as a window, dock it in Chrome's Side Panel, jump in with

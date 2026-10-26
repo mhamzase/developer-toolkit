@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Developer Toolkit: JSON, JWT, Regex & More",
   "short_name": "Dev Toolkit",
-  "version": "2.0.0",
+  "version": "1.0.1",
   "description": "Fast, private developer tools for the work you do every day. All local, always growing.",
   "action": {
     "default_title": "Open Developer Toolkit"

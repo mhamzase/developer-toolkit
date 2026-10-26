@@ -13,7 +13,7 @@ Run this before every release.
 - [ ] Toggle flips to dark
 - [ ] Settings → Theme offers Light / Dark / System; System follows the OS live
 - [ ] Reload window → theme mode persists
-- [ ] All 21 tools readable in both themes
+- [ ] All 26 tools readable in both themes
 - [ ] Scrollbars are styled in both themes
 
 ## 3. Shell (sidebar)
@@ -172,6 +172,23 @@ Run this before every release.
 ### QR Code Generator
 - [ ] Typing a URL renders a code and the meta line (version, byte count); scanning it with a phone returns the exact text
 - [ ] 107+ byte input shows the too-long message; SVG and PNG downloads open as valid images
+
+### JWT Signer
+- [ ] Default header/payload/secret reproduce the classic jwt.io token (signature `SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`)
+- [ ] Switching algorithm updates the header alg; broken JSON frames the panel red
+
+### AES Encrypt / Decrypt
+- [ ] Encrypt then decrypt with the same password round-trips Unicode text; a wrong password fails cleanly with no output
+- [ ] Two encryptions of the same text differ (random salt) yet both decrypt
+
+### JSON to Types
+- [ ] The Sample yields User/Address/Order in all three languages; `note` is optional everywhere (TS `?`, Go `omitempty`, Python `Optional = None`)
+
+### Image Compressor
+- [ ] A JPEG converts to WebP smaller at quality 82; scale 50% halves both dimensions; Download saves the shown result
+
+### Meta Tag Generator
+- [ ] Title counter turns red past 60 chars, description past 160; output escapes quotes; the preview card follows title, description and image
 
 ## 4c. Platform integrations (Phase 3, Chrome only)
 - [ ] `npm install && npm test` smoke suite is green

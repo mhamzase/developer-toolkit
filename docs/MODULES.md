@@ -41,6 +41,20 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
+## Tool highlights (v1.0.1, store track)
+
+- JWT signing (`jwtsign.js`) and AES (`aes.js`) are Web Crypto
+  only; neither persists its secret or input, matching the JWT
+  Decoder and Hash rules.
+- `jsontypes.js` inference: `infer()` builds a shape node,
+  `merge()` unions array item shapes (missing keys become
+  optional), `collectTypes()` names shapes by PascalCase key
+  (light singularization) and dedupes identical shapes.
+- `image.js` follows the house file rule: the shared
+  `DT.ui.fileDrop` picker plus a canvas pipeline.
+- `metatags.js` counters use the standard 60 / 160 limits and an
+  escaped, copy-ready head block.
+
 ## Tool highlights (v2.0.0)
 
 - Five new tools: `base.js` (BigInt base conversion), `chmod.js`,

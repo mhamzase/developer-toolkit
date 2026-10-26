@@ -138,6 +138,12 @@
     star:
       '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
 
+    /* Image — compressor and resizer */
+    image:
+      '<rect x="3" y="3" width="18" height="18" rx="2"/>' +
+      '<circle cx="9" cy="9" r="2"/>' +
+      '<path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/>',
+
     /* Calculator — number base converter */
     calculator:
       '<rect x="4" y="2" width="16" height="20" rx="2"/>' +

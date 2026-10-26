@@ -2,6 +2,25 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.0.1] — 2026-10-26
+Store-track versioning starts here: releases now count 1.0.1,
+1.0.2, ... 1.0.9, then 1.1.0 (the earlier 1.x/2.0.0 numbers were
+internal build milestones).
+
+### Added (26 tools total)
+- JWT Signer: create HS256/HS384/HS512 tokens locally for API
+  testing, with base64url-secret support. The signing companion
+  to the JWT Decoder.
+- AES Encrypt / Decrypt: password-based AES-256-GCM with PBKDF2
+  (210k rounds, per-message random salt), one Base64 string out.
+- JSON to Types: TypeScript interfaces, Go structs or Python
+  dataclasses from a JSON sample, with shape merging across
+  array items and optional-field inference.
+- Image Compressor: compress, resize and convert images
+  (PNG/JPEG/WebP) on a local canvas, with before/after sizes.
+- Meta Tag Generator: SEO, Open Graph and Twitter tags with
+  live character counters (60 / 160) and a social preview card.
+
 ## [2.0.0] — 2026-10-26
 Phase 3: five new tools, platform integrations, store readiness.
 

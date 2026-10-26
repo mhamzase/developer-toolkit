@@ -367,7 +367,12 @@ const OMNIBOX_TOOLS = [
   ['chmod', 'chmod Calculator', 'unix permissions octal rwx'],
   ['sql', 'SQL Formatter', 'query format beautify'],
   ['markdown', 'Markdown Preview', 'md render html'],
-  ['qr', 'QR Code Generator', 'qr code link offline']
+  ['qr', 'QR Code Generator', 'qr code link offline'],
+  ['jwtsign', 'JWT Signer', 'sign token hmac create'],
+  ['aes', 'AES Encrypt / Decrypt', 'encrypt decrypt cipher password'],
+  ['jsontypes', 'JSON to Types', 'typescript interface go struct python dataclass'],
+  ['image', 'Image Compressor', 'compress resize convert webp photo'],
+  ['metatags', 'Meta Tag Generator', 'seo open graph twitter head']
 ];
 
 if (chrome.omnibox) {

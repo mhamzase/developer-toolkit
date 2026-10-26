@@ -107,11 +107,11 @@ async function main() {
 
   const doc = window.document;
   check("sidebar shell renders", !!doc.querySelector(".dt-sidebar"));
-  check("home grid lists all tools", doc.querySelectorAll(".dt-tool-card").length >= 21);
+  check("home grid lists all tools", doc.querySelectorAll(".dt-tool-card").length >= 26);
   check("footer version matches manifest", doc.body.textContent.includes(manifest.version));
 
   const ids = window.eval("DT.core.registry.all().map(t => t.id)");
-  check("registry holds 21 tools", ids.length === 21);
+  check("registry holds 26 tools", ids.length === 26);
 
   const errs = [];
   for (const id of ids) {
