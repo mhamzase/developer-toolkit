@@ -115,6 +115,71 @@
   background-color: var(--color-input-bg);
 }
 
+/* Search quick-launch dropdown (shown while a tool is open, so
+   typing never hides the tool: see js/ui/header.js) */
+.dt-search-drop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+
+  max-height: 328px;
+  overflow-y: auto;
+  padding: var(--space-1);
+
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 40px -12px rgba(15, 23, 42, 0.28);
+}
+
+.dt-search-drop__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 7px 8px;
+
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+}
+
+.dt-search-drop__item:hover {
+  background-color: var(--color-hover);
+}
+
+.dt-search-drop__item--active {
+  background-color: var(--color-accent-soft);
+}
+
+.dt-search-drop__name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dt-search-drop__cat {
+  margin-left: auto;
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  color: var(--color-text-subtle);
+}
+
+.dt-search-drop__empty {
+  padding: var(--space-3);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-subtle);
+}
+
 .dt-header__search-icon {
   position: absolute;
   left: 10px;

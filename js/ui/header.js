@@ -117,11 +117,144 @@
         actions,
       ]);
 
-      // Wire search → router (debounced)
+      /* ---------- Search: grid filter on list, quick-launch
+         dropdown while a tool is open ----------
+         Typing must never hide the tool the user is working in
+         (the old wiring force-switched the view on every
+         keystroke). With a tool open, matches appear in a
+         dropdown under the field and navigation happens only
+         when the user picks one (click, or arrows + Enter).
+         On the list view the field keeps filtering the grid. */
+      const drop = dom.el("div", {
+        class: "dt-search-drop",
+        id: "dt-search-drop",
+        hidden: "",
+        role: "listbox",
+        "aria-label": "Search results",
+      });
+      search.appendChild(drop);
+
+      let matches = [];
+      let activeIdx = 0;
+      let dropOpen = false;
+
+      function closeDrop() {
+        dropOpen = false;
+        matches = [];
+        drop.hidden = true;
+        dom.clear(drop);
+      }
+
+      function paintActive() {
+        drop.querySelectorAll(".dt-search-drop__item").forEach(function (row, i) {
+          row.classList.toggle("dt-search-drop__item--active", i === activeIdx);
+        });
+      }
+
+      function renderDrop() {
+        dom.clear(drop);
+        if (!matches.length) {
+          drop.appendChild(dom.el("div", {
+            class: "dt-search-drop__empty",
+            text: "No tools found",
+          }));
+          return;
+        }
+        matches.forEach(function (tool, i) {
+          const iconNode = DT.utils.icons.get(tool.icon);
+          const iconWrap = dom.el("span", {
+            class: "dt-side-item__icon",
+            "data-cat": DT.core.registry.categorySlug(tool.category),
+          });
+          if (iconNode) iconWrap.appendChild(iconNode);
+          const row = dom.el("button", {
+            type: "button",
+            class: "dt-search-drop__item" +
+              (i === activeIdx ? " dt-search-drop__item--active" : ""),
+            "data-tool-id": tool.id,
+            role: "option",
+          }, [
+            iconWrap,
+            dom.el("span", { class: "dt-search-drop__name", text: tool.name }),
+            dom.el("span", { class: "dt-search-drop__cat", text: tool.category }),
+          ]);
+          row.addEventListener("mouseenter", function () {
+            if (activeIdx !== i) { activeIdx = i; paintActive(); }
+          });
+          row.addEventListener("click", function () { openTool(tool); });
+          drop.appendChild(row);
+        });
+      }
+
+      function openDrop(list) {
+        matches = list;
+        activeIdx = 0;
+        dropOpen = true;
+        drop.hidden = false;
+        renderDrop();
+      }
+
+      function currentMatches() {
+        return DT.core.registry
+          .filter({ query: searchInput.value.trim() })
+          .slice(0, 8);
+      }
+
+      function openTool(tool) {
+        DT.core.prefs.recordRecent(tool.id);
+        closeDrop();
+        searchInput.value = "";
+        DT.core.router.go("tool", { toolId: tool.id, query: "" });
+        searchInput.blur();
+      }
+
+      // Wire search (debounced)
       const push = DT.utils.debounce(function () {
-        DT.core.router.setQuery(searchInput.value.trim());
+        const q = searchInput.value.trim();
+        if (DT.core.router.state.view === "list") {
+          closeDrop();
+          DT.core.router.setQuery(q);
+          return;
+        }
+        if (!q) { closeDrop(); return; }
+        openDrop(currentMatches());
       }, 120);
       searchInput.addEventListener("input", push);
+
+      searchInput.addEventListener("focus", function () {
+        if (DT.core.router.state.view !== "list" && searchInput.value.trim()) {
+          openDrop(currentMatches());
+        }
+      });
+
+      searchInput.addEventListener("keydown", function (e) {
+        if (!dropOpen) return;
+        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+          e.preventDefault();
+          if (!matches.length) return;
+          const dir = e.key === "ArrowDown" ? 1 : -1;
+          activeIdx = (activeIdx + dir + matches.length) % matches.length;
+          paintActive();
+          const rows = drop.querySelectorAll(".dt-search-drop__item");
+          if (rows[activeIdx]) rows[activeIdx].scrollIntoView({ block: "nearest" });
+        } else if (e.key === "Enter") {
+          if (matches[activeIdx]) {
+            e.preventDefault();
+            openTool(matches[activeIdx]);
+          }
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          e.stopPropagation();
+          closeDrop();
+        }
+      });
+
+      document.addEventListener("mousedown", function (e) {
+        if (dropOpen && !search.contains(e.target)) closeDrop();
+      });
+
+      /* Any navigation closes a stale dropdown */
+      DT.core.router.on(function () { if (dropOpen) closeDrop(); });
 
       return header;
     },

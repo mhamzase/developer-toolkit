@@ -55,8 +55,11 @@
     },
 
     setQuery: function (q) {
+      /* Query is view-neutral state: the grid reads it when the
+         list is visible. It must never yank the user out of an
+         open tool (the header search uses its own dropdown for
+         that case and navigates only on an explicit pick). */
       this.state.query = q;
-      if (this.state.view !== 'list') { this.state.view = 'list'; this.state.toolId = null; }
       this.emit();
     }
   };

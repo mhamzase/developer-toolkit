@@ -28,6 +28,14 @@ internal build milestones).
   the in-app header logo picks it up automatically.
 
 ### Fixed
+- Search no longer hides the open tool: typing in the search
+  field used to force-switch to the results list on every
+  keystroke. With a tool open, matches now appear in a dropdown
+  under the field (arrows + Enter, Esc to close, click to open)
+  and navigation happens only on an explicit pick; on the home
+  list the field still filters the grid live. The router query
+  state is view-neutral now.
+### Fixed
 - Sidebar: clicking a tool no longer makes the navigation jump
   back to the top. Route changes now move only the highlight;
   the sidebar rebuilds solely when the favorites set changes,
