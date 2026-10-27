@@ -31,6 +31,11 @@ All notable changes to Developer Toolkit.
 - The sidebar can be collapsed to an icon rail with the new
   toggle in the sidebar head, and expanded again; the choice
   is remembered across restarts.
+- Focusing the search with a tool open and an empty query now
+  opens a Quick switch list (favorites, then recently used)
+  in the results panel; clearing a typed query returns to it.
+- Ctrl+B (Cmd+B) collapses or expands the sidebar from
+  anywhere; the shortcut is listed in the help overlay.
 
 ## [1.0.1] — 2026-10-26
 Store-track versioning starts here: releases now count 1.0.1,

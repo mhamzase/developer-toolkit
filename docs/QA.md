@@ -26,6 +26,8 @@ Run this before every release.
 - [ ] Clicking a card/row opens the tool; its header shows icon, name, description, favorite star
 - [ ] Sidebar collapses to an icon rail under 900px and to a top bar + tool strip under 640px
 - [ ] With a tool open, typing in search shows results in a full width panel at the top of the main area (full tool names, no truncation) and the open tool stays on screen; Enter/click opens the pick, Esc closes the panel
+- [ ] With a tool open, focusing the empty search shows the Quick switch list (favorites then recents, current tool left out); Enter opens the highlighted tool
+- [ ] Ctrl+B collapses and expands the sidebar from anywhere, including while typing in a tool
 - [ ] Sidebar head collapse toggle switches to the icon rail and back at full width; the state survives a reload; the top bar search stays visible and usable while collapsed
 - [ ] Footer version matches manifest.json version (single source)
 

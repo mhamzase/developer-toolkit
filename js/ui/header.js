@@ -121,6 +121,16 @@
       });
       paintCollapseBtn();
 
+      // Ctrl+B (Cmd+B on macOS) toggles the sidebar from
+      // anywhere, matching the global Ctrl+K palette shortcut.
+      document.addEventListener("keydown", function (e) {
+        if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey &&
+            (e.key === "b" || e.key === "B")) {
+          e.preventDefault();
+          collapseBtn.click();
+        }
+      });
+
       const settingsBtn = DT.ui.settings.render();
       const actions = dom.el("div", { class: "dt-header__actions" }, [
         settingsBtn,
@@ -173,8 +183,9 @@
         role: "listbox",
         "aria-label": "Search results",
       });
+      const panelTitle = dom.el("span", { class: "dt-search-panel__title", text: "Search results" });
       const panelHead = dom.el("div", { class: "dt-search-panel__head" }, [
-        dom.el("span", { class: "dt-search-panel__title", text: "Search results" }),
+        panelTitle,
         dom.el("span", {
           class: "dt-search-panel__hint",
           text: "\u2191\u2193 navigate \u00B7 Enter opens \u00B7 Esc closes",
@@ -247,13 +258,39 @@
         });
       }
 
-      function openPanel(list) {
+      function openPanel(list, title) {
         matches = list;
         activeIdx = 0;
+        panelTitle.textContent = title || "Search results";
         mountPanel();
         panelOpenState = true;
         panel.hidden = false;
         renderPanel();
+      }
+
+      /* Quick switch: with an empty query the panel offers the
+         favorites first, then the recently used tools (the
+         current tool left out), so a tool can be changed
+         without the mouse. */
+      function quickSwitchList() {
+        const state = DT.core.router.state;
+        const currentId = state.view === "tool" ? state.toolId : null;
+        const seen = {};
+        const list = [];
+        function add(id) {
+          if (!id || id === currentId || seen[id]) return;
+          const tool = DT.core.registry.get(id);
+          if (tool) { seen[id] = true; list.push(tool); }
+        }
+        DT.core.prefs.getFavorites().forEach(add);
+        DT.core.prefs.getRecents().forEach(add);
+        return list.slice(0, 8);
+      }
+
+      function openQuickSwitch() {
+        const list = quickSwitchList();
+        if (!list.length) { closePanel(); return; }
+        openPanel(list, "Quick switch");
       }
 
       function currentMatches() {
@@ -278,15 +315,15 @@
           DT.core.router.setQuery(q);
           return;
         }
-        if (!q) { closePanel(); return; }
+        if (!q) { openQuickSwitch(); return; }
         openPanel(currentMatches());
       }, 120);
       searchInput.addEventListener("input", push);
 
       searchInput.addEventListener("focus", function () {
-        if (DT.core.router.state.view !== "list" && searchInput.value.trim()) {
-          openPanel(currentMatches());
-        }
+        if (DT.core.router.state.view === "list") return;
+        if (searchInput.value.trim()) openPanel(currentMatches());
+        else openQuickSwitch();
       });
 
       searchInput.addEventListener("keydown", function (e) {

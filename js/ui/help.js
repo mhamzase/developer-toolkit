@@ -24,6 +24,7 @@
       label: 'Global',
       rows: [
         { keys: ['Ctrl', 'K'],   action: 'Open command palette', mac: ['⌘', 'K'] },
+        { keys: ['Ctrl', 'B'],   action: 'Collapse or expand the sidebar', mac: ['⌘', 'B'] },
         { keys: ['/'],           action: 'Open command palette (from home)' },
         { keys: ['?'],           action: 'Show this help' },
         { keys: ['Esc'],         action: 'Close overlay / cancel' }
