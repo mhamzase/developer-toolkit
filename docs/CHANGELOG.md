@@ -21,10 +21,13 @@ All notable changes to Developer Toolkit.
   plus a favicon.ico) from an uploaded image or a letter tile.
 
 ### Changed
-- Search while a tool is open now shows its results in a full
-  width panel at the top of the main area instead of a narrow
-  sidebar dropdown, so long tool names are never truncated.
-  The tool in use is still never hidden while typing.
+- The search field moved out of the sidebar into a top bar
+  above the main area. While a tool is open, its results show
+  in a full width panel at the top of the main area instead of
+  a narrow sidebar dropdown, so long tool names are never
+  truncated. The tool in use is still never hidden while
+  typing, and the search stays available when the sidebar is
+  collapsed.
 - The sidebar can be collapsed to an icon rail with the new
   toggle in the sidebar head, and expanded again; the choice
   is remembered across restarts.

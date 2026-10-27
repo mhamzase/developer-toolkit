@@ -39,9 +39,7 @@ body {
     justify-content: center;
   }
 
-  .dt-header__title,
-  .dt-header__search,
-  .dt-palette-hint {
+  .dt-header__title {
     display: none;
   }
 
@@ -108,10 +106,6 @@ body {
   }
 
   .dt-header__title {
-    display: block;
-  }
-
-  .dt-header__search {
     display: block;
   }
 
@@ -233,9 +227,7 @@ body {
     justify-content: center;
   }
 
-  .dt-root.dt-shell--collapsed .dt-header__title,
-  .dt-root.dt-shell--collapsed .dt-header__search,
-  .dt-root.dt-shell--collapsed .dt-palette-hint {
+  .dt-root.dt-shell--collapsed .dt-header__title {
     display: none;
   }
 

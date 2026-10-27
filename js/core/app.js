@@ -14,7 +14,7 @@
 
   // Add a shortcut hint to the header search field on init
   function attachPaletteHint() {
-    const searchWrap = document.querySelector(".dt-header__search");
+    const searchWrap = document.querySelector(".dt-topbar__search");
     if (!searchWrap || searchWrap.querySelector(".dt-palette-hint")) return;
     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
     const hint = document.createElement("span");
@@ -138,7 +138,11 @@
 
         // Content column: main scrollable area + footer
         mainEl = DT.ui.dom.el("main", { class: "dt-main", id: "dt-main" });
+        const topbar = DT.ui.dom.el("div", { class: "dt-topbar" }, [
+          DT.ui.header.renderSearch(),
+        ]);
         const content = DT.ui.dom.el("div", { class: "dt-content" }, [
+          topbar,
           mainEl,
           DT.ui.footer.render(),
         ]);

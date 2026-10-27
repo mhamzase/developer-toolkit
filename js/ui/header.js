@@ -1,10 +1,12 @@
 /**
  * File: js/ui/header.js
  * Module: UI — Sidebar head
- * Purpose: Logo, title, search input, theme toggle.
- * Notes: Renders the top block of the sidebar in the Clean Pro shell;
- *        the search field and actions keep their original classes so
- *        the palette hint and settings menu keep working unchanged.
+ * Purpose: Sidebar head (logo, title, actions) plus the search
+ *          field that now lives in a top bar above the main area.
+ * Notes: render() builds the sidebar head; renderSearch() builds
+ *        the search field and all of its wiring (grid filtering
+ *        on the list view, results panel while a tool is open),
+ *        and app.js mounts it in the content column's top bar.
  */
 
 (function () {
@@ -37,7 +39,7 @@
   const LOGO_SRC = "../assets/icons/icon48.png";
 
   const ICON_SEARCH =
-    '<svg xmlns="http://www.w3.org/2000/svg" class="dt-header__search-icon" viewBox="0 0 24 24" ' +
+    '<svg xmlns="http://www.w3.org/2000/svg" class="dt-topbar__search-icon" viewBox="0 0 24 24" ' +
     'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     '<circle cx="11" cy="11" r="7"/>' +
     '<line x1="21" y1="21" x2="16.65" y2="16.65"/>' +
@@ -61,21 +63,6 @@
         text: "Developer Toolkit",
       });
       const brand = dom.el("div", { class: "dt-header__brand" }, [logo, title]);
-
-      // Search
-      const searchIcon = dom.svg(ICON_SEARCH);
-      const searchInput = dom.el("input", {
-        type: "search",
-        class: "dt-input",
-        id: "dt-search",
-        placeholder: "Search tools…",
-        autocomplete: "off",
-        spellcheck: "false",
-      });
-      const search = dom.el("div", { class: "dt-header__search" }, [
-        searchIcon,
-        searchInput,
-      ]);
 
       // Theme toggle
       const themeBtn = dom.el("button", {
@@ -143,12 +130,34 @@
 
       const header = dom.el("header", { class: "dt-header" }, [
         brand,
-        search,
         actions,
       ]);
 
-      /* ---------- Search: grid filter on list, results panel
-         in the main area while a tool is open ----------
+      return header;
+    },
+
+    /** Build the search field for the top bar (with wiring). */
+    renderSearch: function () {
+      const dom = DT.ui.dom;
+
+      // Search
+      const searchIcon = dom.svg(ICON_SEARCH);
+      const searchInput = dom.el("input", {
+        type: "search",
+        class: "dt-input",
+        id: "dt-search",
+        placeholder: "Search tools…",
+        autocomplete: "off",
+        spellcheck: "false",
+      });
+      const search = dom.el("div", { class: "dt-topbar__search" }, [
+        searchIcon,
+        searchInput,
+      ]);
+
+      /* ---------- Search wiring: grid filter on the list
+         view, results panel in the main area while a tool
+         is open ----------
          Typing must never hide the tool the user is working in
          (the old wiring force-switched the view on every
          keystroke). With a tool open, matches appear in a full
@@ -311,7 +320,7 @@
       /* Any navigation closes a stale results panel */
       DT.core.router.on(function () { if (panelOpenState) closePanel(); });
 
-      return header;
+      return search;
     },
   };
 })();

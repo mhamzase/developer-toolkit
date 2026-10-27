@@ -101,15 +101,27 @@
   text-overflow: ellipsis;
 }
 
-.dt-header__search {
-  order: 3;
-  flex: 1 1 100%;
+/* Top bar above the main area: home of the search field,
+   which moved out of the sidebar at the user's request */
+.dt-topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-bg);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.dt-topbar__search {
+  flex: 1 1 auto;
+  max-width: 640px;
   min-width: 0;
   position: relative;
 }
 
-.dt-header__search .dt-input {
-  height: 34px;
+.dt-topbar__search .dt-input {
+  width: 100%;
+  height: 36px;
   font-size: var(--fs-sm);
   padding-left: 32px;
   background-color: var(--color-input-bg);
@@ -225,7 +237,7 @@
   transition: transform 0.15s ease;
 }
 
-.dt-header__search-icon {
+.dt-topbar__search-icon {
   position: absolute;
   left: 10px;
   top: 50%;

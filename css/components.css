@@ -1050,8 +1050,8 @@ a.dt-btn--ghost:hover {
   user-select: none;
 }
 
-/* Give the header search padding-right so text doesn't collide with the hint */
-.dt-header__search .dt-input {
+/* Give the top bar search padding-right so text doesn't collide with the hint */
+.dt-topbar__search .dt-input {
   padding-right: 48px;
 }
 
