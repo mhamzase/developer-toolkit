@@ -1,0 +1,26 @@
+/* ============================================================
+ * File: css/tools/subnet.css
+ * Module: Tool CSS — IP Subnet Calculator
+ * Purpose: The address/prefix form layout. Result rows reuse
+ *          the shared label/value styles from ua.css.
+ * ============================================================ */
+
+.dt-subnet-form {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+}
+
+.dt-subnet-form .dt-field {
+  min-width: 180px;
+}
+
+.dt-subnet-form__range {
+  flex: 1 1 220px;
+}
+
+.dt-subnet-range {
+  width: 100%;
+  accent-color: var(--color-accent);
+}

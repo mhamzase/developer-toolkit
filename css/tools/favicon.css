@@ -1,0 +1,48 @@
+/* ============================================================
+ * File: css/tools/favicon.css
+ * Module: Tool CSS — Favicon Generator
+ * Purpose: Source fields row and the size cards grid.
+ * ============================================================ */
+
+.dt-fav-textfields {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dt-fav-letter {
+  width: 90px;
+}
+
+.dt-fav-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 12px;
+}
+
+.dt-fav-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-2);
+}
+
+.dt-fav-card__stage {
+  height: 64px;
+  display: grid;
+  place-items: center;
+}
+
+.dt-fav-card__canvas {
+  image-rendering: auto;
+}
+
+.dt-fav-card__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}

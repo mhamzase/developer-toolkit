@@ -41,6 +41,22 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
+## Tool highlights (v1.0.2, store track)
+
+- `css.js` runs on a small tokenizer (strings and comments stay
+  atomic, so data URIs survive) with a recursive chunk parser
+  for formatting and a pair-rule minifier that keeps /*! license
+  comments and media query keyword spacing.
+- `ua.js` parses with most specific rules first (Edge and
+  Samsung Internet also contain "Chrome") and flags frozen
+  Chrome versions.
+- `subnet.js` is unsigned 32 bit math; /31 follows RFC 3021
+  and /32 is a host route, both called out in the UI.
+- `gradient.js` keeps stops sorted only in the generated CSS;
+  the editor preserves the user's row order.
+- `favicon.js` draws on canvas and assembles `favicon.ico`
+  with `js/utils/ico.js` (PNG entries in an ICO container).
+
 ## Tool highlights (v1.0.1, store track)
 
 - JWT signing (`jwtsign.js`) and AES (`aes.js`) are Web Crypto

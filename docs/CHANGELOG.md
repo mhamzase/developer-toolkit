@@ -2,6 +2,24 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.0.2] — 2026-10-27
+
+### Added (31 tools total)
+- CSS Formatter & Minifier: beautify CSS with nested at-rule
+  support and a 2/4 space or tab indent, or minify it with a
+  size saving readout. Strings and data URIs are never mangled.
+- User Agent Parser: browser, engine, OS, device and client
+  type (person, bot or CLI tool) from any UA string, with a
+  note when Chrome's reduced format hides details.
+- IP Subnet Calculator: mask, wildcard, network, broadcast,
+  usable range, host counts, class and scope for any IPv4
+  address and CIDR prefix, with a copyable summary.
+- CSS Gradient Generator: linear and radial gradients with an
+  editable stop list, angle control, presets and a random
+  generator, plus copy ready CSS.
+- Favicon Generator: a full favicon set (16 to 512 px PNGs
+  plus a favicon.ico) from an uploaded image or a letter tile.
+
 ## [1.0.1] — 2026-10-26
 Store-track versioning starts here: releases now count 1.0.1,
 1.0.2, ... 1.0.9, then 1.1.0 (the earlier 1.x/2.0.0 numbers were

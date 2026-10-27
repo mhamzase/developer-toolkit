@@ -372,7 +372,12 @@ const OMNIBOX_TOOLS = [
   ['aes', 'AES Encrypt / Decrypt', 'encrypt decrypt cipher password'],
   ['jsontypes', 'JSON to Types', 'typescript interface go struct python dataclass'],
   ['image', 'Image Compressor', 'compress resize convert webp photo'],
-  ['metatags', 'Meta Tag Generator', 'seo open graph twitter head']
+  ['metatags', 'Meta Tag Generator', 'seo open graph twitter head'],
+  ['css', 'CSS Formatter & Minifier', 'css format beautify minify stylesheet'],
+  ['ua', 'User Agent Parser', 'user agent browser os device'],
+  ['subnet', 'IP Subnet Calculator', 'ip cidr network broadcast mask'],
+  ['gradient', 'CSS Gradient Generator', 'gradient linear radial color background'],
+  ['favicon', 'Favicon Generator', 'favicon ico icon sizes']
 ];
 
 if (chrome.omnibox) {

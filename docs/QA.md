@@ -13,7 +13,7 @@ Run this before every release.
 - [ ] Toggle flips to dark
 - [ ] Settings → Theme offers Light / Dark / System; System follows the OS live
 - [ ] Reload window → theme mode persists
-- [ ] All 26 tools readable in both themes
+- [ ] All 31 tools readable in both themes
 - [ ] Scrollbars are styled in both themes
 
 ## 3. Shell (sidebar)
@@ -42,6 +42,30 @@ Run this before every release.
 - [ ] Escape then Unescape returns the original text
 - [ ] To XML nests objects and repeats array items as sibling tags
 - [ ] XML to JSON: attributes land in "@attrs", repeated tags become arrays, numeric text becomes a number
+
+### CSS Formatter & Minifier
+- [ ] Format indents rules and nested @media blocks; indent select (2/4/tab) applies
+- [ ] Minify strips comments and the trailing semicolon and shows the saved %; a /*! license comment survives
+- [ ] A data URI background and a content string with braces survive both operations byte-identical
+
+### User Agent Parser
+- [ ] Own UA is prefilled and parsed on open
+- [ ] Chrome/Windows, Safari/iPhone, Edge and Googlebot samples name the right browser, OS, device and client type
+- [ ] A frozen Chrome version (.0.0.0) shows the reduced format note
+
+### IP Subnet Calculator
+- [ ] 192.168.1.10/24 gives network .0, broadcast .255 and 254 usable hosts
+- [ ] Slider and select stay in sync; an invalid IP shows the error box
+- [ ] /31 shows the RFC 3021 note and /32 the host route note
+
+### CSS Gradient Generator
+- [ ] Default output is background: linear-gradient(90deg, #2563eb 0%, #f59e0b 100%);
+- [ ] Angle, type and stop edits update the preview and CSS together; presets and Random work
+
+### Favicon Generator
+- [ ] Six size cards render in text mode; changing the letter or colors redraws them
+- [ ] Image mode draws the uploaded picture into every size
+- [ ] favicon.ico downloads and opens as a valid icon with 16/32/48 entries
 
 ### JWT Decoder
 - [ ] Sample loads and decodes

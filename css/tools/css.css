@@ -1,0 +1,16 @@
+/* ============================================================
+ * File: css/tools/css.css
+ * Module: Tool CSS — CSS Formatter & Minifier
+ * Purpose: The actions row between the input and output panels.
+ * ============================================================ */
+
+.dt-css-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-css-actions .dt-select {
+  width: 120px;
+}

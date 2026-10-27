@@ -1,0 +1,44 @@
+/* ============================================================
+ * File: css/tools/ua.css
+ * Module: Tool CSS — User Agent Parser
+ * Purpose: Label/value result rows.
+ * ============================================================ */
+
+.dt-ua-rows {
+  display: block;
+}
+
+.dt-ua-row {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.dt-ua-row:last-child {
+  border-bottom: 0;
+}
+
+.dt-ua-row__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+
+.dt-ua-row__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+.dt-ua-empty {
+  padding: 14px 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text-subtle);
+}
+
+@media (max-width: 560px) {
+  .dt-ua-row { grid-template-columns: 1fr; gap: 2px; }
+}

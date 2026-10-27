@@ -1,4 +1,4 @@
-# Chrome Web Store listing (v1.0.1)
+# Chrome Web Store listing (v1.0.2)
 
 Copy for the Developer Dashboard, ready to paste. Anything marked
 [TODO] needs a human action (screenshots, dashboard answers).

@@ -1,0 +1,85 @@
+/* ============================================================
+ * File: css/tools/gradient.css
+ * Module: Tool CSS — CSS Gradient Generator
+ * Purpose: Preview stage, stop editor rows and preset chips.
+ * ============================================================ */
+
+.dt-grad-preview {
+  height: 190px;
+  border-radius: var(--radius-lg);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-surface-2);
+}
+
+.dt-grad-controls {
+  margin-top: 14px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.dt-grad-angle {
+  width: 130px;
+  accent-color: var(--color-accent);
+}
+
+.dt-grad-angle-num {
+  width: 72px;
+}
+
+.dt-grad-stops {
+  display: grid;
+  gap: 10px;
+}
+
+.dt-grad-stop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-grad-stop__color {
+  width: 44px;
+  height: 32px;
+  padding: 0;
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: none;
+  cursor: pointer;
+}
+
+.dt-grad-stop__hex {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  min-width: 62px;
+}
+
+.dt-grad-stop__pos {
+  flex: 1 1 140px;
+  accent-color: var(--color-accent);
+}
+
+.dt-grad-stop__num {
+  width: 68px;
+}
+
+.dt-grad-presets {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-grad-chip {
+  width: 72px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid var(--color-border);
+  cursor: pointer;
+  padding: 0;
+}
+
+.dt-grad-chip:hover {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
