@@ -12,10 +12,12 @@
   DT.core = DT.core || {};
 
   const FAV_KEY = 'dt:favorites';
+  const SIDEBAR_KEY = 'dt:sidebarCollapsed';
   const REC_KEY = 'dt:recents';
   const REC_MAX = 5;
 
   let favorites = [];
+  let sidebarCollapsed = false;
   let recents   = [];
   const listeners = [];
 
@@ -32,10 +34,12 @@
     load: function () {
       return Promise.all([
         DT.core.storage.get(FAV_KEY, []),
-        DT.core.storage.get(REC_KEY, [])
+        DT.core.storage.get(REC_KEY, []),
+        DT.core.storage.get(SIDEBAR_KEY, false)
       ]).then(function (results) {
         favorites = Array.isArray(results[0]) ? results[0] : [];
         recents   = Array.isArray(results[1]) ? results[1] : [];
+        sidebarCollapsed = results[2] === true;
         emit();
       });
     },
@@ -58,6 +62,19 @@
       DT.core.storage.set(FAV_KEY, favorites);
       emit();
       return i === -1;
+    },
+
+    /* ---------------- Sidebar layout ----------------
+       Persisted quietly (no emit): the toggle applies the
+       shell class itself, so nothing re-renders or scrolls. */
+
+    isSidebarCollapsed: function () {
+      return sidebarCollapsed;
+    },
+
+    setSidebarCollapsed: function (value) {
+      sidebarCollapsed = !!value;
+      DT.core.storage.set(SIDEBAR_KEY, sidebarCollapsed);
     },
 
     /* ---------------- Recently used ---------------- */

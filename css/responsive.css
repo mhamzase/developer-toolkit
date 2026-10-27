@@ -209,3 +209,75 @@ body {
     min-width: 0;
   }
 }
+
+/* ------------------------------------------------------------
+ * MANUAL COLLAPSE (toggle in the sidebar head, any width)
+ * Mirrors the <900px icon rail; state persists via prefs
+ * (dt:sidebarCollapsed) and app.js applies the shell class.
+ * ------------------------------------------------------------ */
+
+@media (min-width: 641px) {
+  .dt-root.dt-shell--collapsed .dt-sidebar {
+    flex: 0 0 var(--sidebar-collapsed);
+    flex-basis: var(--sidebar-collapsed);
+    width: var(--sidebar-collapsed);
+  }
+
+  .dt-root.dt-shell--collapsed .dt-header {
+    justify-content: center;
+    padding: var(--space-3) var(--space-2) var(--space-2);
+  }
+
+  .dt-root.dt-shell--collapsed .dt-header__brand {
+    flex: 0 0 auto;
+    justify-content: center;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-header__title,
+  .dt-root.dt-shell--collapsed .dt-header__search,
+  .dt-root.dt-shell--collapsed .dt-palette-hint {
+    display: none;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-header__actions {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .dt-root.dt-shell--collapsed .dt-nav {
+    padding: var(--space-2) var(--space-2) var(--space-3);
+  }
+
+  .dt-root.dt-shell--collapsed .dt-side-group {
+    margin-top: var(--space-3);
+    align-items: center;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-side-group__label {
+    display: none;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-side-item {
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-side-item__label,
+  .dt-root.dt-shell--collapsed .dt-side-item__count {
+    display: none;
+  }
+
+  .dt-root.dt-shell--collapsed .dt-side-item__icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* The top bar layout under 640px has no rail to toggle */
+@media (max-width: 640px) {
+  .dt-header__collapse {
+    display: none;
+  }
+}

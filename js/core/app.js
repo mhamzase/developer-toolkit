@@ -144,6 +144,11 @@
         ]);
         root.appendChild(content);
 
+        // Honor the saved sidebar layout (collapse toggle)
+        if (DT.core.prefs.isSidebarCollapsed()) {
+          root.classList.add("dt-shell--collapsed");
+        }
+
         // Subscribe to router → render main view
         DT.core.router.on(renderView);
 

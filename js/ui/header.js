@@ -105,10 +105,40 @@
         paintThemeIcon();
       });
 
+      // Sidebar collapse toggle: switches the shell to the icon
+      // rail (and back) at any window width; the choice persists
+      // via prefs and app.js applies it at boot.
+      const collapseBtn = dom.el("button", {
+        type: "button",
+        class: "dt-btn dt-btn--ghost dt-btn--icon dt-header__collapse",
+        id: "dt-sidebar-collapse",
+        "aria-label": "Toggle sidebar",
+      });
+      const collapseIcon = DT.utils.icons.get("panelLeft");
+      if (collapseIcon) collapseBtn.appendChild(collapseIcon);
+
+      function paintCollapseBtn() {
+        const collapsed = DT.core.prefs.isSidebarCollapsed();
+        collapseBtn.title = collapsed ? "Expand sidebar" : "Collapse sidebar";
+        collapseBtn.setAttribute("aria-pressed", collapsed ? "true" : "false");
+        const svg = collapseBtn.querySelector("svg");
+        if (svg) svg.style.transform = collapsed ? "scaleX(-1)" : "";
+      }
+
+      collapseBtn.addEventListener("click", function () {
+        const next = !DT.core.prefs.isSidebarCollapsed();
+        DT.core.prefs.setSidebarCollapsed(next);
+        const root = document.getElementById("dt-root");
+        if (root) root.classList.toggle("dt-shell--collapsed", next);
+        paintCollapseBtn();
+      });
+      paintCollapseBtn();
+
       const settingsBtn = DT.ui.settings.render();
       const actions = dom.el("div", { class: "dt-header__actions" }, [
         settingsBtn,
         themeBtn,
+        collapseBtn,
       ]);
 
       const header = dom.el("header", { class: "dt-header" }, [
@@ -117,46 +147,65 @@
         actions,
       ]);
 
-      /* ---------- Search: grid filter on list, quick-launch
-         dropdown while a tool is open ----------
+      /* ---------- Search: grid filter on list, results panel
+         in the main area while a tool is open ----------
          Typing must never hide the tool the user is working in
          (the old wiring force-switched the view on every
-         keystroke). With a tool open, matches appear in a
-         dropdown under the field and navigation happens only
-         when the user picks one (click, or arrows + Enter).
-         On the list view the field keeps filtering the grid. */
-      const drop = dom.el("div", {
-        class: "dt-search-drop",
-        id: "dt-search-drop",
+         keystroke). With a tool open, matches appear in a full
+         width panel pinned at the top of the main area (the
+         sidebar dropdown truncated long tool names), and
+         navigation happens only when the user picks one
+         (click, or arrows + Enter). On the list view the field
+         keeps filtering the grid. */
+      const panel = dom.el("div", {
+        class: "dt-search-panel",
+        id: "dt-search-panel",
         hidden: "",
         role: "listbox",
         "aria-label": "Search results",
       });
-      search.appendChild(drop);
+      const panelHead = dom.el("div", { class: "dt-search-panel__head" }, [
+        dom.el("span", { class: "dt-search-panel__title", text: "Search results" }),
+        dom.el("span", {
+          class: "dt-search-panel__hint",
+          text: "\u2191\u2193 navigate \u00B7 Enter opens \u00B7 Esc closes",
+        }),
+      ]);
+      const panelRows = dom.el("div", { class: "dt-search-panel__rows" });
+      panel.appendChild(panelHead);
+      panel.appendChild(panelRows);
 
       let matches = [];
       let activeIdx = 0;
-      let dropOpen = false;
+      let panelOpenState = false;
 
-      function closeDrop() {
-        dropOpen = false;
+      function mountPanel() {
+        const main = document.getElementById("dt-main");
+        if (main && panel.parentNode !== main) {
+          main.insertBefore(panel, main.firstChild);
+        }
+      }
+
+      function closePanel() {
+        panelOpenState = false;
         matches = [];
-        drop.hidden = true;
-        dom.clear(drop);
+        panel.hidden = true;
+        if (panel.parentNode) panel.parentNode.removeChild(panel);
+        dom.clear(panelRows);
       }
 
       function paintActive() {
-        drop.querySelectorAll(".dt-search-drop__item").forEach(function (row, i) {
-          row.classList.toggle("dt-search-drop__item--active", i === activeIdx);
+        panelRows.querySelectorAll(".dt-search-item").forEach(function (row, i) {
+          row.classList.toggle("dt-search-item--active", i === activeIdx);
         });
       }
 
-      function renderDrop() {
-        dom.clear(drop);
+      function renderPanel() {
+        dom.clear(panelRows);
         if (!matches.length) {
-          drop.appendChild(dom.el("div", {
-            class: "dt-search-drop__empty",
-            text: "No tools found",
+          panelRows.appendChild(dom.el("div", {
+            class: "dt-search-panel__empty",
+            text: "No tools match your search",
           }));
           return;
         }
@@ -169,29 +218,33 @@
           if (iconNode) iconWrap.appendChild(iconNode);
           const row = dom.el("button", {
             type: "button",
-            class: "dt-search-drop__item" +
-              (i === activeIdx ? " dt-search-drop__item--active" : ""),
+            class: "dt-search-item" +
+              (i === activeIdx ? " dt-search-item--active" : ""),
             "data-tool-id": tool.id,
             role: "option",
           }, [
             iconWrap,
-            dom.el("span", { class: "dt-search-drop__name", text: tool.name }),
-            dom.el("span", { class: "dt-search-drop__cat", text: tool.category }),
+            dom.el("span", { class: "dt-search-item__main" }, [
+              dom.el("span", { class: "dt-search-item__name", text: tool.name }),
+              dom.el("span", { class: "dt-search-item__desc", text: tool.description || "" }),
+            ]),
+            dom.el("span", { class: "dt-search-item__cat", text: tool.category }),
           ]);
           row.addEventListener("mouseenter", function () {
             if (activeIdx !== i) { activeIdx = i; paintActive(); }
           });
           row.addEventListener("click", function () { openTool(tool); });
-          drop.appendChild(row);
+          panelRows.appendChild(row);
         });
       }
 
-      function openDrop(list) {
+      function openPanel(list) {
         matches = list;
         activeIdx = 0;
-        dropOpen = true;
-        drop.hidden = false;
-        renderDrop();
+        mountPanel();
+        panelOpenState = true;
+        panel.hidden = false;
+        renderPanel();
       }
 
       function currentMatches() {
@@ -202,7 +255,7 @@
 
       function openTool(tool) {
         DT.core.prefs.recordRecent(tool.id);
-        closeDrop();
+        closePanel();
         searchInput.value = "";
         DT.core.router.go("tool", { toolId: tool.id, query: "" });
         searchInput.blur();
@@ -212,31 +265,31 @@
       const push = DT.utils.debounce(function () {
         const q = searchInput.value.trim();
         if (DT.core.router.state.view === "list") {
-          closeDrop();
+          closePanel();
           DT.core.router.setQuery(q);
           return;
         }
-        if (!q) { closeDrop(); return; }
-        openDrop(currentMatches());
+        if (!q) { closePanel(); return; }
+        openPanel(currentMatches());
       }, 120);
       searchInput.addEventListener("input", push);
 
       searchInput.addEventListener("focus", function () {
         if (DT.core.router.state.view !== "list" && searchInput.value.trim()) {
-          openDrop(currentMatches());
+          openPanel(currentMatches());
         }
       });
 
       searchInput.addEventListener("keydown", function (e) {
-        if (!dropOpen) return;
+        if (!panelOpenState) return;
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
           if (!matches.length) return;
           const dir = e.key === "ArrowDown" ? 1 : -1;
           activeIdx = (activeIdx + dir + matches.length) % matches.length;
           paintActive();
-          const rows = drop.querySelectorAll(".dt-search-drop__item");
-          if (rows[activeIdx]) rows[activeIdx].scrollIntoView({ block: "nearest" });
+          const rows = panelRows.querySelectorAll(".dt-search-item");
+          if (rows[activeIdx] && rows[activeIdx].scrollIntoView) rows[activeIdx].scrollIntoView({ block: "nearest" });
         } else if (e.key === "Enter") {
           if (matches[activeIdx]) {
             e.preventDefault();
@@ -245,16 +298,18 @@
         } else if (e.key === "Escape") {
           e.preventDefault();
           e.stopPropagation();
-          closeDrop();
+          closePanel();
         }
       });
 
       document.addEventListener("mousedown", function (e) {
-        if (dropOpen && !search.contains(e.target)) closeDrop();
+        if (panelOpenState && !search.contains(e.target) && !panel.contains(e.target)) {
+          closePanel();
+        }
       });
 
-      /* Any navigation closes a stale dropdown */
-      DT.core.router.on(function () { if (dropOpen) closeDrop(); });
+      /* Any navigation closes a stale results panel */
+      DT.core.router.on(function () { if (panelOpenState) closePanel(); });
 
       return header;
     },

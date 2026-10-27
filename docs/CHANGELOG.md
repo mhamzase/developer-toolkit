@@ -20,6 +20,15 @@ All notable changes to Developer Toolkit.
 - Favicon Generator: a full favicon set (16 to 512 px PNGs
   plus a favicon.ico) from an uploaded image or a letter tile.
 
+### Changed
+- Search while a tool is open now shows its results in a full
+  width panel at the top of the main area instead of a narrow
+  sidebar dropdown, so long tool names are never truncated.
+  The tool in use is still never hidden while typing.
+- The sidebar can be collapsed to an icon rail with the new
+  toggle in the sidebar head, and expanded again; the choice
+  is remembered across restarts.
+
 ## [1.0.1] — 2026-10-26
 Store-track versioning starts here: releases now count 1.0.1,
 1.0.2, ... 1.0.9, then 1.1.0 (the earlier 1.x/2.0.0 numbers were
