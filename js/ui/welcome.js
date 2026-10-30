@@ -49,7 +49,7 @@
     const hero = dom.el('div', { class: 'dt-welcome__hero' }, [
       heroIconWrap,
       dom.el('div', { class: 'dt-welcome__hero-text' }, [
-        dom.el('div', { class: 'dt-welcome__title', text: 'Welcome to Developer Toolkit' }),
+        dom.el('div', { class: 'dt-welcome__title', text: 'Welcome to Developer Toolkit by Zase' }),
         dom.el('div', { class: 'dt-welcome__subtitle', text: '16 tools. All local. No tracking. No sign-up.' })
       ])
     ]);
@@ -128,7 +128,7 @@
       class: 'dt-welcome__panel',
       role: 'dialog',
       'aria-modal': 'true',
-      'aria-label': 'Welcome to Developer Toolkit',
+      'aria-label': 'Welcome to Developer Toolkit by Zase',
       tabindex: '-1'
     }, [hero, featureList, themeRow, actions]);
 

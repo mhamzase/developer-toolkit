@@ -1,0 +1,32 @@
+    <main class="z-main">
+      <div class="z-tool-hero">
+        <div class="z-wrap">
+          <nav class="z-breadcrumb" aria-label="Breadcrumb">
+            <a href="{{PREFIX}}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{{CATEGORY}}</span>
+          </nav>
+          <div class="z-tool-head">
+            <div class="z-tool-head__text">
+              <h1>{{CATEGORY}} Tools</h1>
+              <p>{{INTRO}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="z-wrap">
+        <section class="z-category z-category--page">
+          <div class="z-grid">
+{{CARDS}}
+          </div>
+        </section>
+
+        <section class="z-related z-reveal">
+          <h2>Other categories</h2>
+          <div class="z-cat-links">
+{{SIBLING_LINKS}}
+          </div>
+        </section>
+      </div>
+    </main>

@@ -1,58 +1,85 @@
     <main class="z-main">
       <div class="z-wrap">
-        <div class="z-prose">
+        <div class="z-page-head">
           <h1>Privacy Policy</h1>
-          <p>
+          <p class="z-page-head__sub">
             The short version: Zase tools run entirely in your browser.
             Nothing you type, paste, or generate is collected, transmitted,
             or shared. This page explains exactly what that means for this
             website and for the Chrome extension.
           </p>
-
-          <h2>What we do not do</h2>
-          <ul>
-            <li>No analytics</li>
-            <li>No tracking, and no advertising</li>
-            <li>No accounts and no sign up</li>
-            <li>No cookies set by this site</li>
-            <li>No servers receiving your tool input</li>
-            <li>No remote code: every script is served with the page</li>
-          </ul>
-
-          <h2>What stays on your device</h2>
-          <p>
-            Your theme choice, and preferences saved by some tools (for
-            example, colors you picked in the color tools), are stored in
-            your browser's local storage, on your device only. They never
-            leave the device, and you can delete them at any time by
-            clearing the site's data in your browser settings.
+          <p class="z-page-meta">
+            <span class="z-page-meta__chip">Last updated: 2026-10-30</span>
           </p>
-          <p>
-            Sensitive tools, such as the JWT Decoder, the JWT Signer, the
-            Hash Generator, the Password Generator, and AES Encrypt /
-            Decrypt, do not save their input at all. Anything you paste
-            into them is gone when you close the tab.
-          </p>
+        </div>
 
-          <h2>The Chrome extension</h2>
-          <p>
-            The Developer Toolkit by Zase extension follows the same rule:
-            it collects nothing. It requests only four permissions, each
-            for a visible feature:
-          </p>
-          <ul>
-            <li><strong>storage</strong>: saves your preferences locally, such as theme, favorites, and recents.</li>
-            <li><strong>system.display</strong>: opens the extension window centered on your active screen.</li>
-            <li><strong>contextMenus</strong>: adds right-click entries to open the toolkit or send selected text to a tool, locally.</li>
-            <li><strong>sidePanel</strong>: lets the toolkit open docked in Chrome's Side Panel when you ask for it.</li>
-          </ul>
+        <div class="z-about-grid z-about-grid--two">
+          <article class="z-about-card z-reveal">
+            <h2>What we do not do</h2>
+            <ul>
+              <li>No analytics</li>
+              <li>No tracking</li>
+              <li>No advertising</li>
+              <li>No uploads: no servers receive your tool input</li>
+              <li>No accounts and no sign up</li>
+              <li>No cookies set by this site</li>
+              <li>No remote code: every script is served with the page</li>
+              <li>No selling data: nothing is collected, so there is nothing to sell</li>
+            </ul>
+          </article>
 
-          <h2>Contact</h2>
-          <p>
-            Questions or issues: open an issue on
-            <a href="{{GITHUB_URL}}/issues" target="_blank" rel="noopener">GitHub</a>.
-          </p>
-          <p>Last updated: 2026-10-30</p>
+          <article class="z-about-card z-reveal">
+            <h2>What stays on your device</h2>
+            <p>
+              Your theme choice, settings, favorites, recents, and
+              preferences saved by some tools (for example, colors you
+              picked in the color tools) are stored in your browser's
+              local storage, on your device only. They never leave the
+              device, and you can delete them at any time by clearing
+              the site's data in your browser settings.
+            </p>
+            <p>
+              Sensitive tools, such as the JWT Decoder, the JWT Signer,
+              the Hash Generator, the Password Generator, and AES
+              Encrypt / Decrypt, do not save their input at all.
+              Anything you paste into them is gone when you close
+              the tab.
+            </p>
+          </article>
+
+          <article class="z-about-card z-about-card--wide z-reveal">
+            <h2>The Chrome extension</h2>
+            <p>
+              The Developer Toolkit by Zase extension follows the same
+              rule: it collects nothing. It requests only four
+              permissions, each for a visible feature:
+            </p>
+            <ul>
+              <li><strong>storage</strong>: saves your preferences locally, such as theme, favorites, and recents.</li>
+              <li><strong>system.display</strong>: opens the extension window centered on your active screen.</li>
+              <li><strong>contextMenus</strong>: adds right-click entries to open the toolkit or send selected text to a tool, locally.</li>
+              <li><strong>sidePanel</strong>: lets the toolkit open docked in Chrome's Side Panel when you ask for it.</li>
+            </ul>
+          </article>
+
+          <article class="z-about-card z-reveal">
+            <h2>Changes to this policy</h2>
+            <p>
+              If this policy changes, the updated text will appear on
+              this page, with a new Last updated date at the top. The
+              short version above is the heart of it: the tools run
+              locally, and your data is not collected.
+            </p>
+          </article>
+
+          <article class="z-about-card z-reveal">
+            <h2>Contact</h2>
+            <p>
+              Questions or issues: use the
+              <a href="{{PREFIX}}contact/">contact page</a>, or open an issue on
+              <a href="{{GITHUB_URL}}/issues" target="_blank" rel="noopener">GitHub</a>.
+            </p>
+          </article>
         </div>
       </div>
     </main>

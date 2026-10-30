@@ -6,19 +6,30 @@
     <title>{{TITLE}}</title>
     <meta name="description" content="{{DESCRIPTION}}" />
     <link rel="canonical" href="{{CANONICAL}}" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafafa" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#18181b" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Zase" />
     <meta property="og:title" content="{{TITLE}}" />
     <meta property="og:description" content="{{DESCRIPTION}}" />
     <meta property="og:url" content="{{CANONICAL}}" />
     <meta property="og:image" content="{{OG_IMAGE}}" />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{TITLE}}" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <meta name="twitter:image" content="{{OG_IMAGE}}" />
     <link rel="icon" type="image/svg+xml" href="{{PREFIX}}assets/icons/icon.svg" />
     <link rel="icon" type="image/png" sizes="128x128" href="{{PREFIX}}assets/icons/icon128.png" />
-    <script>
-      /* Theme init: stored choice wins, else follow the OS.
+    <link rel="icon" type="image/x-icon" href="{{PREFIX}}favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{PREFIX}}apple-touch-icon.png" />
+    <link rel="manifest" href="{{PREFIX}}site.webmanifest" />
+{{JSON_LD}}    <script>
+      /* Pre-paint init: flag JS availability (drives the scroll
+       * reveal hidden state, so no-JS visitors always see content)
+       * and set the theme: stored choice wins, else follow the OS.
        * Runs before the stylesheets below so first paint is right. */
       (function () {
+        document.documentElement.classList.add("z-js");
         try {
           var t = window.localStorage.getItem("zase:theme");
           if (t !== "light" && t !== "dark") {
