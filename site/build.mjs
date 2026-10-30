@@ -1212,7 +1212,7 @@ function main() {
   for (const name of ["favicon.ico", "og-image.png", "apple-touch-icon.png"]) {
     copyFile(path.join(SRC, "assets", name), path.join(DIST, name));
   }
-  for (const name of ["icon-96.png", "icon-192.png", "icon-512.png"]) {
+  for (const name of ["icon-96.png", "icon-192.png", "icon-512.png", "chrome.svg"]) {
     copyFile(path.join(SRC, "assets", name), path.join(DIST, "site", name));
   }
   /* head.html links the web manifest at the site root. */

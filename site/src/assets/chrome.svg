@@ -1,0 +1,10 @@
+<!-- Google Chrome logo (official mark, official palette) drawn as
+     clean vector geometry. Used only on "Add to Chrome" buttons that
+     link to the Chrome Web Store listing. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <path fill="#EA4335" d="M24.00 24.00 L8.09 6.70 A23.50 23.50 0 0 1 47.48 23.02 Z"/>
+  <path fill="#FBBC05" d="M24.00 24.00 L47.48 24.98 A23.50 23.50 0 0 1 17.68 46.63 Z"/>
+  <path fill="#34A853" d="M24.00 24.00 L15.81 46.03 A23.50 23.50 0 0 1 6.70 8.09 Z"/>
+  <circle cx="24" cy="24" r="11.4" fill="#FFFFFF"/>
+  <circle cx="24" cy="24" r="9.7" fill="#4285F4"/>
+</svg>

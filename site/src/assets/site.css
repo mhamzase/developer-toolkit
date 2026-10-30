@@ -69,11 +69,13 @@ body {
   height: auto;
 }
 
-/* Links: the shared extension base.css underlines every link on
- * hover, a text-link habit from the popup. On the website, links
- * live inside buttons, cards and nav items, so hover must never
- * draw an underline. Same specificity as the base rule, and
- * site.css loads after base.css, so this wins. */
+/* Links: the shared extension base.css does two popup habits on
+ * hover: it underlines every link and recolors it to the accent
+ * hover shade. On the website, links live inside buttons, cards
+ * and nav items, so hover must never draw an underline, and each
+ * component below pins its own hover text color (the base
+ * recolor turned the gradient CTA's white text dark). Plain
+ * prose links keep the accent family, as designed. */
 a:hover {
   text-decoration: none;
 }
@@ -135,6 +137,10 @@ a:hover {
   letter-spacing: var(--ls-tight);
 }
 
+.z-brand:hover {
+  color: var(--color-text);
+}
+
 .z-brand img {
   border-radius: 9px;
   box-shadow: var(--z-shadow-sm);
@@ -173,19 +179,17 @@ a:hover {
   display: none;
 }
 
-/* Chrome-style tricolor dot used on store CTAs. */
-.z-chrome-dot {
+/* Official Google Chrome logo (site/chrome.svg) on store CTAs. */
+.z-chrome-icon {
   flex: 0 0 auto;
-  width: 12px;
-  height: 12px;
-  border-radius: var(--radius-full);
-  background: conic-gradient(
-    #ea4335 0 33%,
-    #fbbc05 33% 66%,
-    #34a853 66% 88%,
-    #4285f4 88% 100%
-  );
-  box-shadow: inset 0 0 0 2.5px #fff;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+.z-btn--lg .z-chrome-icon {
+  width: 19px;
+  height: 19px;
 }
 
 /* ---------------- Buttons ---------------- */
@@ -222,6 +226,7 @@ a:hover {
 }
 
 .z-btn--accent:hover {
+  color: #fff;
   box-shadow: 0 10px 26px var(--z-glow);
   transform: translateY(-1px);
 }
@@ -234,6 +239,7 @@ a:hover {
 }
 
 .z-btn--ghost:hover {
+  color: var(--color-text);
   border-color: var(--z-grad-2);
   transform: translateY(-1px);
 }
@@ -244,6 +250,7 @@ a:hover {
 }
 
 .z-btn--light:hover {
+  color: var(--z-grad-3);
   transform: translateY(-1px);
 }
 
@@ -254,6 +261,7 @@ a:hover {
 }
 
 .z-btn--outline:hover {
+  color: #fff;
   background-color: rgba(255, 255, 255, 0.12);
 }
 
@@ -648,7 +656,7 @@ a:hover {
 }
 
 .z-category__link:hover {
-  text-decoration: underline;
+  color: var(--z-grad-3);
 }
 
 .z-grid {
@@ -691,6 +699,7 @@ a:hover {
 }
 
 .z-card:hover {
+  color: var(--color-text);
   border-color: var(--z-grad-2);
   box-shadow: var(--z-shadow-md);
 }
