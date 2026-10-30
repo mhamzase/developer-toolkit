@@ -1,0 +1,512 @@
+/* ============================================================
+ * File: site/src/assets/site.css
+ * Purpose: Zase website shell styles: header, hero, tool grid,
+ *          tool page frame, prose pages, footer.
+ * Depends on: css/variables.css + css/themes.css (design tokens).
+ * Rule: colors come only from the shared theme tokens, so light
+ *       and dark both work by flipping <html data-theme>.
+ * ============================================================ */
+
+/* ---------------- Layout frame ---------------- */
+
+.z-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+.z-main {
+  padding: var(--space-8) 0 var(--space-12);
+  min-height: 60vh;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ---------------- Header ---------------- */
+
+.z-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--color-bg);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.z-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  min-height: 60px;
+  flex-wrap: wrap;
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+}
+
+.z-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-lg);
+  letter-spacing: var(--ls-tight);
+}
+
+.z-brand img {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+}
+
+.z-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-left: auto;
+}
+
+.z-nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+}
+
+.z-nav a:hover {
+  color: var(--color-text);
+}
+
+.z-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ---------------- Buttons ---------------- */
+
+.z-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid transparent;
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+.z-btn--accent {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.z-btn--accent:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.z-btn--ghost {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.z-btn--ghost:hover {
+  background-color: var(--color-hover);
+}
+
+.z-btn--icon {
+  padding: 8px;
+  border-color: var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-muted);
+}
+
+.z-btn--icon:hover {
+  background-color: var(--color-hover);
+  color: var(--color-text);
+}
+
+.z-btn .dt-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Theme toggle shows the icon of the theme it switches TO. */
+.z-theme-toggle .z-icon-sun {
+  display: none;
+}
+[data-theme="dark"] .z-theme-toggle .z-icon-sun {
+  display: block;
+}
+[data-theme="dark"] .z-theme-toggle .z-icon-moon {
+  display: none;
+}
+
+/* ---------------- Hero (home) ---------------- */
+
+.z-hero {
+  text-align: center;
+  padding: var(--space-10) 0 var(--space-8);
+}
+
+.z-hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  font-weight: var(--fw-extrabold);
+  margin: 0 0 var(--space-4);
+}
+
+.z-hero__sub {
+  max-width: 640px;
+  margin: 0 auto var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-relaxed);
+}
+
+.z-hero__cta {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-8);
+}
+
+.z-search {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.z-search input {
+  width: 100%;
+  padding: 12px 18px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  color: var(--color-text);
+  background-color: var(--color-input-bg);
+  border: var(--border-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.z-search input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.z-no-results {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-8) 0;
+}
+
+/* ---------------- Category sections + tool cards ---------------- */
+
+.z-category {
+  margin-top: var(--space-10);
+}
+
+.z-category h2 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  margin: 0 0 var(--space-4);
+}
+
+.z-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: var(--space-4);
+}
+
+.z-card {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
+}
+
+.z-card:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-hover);
+}
+
+.z-card__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+}
+
+.z-card__icon .dt-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Per-category tile colors, driven by the shared theme tokens. */
+.z-card__icon--data       { background: var(--cat-data-bg);       color: var(--cat-data-fg); }
+.z-card__icon--encoding   { background: var(--cat-encoding-bg);   color: var(--cat-encoding-fg); }
+.z-card__icon--security   { background: var(--cat-security-bg);   color: var(--cat-security-fg); }
+.z-card__icon--generators { background: var(--cat-generators-bg); color: var(--cat-generators-fg); }
+.z-card__icon--conversion { background: var(--cat-conversion-bg); color: var(--cat-conversion-fg); }
+.z-card__icon--text       { background: var(--cat-text-bg);       color: var(--cat-text-fg); }
+.z-card__icon--color      { background: var(--cat-color-bg);      color: var(--cat-color-fg); }
+.z-card__icon--reference  { background: var(--cat-reference-bg);  color: var(--cat-reference-fg); }
+.z-card__icon--regex      { background: var(--cat-regex-bg);      color: var(--cat-regex-fg); }
+
+.z-card__name {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-base);
+  margin: 0 0 2px;
+}
+
+.z-card__desc {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+
+/* ---------------- Tool page frame ---------------- */
+
+.z-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: var(--fs-sm);
+  color: var(--color-text-subtle);
+  margin-bottom: var(--space-5);
+}
+
+.z-breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.z-breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.z-tool-head h1 {
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: var(--ls-tight);
+  margin: 0 0 var(--space-2);
+}
+
+.z-tool-head p {
+  color: var(--color-text-muted);
+  font-size: var(--fs-md);
+  line-height: var(--lh-relaxed);
+  max-width: 720px;
+  margin: 0 0 var(--space-6);
+}
+
+/* The mounted tool lives in .dt-workspace (shared tool CSS);
+ * on the web it sits inside a bordered surface for definition. */
+.z-tool-shell {
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.z-tool-shell .dt-workspace {
+  padding: var(--space-5);
+}
+
+.z-tool-error {
+  color: var(--color-danger);
+  padding: var(--space-4);
+}
+
+/* Extension cross-promo note under every tool */
+.z-ext-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  background-color: var(--color-accent-soft);
+  border-radius: var(--radius-lg);
+}
+
+.z-ext-note p {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  max-width: 640px;
+}
+
+.z-ext-note strong {
+  display: block;
+  font-size: var(--fs-base);
+  margin-bottom: 2px;
+}
+
+/* Related tools row */
+.z-related {
+  margin-top: var(--space-10);
+}
+
+.z-related h2 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  margin: 0 0 var(--space-4);
+}
+
+/* ---------------- Prose pages (about, privacy) ---------------- */
+
+.z-prose {
+  max-width: 760px;
+}
+
+.z-prose h1 {
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: var(--ls-tight);
+  margin: 0 0 var(--space-5);
+}
+
+.z-prose h2 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  margin: var(--space-8) 0 var(--space-3);
+}
+
+.z-prose p,
+.z-prose li {
+  color: var(--color-text-muted);
+  line-height: var(--lh-relaxed);
+  font-size: var(--fs-md);
+}
+
+.z-prose a {
+  color: var(--color-accent);
+}
+
+.z-prose ul {
+  padding-left: var(--space-5);
+}
+
+/* ---------------- 404 ---------------- */
+
+.z-404 {
+  text-align: center;
+  padding: var(--space-12) 0;
+}
+
+.z-404 h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  margin: 0 0 var(--space-3);
+}
+
+.z-404 p {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-6);
+}
+
+/* ---------------- Footer ---------------- */
+
+.z-footer {
+  border-top: var(--border-thin) solid var(--color-border);
+  background-color: var(--color-bg-subtle);
+  padding: var(--space-8) 0;
+  margin-top: var(--space-12);
+}
+
+.z-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.z-footer__brand {
+  font-weight: var(--fw-bold);
+  margin: 0 0 var(--space-1);
+}
+
+.z-footer__meta {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  margin: 0;
+  line-height: var(--lh-relaxed);
+}
+
+.z-footer__nav {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.z-footer__nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+}
+
+.z-footer__nav a:hover {
+  color: var(--color-text);
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 640px) {
+  .z-header__inner {
+    gap: var(--space-3);
+  }
+
+  .z-nav {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .z-header__actions {
+    margin-left: auto;
+  }
+
+  .z-hero {
+    padding: var(--space-8) 0 var(--space-6);
+  }
+
+  .z-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .z-tool-shell .dt-workspace {
+    padding: var(--space-3);
+  }
+
+  .z-ext-note {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

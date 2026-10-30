@@ -1,0 +1,31 @@
+    <main class="z-main">
+      <div class="z-wrap">
+        <section class="z-hero">
+          <h1>Developer tools that run entirely in your browser</h1>
+          <p class="z-hero__sub">
+            Format JSON, decode JWTs, test regular expressions, generate hashes,
+            QR codes and more. Free, private, and with no sign up: everything you
+            paste stays on your device.
+          </p>
+          <div class="z-hero__cta">
+            <a class="z-btn z-btn--accent" href="{{STORE_URL}}" target="_blank" rel="noopener">Add to Chrome: it is free</a>
+            <a class="z-btn z-btn--ghost" href="#tools">Browse the tools</a>
+          </div>
+          <div class="z-search">
+            <input
+              id="z-search"
+              type="search"
+              placeholder="Search tools: try json, jwt, regex, color..."
+              aria-label="Search tools"
+              autocomplete="off"
+            />
+          </div>
+        </section>
+        <div id="tools">
+{{CATEGORY_SECTIONS}}
+          <p class="z-no-results" id="z-no-results" style="display: none">
+            No tool matches your search. Try a shorter word, for example json or color.
+          </p>
+        </div>
+      </div>
+    </main>

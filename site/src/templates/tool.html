@@ -1,0 +1,33 @@
+    <main class="z-main">
+      <div class="z-wrap">
+        <nav class="z-breadcrumb" aria-label="Breadcrumb">
+          <a href="{{PREFIX}}">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="{{PREFIX}}#category-{{CAT_SLUG}}">{{CATEGORY}}</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{{NAME}}</span>
+        </nav>
+
+        <div class="z-tool-head">
+          <h1>{{NAME}}</h1>
+          <p>{{LONG_DESCRIPTION}}</p>
+        </div>
+
+        <div class="z-tool-shell">
+          <div id="dt-tool-mount" class="dt-workspace" data-tool-id="{{TOOL_ID}}"></div>
+        </div>
+        <div id="dt-toasts" class="dt-toasts" role="status" aria-live="polite"></div>
+
+        <section class="z-ext-note">
+          <p>
+            <strong>Also available in the Chrome extension</strong>
+            Every Zase tool also lives in the free Developer Toolkit by Zase
+            extension: fully offline, in a window or the side panel, one
+            keyboard shortcut away.
+          </p>
+          <a class="z-btn z-btn--accent" href="{{STORE_URL}}" target="_blank" rel="noopener">Add to Chrome</a>
+        </section>
+
+{{RELATED_SECTION}}
+      </div>
+    </main>

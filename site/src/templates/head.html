@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{TITLE}}</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zase" />
+    <meta property="og:title" content="{{TITLE}}" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    <meta property="og:image" content="{{OG_IMAGE}}" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/svg+xml" href="{{PREFIX}}assets/icons/icon.svg" />
+    <link rel="icon" type="image/png" sizes="128x128" href="{{PREFIX}}assets/icons/icon128.png" />
+    <script>
+      /* Theme init: stored choice wins, else follow the OS.
+       * Runs before the stylesheets below so first paint is right. */
+      (function () {
+        try {
+          var t = window.localStorage.getItem("zase:theme");
+          if (t !== "light" && t !== "dark") {
+            t =
+              window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          /* localStorage blocked: keep the default light theme. */
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="{{PREFIX}}css/variables.css" />
+    <link rel="stylesheet" href="{{PREFIX}}css/themes.css" />
+    <link rel="stylesheet" href="{{PREFIX}}css/base.css" />
+{{EXTRA_CSS}}
+    <link rel="stylesheet" href="{{PREFIX}}site/site.css" />
+  </head>
