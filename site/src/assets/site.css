@@ -122,8 +122,14 @@ a:hover {
   position: relative;
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: var(--space-5);
   min-height: 64px;
+}
+
+.z-brand,
+.z-header__actions {
+  flex: 0 0 auto;
 }
 
 .z-brand {
@@ -153,20 +159,40 @@ a:hover {
   margin-left: auto;
 }
 
-.z-nav a {
+.z-nav a:not(.z-nav__cta) {
   color: var(--color-text-muted);
   text-decoration: none;
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
-  padding: 6px 2px;
-  border-bottom: 2px solid transparent;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
   transition: color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard);
+    background-color var(--duration-fast) var(--ease-standard);
 }
 
-.z-nav a:hover {
+.z-nav a:not(.z-nav__cta):hover {
   color: var(--color-text);
-  border-bottom-color: var(--z-grad-2);
+  background-color: var(--color-hover);
+}
+
+/* Current page in the nav: a filled pill with full-strength
+ * text, so the reader can see where they are at a glance. */
+.z-nav a.z-nav--active {
+  color: var(--color-text);
+  background-color: var(--color-active);
+  font-weight: var(--fw-semibold);
+}
+
+.z-nav a.z-nav--active:hover {
+  color: var(--color-text);
+  background-color: var(--color-active);
+}
+
+/* The Add to Chrome button that tops the mobile menu panel;
+ * the header CTA carries the action on wider screens. (The
+ * doubled selector outranks the later .z-btn display rule.) */
+.z-nav .z-nav__cta {
+  display: none;
 }
 
 .z-header__actions {
@@ -1601,9 +1627,10 @@ a:hover {
     display: flex;
   }
 
-  .z-nav a {
-    padding: 10px 4px;
+  .z-nav a:not(.z-nav__cta) {
+    padding: 10px 12px;
     border-bottom: var(--border-thin) solid var(--color-border);
+    border-radius: var(--radius-md);
     font-size: var(--fs-base);
   }
 
@@ -1611,12 +1638,34 @@ a:hover {
     border-bottom: none;
   }
 
-  .z-header__cta {
-    display: none;
+  /* Full-width store button at the top of the menu panel. */
+  .z-nav .z-nav__cta {
+    display: inline-flex;
+    width: 100%;
+    margin-bottom: var(--space-2);
+    padding: 11px 16px;
   }
 
   .z-mock__body {
     grid-template-columns: 128px 1fr;
+  }
+}
+
+/* Small phones: the header stays one side-by-side row (brand
+ * left, actions right). The full Add to Chrome button no longer
+ * fits next to the brand and toggles at this width, so it moves
+ * into the menu panel as a full-width button (see .z-nav__cta). */
+@media (max-width: 480px) {
+  .z-header__inner {
+    gap: var(--space-3);
+  }
+
+  .z-header__cta {
+    display: none;
+  }
+
+  .z-header__actions {
+    gap: var(--space-2);
   }
 }
 

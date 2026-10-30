@@ -6,10 +6,13 @@
           <span>Zase</span>
         </a>
         <nav class="z-nav" id="z-nav" aria-label="Main">
-          <a href="{{PREFIX}}">Tools</a>
-          <a href="{{PREFIX}}about/">About</a>
-          <a href="{{PREFIX}}contact/">Contact</a>
-          <a href="{{PREFIX}}privacy/">Privacy</a>
+          <a class="z-btn z-btn--accent z-nav__cta" href="{{STORE_URL}}" target="_blank" rel="noopener">
+            <img class="z-chrome-icon" src="{{PREFIX}}site/chrome.svg" alt="" width="16" height="16" />Add to Chrome
+          </a>
+          <a href="{{PREFIX}}"{{NAV_TOOLS}}>Tools</a>
+          <a href="{{PREFIX}}about/"{{NAV_ABOUT}}>About</a>
+          <a href="{{PREFIX}}contact/"{{NAV_CONTACT}}>Contact</a>
+          <a href="{{PREFIX}}privacy/"{{NAV_PRIVACY}}>Privacy</a>
         </nav>
         <div class="z-header__actions">
           <button

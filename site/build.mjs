@@ -862,7 +862,7 @@ function main() {
    * footer. prefix is "" at root, "../" one level deep and
    * "../../" for category pages two levels deep.
    */
-  function renderPage({ title, description, path: urlPath, prefix, body, scripts, jsonLd, extraCss }) {
+  function renderPage({ title, description, path: urlPath, prefix, body, scripts, jsonLd, extraCss, nav }) {
     const canonical = urlPath === "" ? BASE_URL + "/" : BASE_URL + "/" + urlPath + "/";
     const scriptTags = (scripts || [])
       .map((src) => '    <script src="' + prefix + src + '"></script>')
@@ -876,7 +876,17 @@ function main() {
       JSON_LD: (jsonLd || []).map(jsonLdTag).join(""),
       EXTRA_CSS: extraCss || "",
     });
-    const header = fill(headerT, { PREFIX: prefix, STORE_URL: STORE_URL });
+    /* Header nav: the link for the current page carries the
+     * active class plus aria-current; all other tokens are empty. */
+    const NAV_ACTIVE = ' class="z-nav--active" aria-current="page"';
+    const header = fill(headerT, {
+      PREFIX: prefix,
+      STORE_URL: STORE_URL,
+      NAV_TOOLS: nav === "tools" ? NAV_ACTIVE : "",
+      NAV_ABOUT: nav === "about" ? NAV_ACTIVE : "",
+      NAV_CONTACT: nav === "contact" ? NAV_ACTIVE : "",
+      NAV_PRIVACY: nav === "privacy" ? NAV_ACTIVE : "",
+    });
     const footer = fill(footerT, {
       PREFIX: prefix,
       VERSION: version,
@@ -928,6 +938,7 @@ function main() {
       "Developer Toolkit by Zase: free online tools for developers. Format JSON, decode JWTs, test regex, encode Base64 and more. Everything runs locally in your browser: no uploads, no accounts.",
     path: "",
     prefix: "",
+    nav: "tools",
     body: fill(homeT, {
       CATEGORY_SECTIONS: categorySections,
       FAQ_ITEMS: faqItems,
@@ -1024,6 +1035,7 @@ function main() {
         description: tool.description,
         path: slug,
         prefix: "../",
+        nav: "tools",
         body,
         scripts,
         extraCss,
@@ -1080,6 +1092,7 @@ function main() {
           "Free online " + cat.toLowerCase() + " tools from Zase.",
         path: "category/" + catSlug,
         prefix: "../../",
+        nav: "tools",
         body,
         scripts: [],
         jsonLd: [
@@ -1143,6 +1156,7 @@ function main() {
         description: page.description,
         path: page.dir,
         prefix: "../",
+        nav: page.dir,
         body,
         scripts: [],
         jsonLd: [
