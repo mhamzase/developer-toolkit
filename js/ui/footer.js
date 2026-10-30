@@ -21,7 +21,7 @@
   const VERSION       = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getManifest)
     ? chrome.runtime.getManifest().version
     : 'dev';
-  const DEVELOPER     = 'Hamza Shabbir';
+  const DEVELOPER     = 'Zase';
   const GITHUB_URL    = 'https://github.com/mhamzase';
   const GITHUB_HANDLE = '@mhamzase';
   const DONATE_URL    = 'https://ko-fi.com/your-username'; // update later
