@@ -31,6 +31,15 @@ body {
   height: auto;
 }
 
+/* Links: the shared extension base.css underlines every link on
+ * hover, a text-link habit from the popup. On the website, links
+ * live inside buttons, cards and nav items, so hover must never
+ * draw an underline. Same specificity as the base rule, and
+ * site.css loads after base.css, so this wins. */
+a:hover {
+  text-decoration: none;
+}
+
 /* ---------------- Header ---------------- */
 
 .z-header {
