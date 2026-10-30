@@ -61,6 +61,12 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
+  /* The shared extension base.css sets overflow: hidden on body
+   * because the popup shell scrolls inside its own regions. The
+   * website is a normal document, so restore page scrolling here
+   * (site.css loads after base.css, this rule wins). */
+  overflow: visible;
+  height: auto;
 }
 
 .z-grad-text {
