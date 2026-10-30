@@ -63,7 +63,7 @@ Connect to Git, pick this repo):
 | Setting | Value |
 |---|---|
 | Project name | devtoolkit-zase (gives devtoolkit-zase.pages.dev) |
-| Production branch | dev |
+| Production branch | master |
 | Root directory | repo root (leave empty / `/`) |
 | Build command | `node site/build.mjs` |
 | Build output directory | `site/dist` |
@@ -71,10 +71,10 @@ Connect to Git, pick this repo):
 
 Notes:
 
-- All website work happens on the `dev` branch, and the production
-  site updates on every push to `dev`. On the day the owner orders
-  the `dev` to `master` merge, switch the production branch above
-  to `master` in the same settings screen.
+- All website work happens on the `dev` branch. The production
+  site serves `master` (switched on 2026-10-31, the day `dev` was
+  merged on the owner's order), so website changes go live when
+  `dev` is merged to `master`, not on every push to `dev`.
 - A custom domain can be attached later in the same dashboard
   (Pages project, Custom domains) with no code changes; canonical
   URLs in the build point at `https://devtoolkit-zase.pages.dev` and
