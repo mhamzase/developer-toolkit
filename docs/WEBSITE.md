@@ -62,7 +62,7 @@ Connect to Git, pick this repo):
 
 | Setting | Value |
 |---|---|
-| Project name | zase (gives zase.pages.dev; if taken, devzase) |
+| Project name | devzase (gives devzase.pages.dev) |
 | Production branch | master |
 | Root directory | repo root (leave empty / `/`) |
 | Build command | `node site/build.mjs` |
@@ -78,7 +78,7 @@ Notes:
   the repo's release flow.
 - A custom domain can be attached later in the same dashboard
   (Pages project, Custom domains) with no code changes; canonical
-  URLs in the build point at `https://zase.pages.dev` and would be
+  URLs in the build point at `https://devzase.pages.dev` and would be
   updated in `site/build.mjs` (the `BASE_URL` constant) if the
   domain changes.
 

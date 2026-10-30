@@ -30,7 +30,7 @@ const ROOT = path.join(SITE_DIR, "..");
 const SRC = path.join(SITE_DIR, "src");
 const DIST = path.join(SITE_DIR, "dist");
 
-const BASE_URL = "https://zase.pages.dev";
+const BASE_URL = "https://devzase.pages.dev";
 const STORE_URL =
   "https://chromewebstore.google.com/detail/developer-toolkit-json-jw/fhjlhcecanniahjgnjffdhmfkfikkkdg";
 const GITHUB_URL = "https://github.com/mhamzase/developer-toolkit";
