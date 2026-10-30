@@ -71,6 +71,10 @@ a:hover {
   letter-spacing: var(--ls-tight);
 }
 
+.z-brand:hover {
+  color: var(--color-text);
+}
+
 .z-brand img {
   width: 30px;
   height: 30px;
@@ -126,6 +130,9 @@ a:hover {
 }
 
 .z-btn--accent:hover {
+  /* Pin the text color: the shared base.css a:hover recolors
+   * every link to the accent shade, which wrecks button text. */
+  color: var(--color-on-accent);
   background-color: var(--color-accent-hover);
 }
 
@@ -136,6 +143,7 @@ a:hover {
 }
 
 .z-btn--ghost:hover {
+  color: var(--color-text);
   background-color: var(--color-hover);
 }
 
@@ -260,6 +268,7 @@ a:hover {
 }
 
 .z-card:hover {
+  color: var(--color-text);
   border-color: var(--color-border-strong);
   background-color: var(--color-hover);
 }
