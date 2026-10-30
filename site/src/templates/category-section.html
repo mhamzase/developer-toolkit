@@ -1,5 +1,8 @@
         <section class="z-category" data-category-section>
-          <h2 id="category-{{CAT_SLUG}}">{{CATEGORY}}</h2>
+          <div class="z-category__head">
+            <h2 id="category-{{CAT_SLUG}}"><a href="{{PREFIX}}category/{{CAT_SLUG}}/">{{CATEGORY}}</a></h2>
+            <a class="z-category__link" href="{{PREFIX}}category/{{CAT_SLUG}}/">View all {{CATEGORY}} tools</a>
+          </div>
           <div class="z-grid">
 {{CARDS}}
           </div>

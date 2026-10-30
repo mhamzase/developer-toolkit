@@ -1,18 +1,27 @@
     <main class="z-main">
-      <div class="z-wrap">
-        <nav class="z-breadcrumb" aria-label="Breadcrumb">
-          <a href="{{PREFIX}}">Home</a>
-          <span aria-hidden="true">/</span>
-          <a href="{{PREFIX}}#category-{{CAT_SLUG}}">{{CATEGORY}}</a>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{{NAME}}</span>
-        </nav>
-
-        <div class="z-tool-head">
-          <h1>{{NAME}}</h1>
-          <p>{{LONG_DESCRIPTION}}</p>
+      <div class="z-tool-hero">
+        <div class="z-wrap">
+          <nav class="z-breadcrumb" aria-label="Breadcrumb">
+            <a href="{{PREFIX}}">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="{{PREFIX}}category/{{CAT_SLUG}}/">{{CATEGORY}}</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{{NAME}}</span>
+          </nav>
+          <div class="z-tool-head">
+            <span class="z-card__icon z-card__icon--{{CAT_SLUG}} z-tool-head__icon">{{ICON_SVG}}</span>
+            <div class="z-tool-head__text">
+              <h1>{{NAME}}</h1>
+              <p>{{LONG_DESCRIPTION}}</p>
+            </div>
+            <a class="z-btn z-btn--ghost z-tool-head__cta" href="{{STORE_URL}}" target="_blank" rel="noopener">
+              <span class="z-chrome-dot" aria-hidden="true"></span>Get it in Chrome
+            </a>
+          </div>
         </div>
+      </div>
 
+      <div class="z-wrap">
         <div class="z-tool-shell">
           <div id="dt-tool-mount" class="dt-workspace" data-tool-id="{{TOOL_ID}}"></div>
         </div>
@@ -26,6 +35,19 @@
             keyboard shortcut away.
           </p>
           <a class="z-btn z-btn--accent" href="{{STORE_URL}}" target="_blank" rel="noopener">Add to Chrome</a>
+        </section>
+
+        <section class="z-seo">
+          <h2>About this {{NAME}}</h2>
+          <p>{{INTRO}}</p>
+          <h2>How to use the {{NAME}}</h2>
+          <ol class="z-seo__steps">
+{{HOW_STEPS}}
+          </ol>
+          <h2>Good to know</h2>
+          <ul class="z-seo__points">
+{{POINT_ITEMS}}
+          </ul>
         </section>
 
 {{RELATED_SECTION}}

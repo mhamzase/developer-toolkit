@@ -1,31 +1,210 @@
-    <main class="z-main">
-      <div class="z-wrap">
-        <section class="z-hero">
-          <h1>Developer tools that run entirely in your browser</h1>
-          <p class="z-hero__sub">
-            Format JSON, decode JWTs, test regular expressions, generate hashes,
-            QR codes and more. Free, private, and with no sign up: everything you
-            paste stays on your device.
-          </p>
-          <div class="z-hero__cta">
-            <a class="z-btn z-btn--accent" href="{{STORE_URL}}" target="_blank" rel="noopener">Add to Chrome: it is free</a>
-            <a class="z-btn z-btn--ghost" href="#tools">Browse the tools</a>
+    <main class="z-main z-main--home">
+      <section class="z-hero">
+        <div class="z-hero__glow" aria-hidden="true"></div>
+        <div class="z-wrap z-hero__grid">
+          <div class="z-hero__copy">
+            <p class="z-eyebrow">
+              <span class="z-eyebrow__dot" aria-hidden="true"></span>
+              Free developer tools, by Zase
+            </p>
+            <h1>Developer tools that run <span class="z-grad-text">entirely in your browser</span></h1>
+            <p class="z-hero__sub">
+              Format JSON, decode JWTs, test regular expressions, generate hashes,
+              QR codes and more. Free, private, and with no sign up: everything you
+              paste stays on your device.
+            </p>
+            <div class="z-search">
+              <svg class="dt-icon z-search__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input
+                id="z-search"
+                type="search"
+                placeholder="Search tools: try json, jwt, regex, color..."
+                aria-label="Search tools"
+                autocomplete="off"
+              />
+            </div>
+            <div class="z-hero__cta">
+              <a class="z-btn z-btn--accent z-btn--lg" href="#tools">Browse the tools</a>
+              <a class="z-btn z-btn--ghost z-btn--lg" href="{{STORE_URL}}" target="_blank" rel="noopener">
+                <span class="z-chrome-dot" aria-hidden="true"></span>Add to Chrome: it is free
+              </a>
+            </div>
           </div>
-          <div class="z-search">
-            <input
-              id="z-search"
-              type="search"
-              placeholder="Search tools: try json, jwt, regex, color..."
-              aria-label="Search tools"
-              autocomplete="off"
-            />
+
+          <div class="z-hero__visual" aria-hidden="true">
+            <div class="z-mock-scene">
+              <div class="z-mock">
+                <div class="z-mock__bar">
+                  <span class="z-mock__dot"></span><span class="z-mock__dot"></span><span class="z-mock__dot"></span>
+                  <span class="z-mock__title">Developer Toolkit by Zase</span>
+                </div>
+                <div class="z-mock__body">
+                  <div class="z-mock__side">
+                    <span class="z-mock__brand"><img src="site/icon-96.png" alt="" width="18" height="18" /> Zase</span>
+                    <span class="z-mock__nav z-mock__nav--active">JSON Formatter</span>
+                    <span class="z-mock__nav">JWT Decoder</span>
+                    <span class="z-mock__nav">Regex Tester</span>
+                    <span class="z-mock__nav">Base64</span>
+                    <span class="z-mock__nav">Hash Generator</span>
+                    <span class="z-mock__nav">QR Code Generator</span>
+                  </div>
+                  <div class="z-mock__main">
+                    <div class="z-mock__tool-head">
+                      <span class="z-mock__tool-name">JSON Formatter</span>
+                      <span class="z-mock__pill">Valid JSON</span>
+                    </div>
+                    <pre class="z-mock__code"><code>{
+  "name": "zase",
+  "tools": 36,
+  "private": true,
+  "price": 0
+}</code></pre>
+                    <div class="z-mock__actions">
+                      <span class="z-mock__btn z-mock__btn--accent">Format</span>
+                      <span class="z-mock__btn">Minify</span>
+                      <span class="z-mock__btn">Copy</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="z-mock__chip z-mock__chip--a">100% offline</div>
+              <div class="z-mock__chip z-mock__chip--b">No tracking</div>
+            </div>
           </div>
-        </section>
-        <div id="tools">
-{{CATEGORY_SECTIONS}}
-          <p class="z-no-results" id="z-no-results" style="display: none">
-            No tool matches your search. Try a shorter word, for example json or color.
-          </p>
         </div>
+      </section>
+
+      <div class="z-wrap">
+        <ul class="z-trust z-reveal">
+          <li>
+            <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            100% Free
+          </li>
+          <li>
+            <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Runs Offline
+          </li>
+          <li>
+            <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            No Tracking
+          </li>
+          <li>
+            <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            Open Source
+          </li>
+        </ul>
       </div>
+
+      <div class="z-wrap" id="tools">
+{{CATEGORY_SECTIONS}}
+        <p class="z-no-results" id="z-no-results" style="display: none">
+          No tool matches your search. Try a shorter word, for example json or color.
+        </p>
+      </div>
+
+      <section class="z-band">
+        <div class="z-wrap">
+          <h2 class="z-band__title z-reveal">Why developers pick Zase</h2>
+          <p class="z-band__sub z-reveal">
+            Most online tools send what you paste to a server. Zase was built
+            to never do that, on this site and in the extension.
+          </p>
+          <div class="z-features">
+            <article class="z-feature z-reveal">
+              <span class="z-feature__icon">
+                <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <h3>Private by design</h3>
+              <p>Formatting, decoding, hashing and generating all happen locally on your device. Tokens and payloads never travel anywhere.</p>
+            </article>
+            <article class="z-feature z-reveal">
+              <span class="z-feature__icon">
+                <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </span>
+              <h3>Works fully offline</h3>
+              <p>The Chrome extension runs with no connection at all. On the web, every tool works right in the tab, with nothing to install.</p>
+            </article>
+            <article class="z-feature z-reveal">
+              <span class="z-feature__icon">
+                <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </span>
+              <h3>Instant, no waiting</h3>
+              <p>No uploads, no queues, no server round trips. Paste, click, done: results appear as fast as your device can compute them.</p>
+            </article>
+            <article class="z-feature z-reveal">
+              <span class="z-feature__icon">
+                <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <h3>Free, no account</h3>
+              <p>Every tool is free, with no sign up, no trial timer and no locked features. Open a page and start working.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="z-wrap z-ext z-reveal">
+        <div class="z-ext__copy">
+          <p class="z-eyebrow">
+            <span class="z-eyebrow__dot" aria-hidden="true"></span>
+            Chrome extension
+          </p>
+          <h2>Every tool, one shortcut away</h2>
+          <p>
+            Developer Toolkit by Zase packs the same tools into a free Chrome
+            extension: fully offline, in a standalone window or docked in the
+            side panel, with favorites, recents and a right-click menu that
+            sends selected text straight into a tool.
+          </p>
+          <ul class="z-ext__points">
+            <li>Fully offline after install: planes, trains and bad wifi are fine</li>
+            <li>Side panel view keeps a tool next to the page you are reading</li>
+            <li>Favorites and recents put your daily tools one click away</li>
+            <li>Only four permissions, each tied to a visible feature</li>
+          </ul>
+          <a class="z-btn z-btn--accent z-btn--lg" href="{{STORE_URL}}" target="_blank" rel="noopener">
+            <span class="z-chrome-dot" aria-hidden="true"></span>Add to Chrome: it is free
+          </a>
+        </div>
+        <div class="z-ext__visual" aria-hidden="true">
+          <div class="z-browser">
+            <div class="z-browser__bar">
+              <span class="z-mock__dot"></span><span class="z-mock__dot"></span><span class="z-mock__dot"></span>
+              <span class="z-browser__url">your-api-docs.example.com</span>
+            </div>
+            <div class="z-browser__body">
+              <div class="z-browser__page">
+                <span class="z-browser__line"></span>
+                <span class="z-browser__line"></span>
+                <span class="z-browser__line z-browser__line--short"></span>
+                <span class="z-browser__line"></span>
+                <span class="z-browser__line z-browser__line--short"></span>
+              </div>
+              <div class="z-browser__panel">
+                <span class="z-mock__brand"><img src="site/icon-96.png" alt="" width="18" height="18" /> Zase</span>
+                <span class="z-browser__panel-title">JWT Decoder</span>
+                <span class="z-browser__token">eyJhbGciOiJIUzI1NiIs...</span>
+                <span class="z-browser__claim">"sub": "1234567890"</span>
+                <span class="z-browser__claim">"name": "John Doe"</span>
+                <span class="z-browser__claim">"exp": 1516239022</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="z-wrap z-faq z-reveal">
+        <h2 class="z-band__title">Frequently asked questions</h2>
+{{FAQ_ITEMS}}
+      </section>
+
+      <section class="z-wrap">
+        <div class="z-cta-band z-reveal">
+          <h2>Your next tool is already open</h2>
+          <p>Thirty-six tools, zero uploads. Pick one above, or keep them all in Chrome.</p>
+          <div class="z-hero__cta">
+            <a class="z-btn z-btn--light z-btn--lg" href="#tools">Browse the tools</a>
+            <a class="z-btn z-btn--outline z-btn--lg" href="{{STORE_URL}}" target="_blank" rel="noopener">Add to Chrome</a>
+          </div>
+        </div>
+      </section>
     </main>

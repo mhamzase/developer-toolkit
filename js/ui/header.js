@@ -60,7 +60,7 @@
       });
       const title = dom.el("div", {
         class: "dt-header__title",
-        text: "Developer Toolkit",
+        text: "Developer Toolkit by Zase",
       });
       const brand = dom.el("div", { class: "dt-header__brand" }, [logo, title]);
 
