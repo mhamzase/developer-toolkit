@@ -62,8 +62,8 @@ Connect to Git, pick this repo):
 
 | Setting | Value |
 |---|---|
-| Project name | zase-tools (gives zase-tools.pages.dev) |
-| Production branch | master |
+| Project name | devtoolkit-zase (gives devtoolkit-zase.pages.dev) |
+| Production branch | dev |
 | Root directory | repo root (leave empty / `/`) |
 | Build command | `node site/build.mjs` |
 | Build output directory | `site/dist` |
@@ -71,16 +71,15 @@ Connect to Git, pick this repo):
 
 Notes:
 
-- Pushes to non-production branches (for example `dev`) get their
-  own preview URLs automatically, so the site can be reviewed before
-  anything merges to master.
-- The production site only changes when `master` changes, matching
-  the repo's release flow.
+- All website work happens on the `dev` branch, and the production
+  site updates on every push to `dev`. On the day the owner orders
+  the `dev` to `master` merge, switch the production branch above
+  to `master` in the same settings screen.
 - A custom domain can be attached later in the same dashboard
   (Pages project, Custom domains) with no code changes; canonical
-  URLs in the build point at `https://zase-tools.pages.dev` and would be
-  updated in `site/build.mjs` (the `BASE_URL` constant) if the
-  domain changes.
+  URLs in the build point at `https://devtoolkit-zase.pages.dev` and
+  would be updated in `site/build.mjs` (the `BASE_URL` constant) if
+  the domain changes.
 
 ## Extension packaging stays separate
 
