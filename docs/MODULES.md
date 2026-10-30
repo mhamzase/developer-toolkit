@@ -41,6 +41,24 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
+## Tool highlights (v1.0.3, store track)
+
+- `yaml.js` carries a hand written YAML engine (block parser,
+  flow parser, serializer) for the everyday subset; a sequence
+  may sit at the same indent as its parent key, and sequence
+  items that open a mapping are parsed through a virtual first
+  line aligned two columns past the dash.
+- `xml.js` validates with DOMParser and serializes by walking
+  the DOM itself, so attribute order is kept and mixed content
+  is emitted inline instead of gaining invented whitespace.
+- `jsonpath.js` tokenizes the path once, then evaluates over
+  {value, path} node pairs; filters compare with strict
+  equality against a parsed literal.
+- `entities.js` decodes through a named table plus numeric
+  references; no innerHTML is ever used on user text.
+- `slug.js` transliterates with NFD decomposition plus an
+  explicit map for letters NFD cannot split (ß, ø, ł, þ).
+
 ## Tool highlights (v1.0.2, store track)
 
 - `css.js` runs on a small tokenizer (strings and comments stay

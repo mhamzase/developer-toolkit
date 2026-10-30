@@ -212,6 +212,37 @@
       '<polyline points="12 7 12 12 15 14"/>' +
       '<path d="M5.5 5.5 3 8"/>' +
       '<path d="M3 3v5h5"/>',
+
+    /* File text (YAML) — document with lines */
+    fileText:
+      '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+      '<polyline points="14 2 14 8 20 8"/>' +
+      '<path d="M9 13h6"/>' +
+      '<path d="M9 17h6"/>',
+
+    /* Code XML — angle brackets with a slash */
+    codeXml:
+      '<path d="m18 16 4-4-4-4"/>' +
+      '<path d="m6 8-4 4 4 4"/>' +
+      '<path d="m14.5 4-5 16"/>',
+
+    /* Route (JSONPath) — a path between two points */
+    route:
+      '<circle cx="6" cy="19" r="3"/>' +
+      '<path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/>' +
+      '<circle cx="18" cy="5" r="3"/>',
+
+    /* Entity (HTML entities) — brackets with a dot */
+    entity:
+      '<polyline points="9 8 4 12 9 16"/>' +
+      '<polyline points="15 8 20 12 15 16"/>' +
+      '<circle cx="12" cy="12" r=".6" fill="currentColor"/>',
+
+    /* Pilcrow (slug) — paragraph mark */
+    pilcrow:
+      '<path d="M13 4v16"/>' +
+      '<path d="M17 4v16"/>' +
+      '<path d="M19 4H9.5a4.5 4.5 0 0 0 0 9H13"/>',
   };
 
   /**

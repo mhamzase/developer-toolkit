@@ -1,0 +1,27 @@
+/* ============================================================
+ * File: css/tools/slug.css
+ * Module: Tool CSS — Slug Generator
+ * Purpose: The options row between the input and output panels.
+ * ============================================================ */
+
+.dt-slug-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-slug-options .dt-select {
+  width: 140px;
+}
+
+.dt-slug-options .dt-input--sm {
+  width: 80px;
+}
+
+.dt-slug-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}

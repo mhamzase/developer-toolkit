@@ -2,6 +2,37 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.0.3] — 2026-10-30
+
+### Added (36 tools total)
+- YAML Formatter & Converter: format and validate YAML with
+  line numbered errors, and convert between YAML and JSON in
+  both directions. A hand written parser covers the everyday
+  subset: block mappings and sequences, flow collections,
+  quoted scalars, comments and block scalars. Anchors, aliases
+  and tags are reported as errors, never silently mangled.
+- XML Formatter & Validator: pretty print XML with 2/4 space
+  or tab indentation, minify it, or validate it, with element
+  and depth counts. Attribute order, comments, CDATA and
+  mixed content survive a format round trip.
+- JSONPath Tester: run a JSONPath expression against a JSON
+  document and list every match with its concrete path and
+  value. Supports child keys, indexes (negative included),
+  wildcards, recursive descent and simple [?(@.field op value)]
+  filters.
+- HTML Entity Encoder & Decoder: encode to named, decimal or
+  hex entities, and decode named and numeric entities back to
+  text. Unknown named entities are left untouched.
+- Slug Generator: turn titles into URL friendly slugs, one
+  line at a time, with separator, lowercase and max length
+  options and accent transliteration (Café Über becomes
+  cafe-uber).
+
+### Changed
+- Search and omnibox keywords audited: the new tools are
+  findable by the words people actually type (yml, config,
+  rss, xpath, permalink, escape).
+
 ## [1.0.2] — 2026-10-27
 
 ### Added (31 tools total)

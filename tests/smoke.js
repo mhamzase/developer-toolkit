@@ -107,11 +107,11 @@ async function main() {
 
   const doc = window.document;
   check("sidebar shell renders", !!doc.querySelector(".dt-sidebar"));
-  check("home grid lists all tools", doc.querySelectorAll(".dt-tool-card").length >= 31);
+  check("home grid lists all tools", doc.querySelectorAll(".dt-tool-card").length >= 36);
   check("footer version matches manifest", doc.body.textContent.includes(manifest.version));
 
   const ids = window.eval("DT.core.registry.all().map(t => t.id)");
-  check("registry holds 31 tools", ids.length === 31);
+  check("registry holds 36 tools", ids.length === 36);
 
   const errs = [];
   for (const id of ids) {
@@ -171,6 +171,56 @@ async function main() {
   setVal(ws().querySelector("#dt-qr-input"), "HELLO");
   await tick(400);
   check("qr preview has svg", !!ws().querySelector("#dt-qr-preview svg"));
+
+  /* --- YAML: JSON to YAML and back --- */
+  window.eval("DT.core.router.go('tool', { toolId: 'yaml' })");
+  await tick(20);
+  setVal(ws().querySelector("#dt-yaml-input"), '{"name":"test","tags":["a","b"],"nested":{"x":1}}');
+  btnByText(ws(), "JSON to YAML").click();
+  await tick(10);
+  const yamlOut = ws().querySelector("#dt-yaml-output").value;
+  check("yaml json to yaml", yamlOut.includes("name: test") && yamlOut.includes("- a") && yamlOut.includes("x: 1"));
+  setVal(ws().querySelector("#dt-yaml-input"), "name: test\ncount: 3\n");
+  btnByText(ws(), "YAML to JSON").click();
+  await tick(10);
+  check("yaml to json", ws().querySelector("#dt-yaml-output").value.includes('"count": 3'));
+
+  /* --- XML format --- */
+  window.eval("DT.core.router.go('tool', { toolId: 'xml' })");
+  await tick(20);
+  setVal(ws().querySelector("#dt-xml-input"), "<root><a>1</a><b><c>2</c></b></root>");
+  btnByText(ws(), "Format").click();
+  await tick(10);
+  check("xml formats nested", ws().querySelector("#dt-xml-output").value.includes("\n  <a>1</a>"));
+
+  /* --- JSONPath query --- */
+  window.eval("DT.core.router.go('tool', { toolId: 'jsonpath' })");
+  await tick(20);
+  setVal(ws().querySelector("#dt-jsonpath-input"), '{"store":{"book":[{"title":"A"},{"title":"B"}]}}');
+  setVal(ws().querySelector("#dt-jsonpath-query"), "$.store.book[*].title");
+  btnByText(ws(), "Run query").click();
+  await tick(10);
+  check("jsonpath wildcard matches", ws().textContent.includes('$.store.book[1].title') && ws().textContent.includes('"B"'));
+
+  /* --- HTML entities --- */
+  window.eval("DT.core.router.go('tool', { toolId: 'entities' })");
+  await tick(20);
+  setVal(ws().querySelector("#dt-entities-input"), "Fish & Chips <3");
+  btnByText(ws(), "Convert").click();
+  await tick(10);
+  check("entities encode named", ws().querySelector("#dt-entities-output").value === "Fish &amp; Chips &lt;3");
+  setVal(ws().querySelector("#dt-entities-mode"), "decode", "change");
+  setVal(ws().querySelector("#dt-entities-input"), "Fish &amp; Chips &#169;");
+  btnByText(ws(), "Convert").click();
+  await tick(10);
+  check("entities decode", ws().querySelector("#dt-entities-output").value === "Fish & Chips ©");
+
+  /* --- Slug generator (live) --- */
+  window.eval("DT.core.router.go('tool', { toolId: 'slug' })");
+  await tick(20);
+  setVal(ws().querySelector("#dt-slug-input"), "Café Über: A Beginner's Guide!");
+  await tick(10);
+  check("slug transliterates", ws().querySelector("#dt-slug-output").value === "cafe-uber-a-beginner-s-guide");
 
   console.log("SMOKE PASS " + pass + " FAIL " + fail);
   if (failed.length) console.log("FAILED: " + failed.join(" | "));

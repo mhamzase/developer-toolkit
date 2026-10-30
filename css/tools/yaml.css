@@ -1,0 +1,12 @@
+/* ============================================================
+ * File: css/tools/yaml.css
+ * Module: Tool CSS — YAML Formatter & Converter
+ * Purpose: The actions row between the input and output panels.
+ * ============================================================ */
+
+.dt-yaml-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}

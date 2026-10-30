@@ -1,0 +1,16 @@
+/* ============================================================
+ * File: css/tools/entities.css
+ * Module: Tool CSS — HTML Entity Encoder & Decoder
+ * Purpose: The actions row between the input and output panels.
+ * ============================================================ */
+
+.dt-entities-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-entities-actions .dt-select {
+  width: auto;
+}

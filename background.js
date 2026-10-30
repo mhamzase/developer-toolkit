@@ -377,7 +377,12 @@ const OMNIBOX_TOOLS = [
   ['ua', 'User Agent Parser', 'user agent browser os device'],
   ['subnet', 'IP Subnet Calculator', 'ip cidr network broadcast mask'],
   ['gradient', 'CSS Gradient Generator', 'gradient linear radial color background'],
-  ['favicon', 'Favicon Generator', 'favicon ico icon sizes']
+  ['favicon', 'Favicon Generator', 'favicon ico icon sizes'],
+  ['yaml', 'YAML Formatter & Converter', 'yaml yml format validate convert json config'],
+  ['xml', 'XML Formatter & Validator', 'xml format beautify validate minify rss'],
+  ['jsonpath', 'JSONPath Tester', 'jsonpath query json filter extract'],
+  ['entities', 'HTML Entity Encoder & Decoder', 'html entity encode decode escape'],
+  ['slug', 'Slug Generator', 'slug url permalink seo title']
 ];
 
 if (chrome.omnibox) {

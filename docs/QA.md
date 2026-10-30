@@ -13,7 +13,7 @@ Run this before every release.
 - [ ] Toggle flips to dark
 - [ ] Settings → Theme offers Light / Dark / System; System follows the OS live
 - [ ] Reload window → theme mode persists
-- [ ] All 31 tools readable in both themes
+- [ ] All 36 tools readable in both themes
 - [ ] Scrollbars are styled in both themes
 
 ## 3. Shell (sidebar)
@@ -70,6 +70,28 @@ Run this before every release.
 - [ ] Six size cards render in text mode; changing the letter or colors redraws them
 - [ ] Image mode draws the uploaded picture into every size
 - [ ] favicon.ico downloads and opens as a valid icon with 16/32/48 entries
+
+### YAML Formatter & Converter
+- [ ] JSON to YAML emits nested maps, sequences and sequences of maps; feeding the output back through YAML to JSON returns the same values
+- [ ] Format is idempotent on a document with block scalars and same-indent sequences
+- [ ] Bad indentation shows an error that names the line
+
+### XML Formatter & Validator
+- [ ] Format indents nested elements and keeps attribute order, comments and CDATA
+- [ ] Minify returns one line; malformed XML shows the parser error
+
+### JSONPath Tester
+- [ ] $.store.book[*].title lists both titles with concrete paths
+- [ ] $..price finds values at any depth; a [?(@.price > 10)] filter narrows the matches
+- [ ] A path with no matches shows the empty note, not an error
+
+### HTML Entity Encoder & Decoder
+- [ ] Named encode turns & < > into &amp; &lt; &gt;; decode restores named and numeric entities
+- [ ] An unknown entity like &nosuch; survives a decode unchanged
+
+### Slug Generator
+- [ ] Café Über becomes cafe-uber (accents transliterated, nothing dropped silently)
+- [ ] Separator, lowercase and max length options apply live, per line
 
 ### JWT Decoder
 - [ ] Sample loads and decodes

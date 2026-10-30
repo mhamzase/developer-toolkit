@@ -1,0 +1,16 @@
+/* ============================================================
+ * File: css/tools/xml.css
+ * Module: Tool CSS — XML Formatter & Validator
+ * Purpose: The actions row between the input and output panels.
+ * ============================================================ */
+
+.dt-xml-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dt-xml-actions .dt-select {
+  width: 120px;
+}
