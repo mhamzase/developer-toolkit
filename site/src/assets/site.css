@@ -55,9 +55,14 @@ a:hover {
   align-items: center;
   gap: var(--space-5);
   min-height: 60px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding-top: var(--space-2);
   padding-bottom: var(--space-2);
+}
+
+.z-brand,
+.z-header__actions {
+  flex: 0 0 auto;
 }
 
 .z-brand {
@@ -93,10 +98,28 @@ a:hover {
   text-decoration: none;
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  transition: color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard);
 }
 
 .z-nav a:hover {
   color: var(--color-text);
+  background-color: var(--color-hover);
+}
+
+/* Current page in the nav: a filled pill with full-strength
+ * text, matching the redesigned site's selected state. */
+.z-nav a.z-nav--active {
+  color: var(--color-text);
+  background-color: var(--color-active);
+  font-weight: var(--fw-semibold);
+}
+
+.z-nav a.z-nav--active:hover {
+  color: var(--color-text);
+  background-color: var(--color-active);
 }
 
 .z-header__actions {
@@ -503,18 +526,39 @@ a:hover {
 /* ---------------- Responsive ---------------- */
 
 @media (max-width: 640px) {
+  /* Row one stays brand + actions side by side; the nav drops
+   * to a single scrollable row directly underneath. */
   .z-header__inner {
     gap: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .z-nav {
     order: 3;
     width: 100%;
     margin-left: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .z-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .z-nav a {
+    flex: 0 0 auto;
   }
 
   .z-header__actions {
     margin-left: auto;
+    gap: var(--space-2);
+  }
+
+  .z-header__actions .z-btn--accent {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   .z-hero {

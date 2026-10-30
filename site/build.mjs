@@ -215,7 +215,7 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(ROOT, "manifest.json"), "utf8")
 );
 
-function renderPage({ prefix, title, description, canonical, body, extraCss, extraScripts }) {
+function renderPage({ prefix, title, description, canonical, body, extraCss, extraScripts, nav }) {
   const head = fill(readTemplate("head.html"), {
     TITLE: esc(title),
     DESCRIPTION: escAttr(description),
@@ -224,9 +224,15 @@ function renderPage({ prefix, title, description, canonical, body, extraCss, ext
     PREFIX: prefix,
     EXTRA_CSS: extraCss || "",
   });
+  /* Header nav: the link for the current page carries the
+   * active class plus aria-current; all other tokens are empty. */
+  const NAV_ACTIVE = ' class="z-nav--active" aria-current="page"';
   const header = fill(readTemplate("header.html"), {
     PREFIX: prefix,
     STORE_URL,
+    NAV_TOOLS: nav === "tools" ? NAV_ACTIVE : "",
+    NAV_ABOUT: nav === "about" ? NAV_ACTIVE : "",
+    NAV_PRIVACY: nav === "privacy" ? NAV_ACTIVE : "",
   });
   const footer = fill(readTemplate("footer.html"), {
     PREFIX: prefix,
@@ -364,6 +370,7 @@ function main() {
       description:
         "Free online developer tools by Zase: JSON formatter, JWT decoder and signer, regex tester, Base64, YAML and XML formatters, hash and password generators, QR codes and more. Everything runs in your browser: nothing is uploaded, tracked, or stored on a server.",
       canonical: BASE_URL + "/",
+      nav: "tools",
       body: homeBody,
     })
   );
@@ -410,6 +417,7 @@ function main() {
         desc +
         ". Free online tool by Zase that runs 100% in your browser: no sign up, no uploads, nothing leaves your device.",
       canonical: BASE_URL + "/" + tool.slug + "/",
+      nav: "tools",
       body,
       extraCss: cssLinks(prefix, [
         "css/components.css",
@@ -456,6 +464,7 @@ function main() {
         title: p.title,
         description: p.description,
         canonical: BASE_URL + "/" + p.slug + "/",
+        nav: p.slug,
         body,
       })
     );
