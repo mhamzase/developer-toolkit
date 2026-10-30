@@ -5,7 +5,7 @@ Copy for the Developer Dashboard, ready to paste. Anything marked
 
 ## Basics
 
-- **Name:** Developer Toolkit: JSON, JWT, Regex & More
+- **Name:** Developer Toolkit by Zase: JSON, JWT, Regex & More
 - **Category:** Developer Tools
 - **Language:** English
 

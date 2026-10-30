@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Developer Toolkit: JSON, JWT, Regex & More",
+  "name": "Developer Toolkit by Zase: JSON, JWT, Regex & More",
   "short_name": "Dev Toolkit",
   "version": "1.0.3",
   "description": "JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR codes and more. Free, 100% offline, no tracking.",
