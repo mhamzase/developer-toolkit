@@ -1151,11 +1151,71 @@ a:hover {
 /* The mounted tool lives in .dt-workspace (shared tool CSS);
  * on the web it sits inside a raised surface card. */
 .z-tool-shell {
+  position: relative;
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-xl);
   background-color: var(--color-surface);
   box-shadow: var(--z-shadow-md);
   overflow: hidden;
+}
+
+/* Loading state shown until the tool mounts (web-boot.js hides
+ * it). The tool scripts load after the page chrome, so without
+ * this the shell sits empty for a beat on slower connections. */
+.z-tool-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-10) var(--space-5);
+  text-align: center;
+}
+
+.z-tool-loading__ring {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 4px solid var(--color-border);
+  border-top-color: var(--z-grad-2);
+  animation: z-spin 0.8s linear infinite;
+}
+
+@keyframes z-spin {
+  to { transform: rotate(360deg); }
+}
+
+.z-tool-loading__text {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: var(--fw-semibold);
+}
+
+.z-tool-loading__skel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(420px, 100%);
+  margin-top: var(--space-2);
+}
+
+.z-tool-loading__skel span {
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-subtle);
+  animation: z-pulse 1.2s ease-in-out infinite;
+}
+
+.z-tool-loading__skel span:nth-child(2) { width: 82%; }
+.z-tool-loading__skel span:nth-child(3) { width: 64%; }
+
+@keyframes z-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .z-tool-loading__ring,
+  .z-tool-loading__skel span { animation: none; }
 }
 
 .z-tool-shell .dt-workspace {
@@ -1693,12 +1753,37 @@ a:hover {
     gap: var(--space-6);
   }
 
+  /* Stack the tool head: icon and title share the first row,
+   * the description gets the full width (it used to be squeezed
+   * into a narrow column beside the store button), and the
+   * store button drops under the description. The text wrapper
+   * becomes display:contents so its children join this layout. */
   .z-tool-head {
     flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .z-tool-head__text {
+    display: contents;
+  }
+
+  .z-tool-head h1 {
+    flex: 1 1 0;
+    min-width: 0;
+    align-self: center;
+    margin: 0;
+    order: 1;
+  }
+
+  .z-tool-head p {
+    flex: 1 1 100%;
+    order: 2;
   }
 
   .z-tool-head__cta {
-    margin-left: 72px;
+    order: 3;
+    margin-top: var(--space-1);
+    margin-left: 0;
   }
 
   .z-tool-shell .dt-workspace {

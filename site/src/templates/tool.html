@@ -23,6 +23,11 @@
 
       <div class="z-wrap">
         <div class="z-tool-shell">
+          <div class="z-tool-loading" id="dt-tool-loading" role="status" aria-label="Loading tool">
+            <span class="z-tool-loading__ring" aria-hidden="true"></span>
+            <p class="z-tool-loading__text">Loading {{NAME}}</p>
+            <div class="z-tool-loading__skel" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
           <div id="dt-tool-mount" class="dt-workspace" data-tool-id="{{TOOL_ID}}"></div>
         </div>
         <div id="dt-toasts" class="dt-toasts" role="status" aria-live="polite"></div>
