@@ -21,6 +21,9 @@
 
   const DEFAULTS = {
     persistInput: false,
+    /* Right-click Transform / Generate menus (background.js reads
+       the same dt:settings key; absent means on). */
+    rightClickMenus: true,
   };
 
   let settings = Object.assign({}, DEFAULTS, { _v: SETTINGS_VERSION });

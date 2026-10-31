@@ -9,7 +9,7 @@
             website and for the Chrome extension.
           </p>
           <p class="z-page-meta">
-            <span class="z-page-meta__chip">Last updated: 2026-10-30</span>
+            <span class="z-page-meta__chip">Last updated: 2026-10-31</span>
           </p>
         </div>
 
@@ -51,14 +51,16 @@
             <h2>The Chrome extension</h2>
             <p>
               The Developer Toolkit by Zase extension follows the same
-              rule: it collects nothing. It requests only four
+              rule: it collects nothing. It requests only six
               permissions, each for a visible feature:
             </p>
             <ul>
               <li><strong>storage</strong>: saves your preferences locally, such as theme, favorites, and recents.</li>
               <li><strong>system.display</strong>: opens the extension window centered on your active screen.</li>
-              <li><strong>contextMenus</strong>: adds right-click entries to open the toolkit or send selected text to a tool, locally.</li>
+              <li><strong>contextMenus</strong>: adds right-click entries to open the toolkit, send selected text to a tool, or transform and generate right on the page, locally.</li>
               <li><strong>sidePanel</strong>: lets the toolkit open docked in Chrome's Side Panel when you ask for it.</li>
+              <li><strong>scripting</strong>: runs a right-click Transform or Generate action in the page you clicked on, only at the moment you click it. There is no persistent content script.</li>
+              <li><strong>activeTab</strong>: temporary access to just the tab you right-clicked, only while that action runs, so the result can be copied. No access at any other time.</li>
             </ul>
           </article>
 

@@ -9,7 +9,9 @@
  * Notes:
  *   - Uses chrome.windows.getLastFocused() + system.display.getInfo()
  *   - No network. Permissions: storage, system.display,
- *     contextMenus, sidePanel.
+ *     contextMenus, sidePanel, scripting, activeTab (the last two
+ *     power the right-click Transform / Generate actions and are
+ *     used only on the tab and at the moment of the click).
  */
 
 const APP_URL    = chrome.runtime.getURL('popup/popup.html');
@@ -268,8 +270,121 @@ const MENU_SELECTION = {
   'dt-sel-hash': 'hash'
 };
 
+/* --------------------------------------------------------------
+ * Right-click Transform / Generate (Step 3)
+ * Transform acts on the current selection, Generate needs no
+ * input. Both run inside the clicked page via
+ * js/context/zase-page.js, injected on demand: no persistent
+ * content script, no host permissions. Gated by the
+ * rightClickMenus setting (Settings toggle, default on).
+ * -------------------------------------------------------------- */
+
+const TX_MENU_ITEMS = [
+  ['b64-encode', 'Base64 Encode'],
+  ['b64-decode', 'Base64 Decode'],
+  ['url-encode', 'URL Encode'],
+  ['url-decode', 'URL Decode'],
+  'SEP',
+  ['case-upper', 'UPPERCASE'],
+  ['case-lower', 'lowercase'],
+  ['case-title', 'Title Case'],
+  ['case-camel', 'camelCase'],
+  ['case-snake', 'snake_case'],
+  ['case-kebab', 'kebab-case'],
+  'SEP',
+  ['hash-md5', 'MD5 Hash'],
+  ['hash-sha256', 'SHA-256 Hash'],
+  'SEP',
+  ['json-format', 'Format JSON'],
+  ['json-minify', 'Minify JSON'],
+  'SEP',
+  ['jwt-decode', 'Decode JWT'],
+  ['timestamp', 'Convert Timestamp / Date'],
+  ['count', 'Count Words']
+];
+
+const GEN_MENU_ITEMS = [
+  ['password', 'Password'],
+  ['uuid', 'UUID'],
+  ['lorem', 'Lorem Ipsum']
+];
+
+/** The Settings toggle lives in dt:settings; absent means on. */
+async function rightClickMenusEnabled() {
+  try {
+    const data = await chrome.storage.local.get('dt:settings');
+    const saved = data && data['dt:settings'];
+    return !saved || saved.rightClickMenus !== false;
+  } catch (e) {
+    return true;
+  }
+}
+
+function createActionMenus() {
+  chrome.contextMenus.create({
+    id: 'dt-tx',
+    title: 'Transform with Zase',
+    contexts: ['selection']
+  });
+  TX_MENU_ITEMS.forEach(function (item, i) {
+    if (item === 'SEP') {
+      chrome.contextMenus.create({
+        id: 'dt-tx-sep-' + i,
+        parentId: 'dt-tx',
+        type: 'separator',
+        contexts: ['selection']
+      });
+      return;
+    }
+    chrome.contextMenus.create({
+      id: 'dt-tx-' + item[0],
+      parentId: 'dt-tx',
+      title: item[1],
+      contexts: ['selection']
+    });
+  });
+
+  chrome.contextMenus.create({
+    id: 'dt-gn',
+    title: 'Generate with Zase',
+    contexts: ['page', 'editable']
+  });
+  GEN_MENU_ITEMS.forEach(function (item) {
+    chrome.contextMenus.create({
+      id: 'dt-gn-' + item[0],
+      parentId: 'dt-gn',
+      title: item[1],
+      contexts: ['page', 'editable']
+    });
+  });
+}
+
+/**
+ * Run one Transform / Generate action in the clicked tab: hand
+ * the payload to the page, then inject the runner file.
+ * Restricted pages (chrome://, the Web Store) refuse injection;
+ * that failure is silent by design.
+ */
+async function runPageAction(tab, action, text) {
+  if (!tab || tab.id == null || !chrome.scripting) return;
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: function (payload) { window.__ZASE_PENDING__ = payload; },
+      args: [{ action: action, text: text || '' }]
+    });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['js/context/zase-page.js']
+    });
+  } catch (e) {
+    // Page does not allow scripting (browser UI, store, PDF viewer).
+  }
+}
+
 function createContextMenus() {
   if (!chrome.contextMenus) return;
+  rightClickMenusEnabled().then(function (actionsOn) {
   chrome.contextMenus.removeAll(function () {
     chrome.contextMenus.create({
       id: 'dt-open',
@@ -310,6 +425,18 @@ function createContextMenus() {
       title: 'Hash with SHA-256',
       contexts: ['selection']
     });
+    if (actionsOn) createActionMenus();
+  });
+  });
+}
+
+chrome.runtime.onStartup.addListener(function () {
+  createContextMenus();
+});
+
+if (chrome.storage && chrome.storage.onChanged) {
+  chrome.storage.onChanged.addListener(function (changes, area) {
+    if (area === 'local' && changes['dt:settings']) createContextMenus();
   });
 }
 
@@ -325,6 +452,16 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
+  if (typeof info.menuItemId === 'string' && info.menuItemId.indexOf('dt-tx-') === 0) {
+    runPageAction(tab, info.menuItemId.slice(6), info.selectionText || '')
+      .catch(function () {});
+    return;
+  }
+  if (typeof info.menuItemId === 'string' && info.menuItemId.indexOf('dt-gn-') === 0) {
+    runPageAction(tab, 'gen-' + info.menuItemId.slice(6), '')
+      .catch(function () {});
+    return;
+  }
   if (info.menuItemId === 'dt-open') {
     openOrFocusApp().catch(function () {});
     return;

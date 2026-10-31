@@ -20,7 +20,9 @@
     "storage",
     "system.display",
     "contextMenus",
-    "sidePanel"
+    "sidePanel",
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": [],
   "content_security_policy": {

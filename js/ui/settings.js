@@ -75,6 +75,20 @@
       DT.ui.toast.success(persistRow.input.checked ? "Enabled" : "Disabled");
     });
 
+    /* Right-click Transform / Generate menus on web pages. The
+       background worker watches dt:settings and rebuilds the
+       menus the moment this flips. */
+    const rightClickRow = toggleRow(
+      "dt-set-rightclick",
+      "Right-click menus",
+      "Transform or generate from any page's right-click menu",
+      settings.rightClickMenus !== false,
+    );
+    rightClickRow.input.addEventListener("change", function () {
+      DT.core.session.set("rightClickMenus", rightClickRow.input.checked);
+      DT.ui.toast.success(rightClickRow.input.checked ? "Enabled" : "Disabled");
+    });
+
     /* Theme mode: Light / Dark / System */
     const themeModes = [
       { id: 'light', label: 'Light' },
@@ -176,6 +190,7 @@
           themeRow,
           dom.el('div', { class: 'dt-settings__divider' }),
           persistRow.el,
+          rightClickRow.el,
           ...(sidePanelRow
             ? [dom.el('div', { class: 'dt-settings__divider' }), sidePanelRow]
             : []),
