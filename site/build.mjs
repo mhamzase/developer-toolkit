@@ -758,6 +758,483 @@ const CONTENT = {
   },
 };
 
+/* ---------------- Deep content (Step 4 SEO) ----------------
+ * Extra page depth for the five most searched tools: a guide of
+ * short subsections, a worked example, and a per-tool FAQ that
+ * also feeds FAQPage structured data. Tools without an entry
+ * here render exactly as before. Copy rule (Hamza): no tool
+ * counts anywhere, ever. */
+
+const DEEP_CONTENT = {
+  json: {
+    guide: [
+      {
+        h: "What formatting actually fixes",
+        p: "Most JSON problems are reading problems. An API returns one long line, a config file mixes tabs and spaces, or a payload copied from a log has line breaks in the middle of strings. Formatting gives the data a stable shape: one key per line, consistent indentation, arrays you can scan. Once the shape is stable, the real problems stand out: a missing bracket, a number stored as a string, a field that appears twice. The validator here points at the exact spot instead of just saying invalid, so you fix the cause instead of guessing.",
+      },
+      {
+        h: "Comparing two responses",
+        p: "Developers often need to know what changed between two API responses: yesterday's payload and today's. Raw, they are impossible to compare because key order jumps around between calls. Sort the keys in both, format both the same way, and a plain text diff suddenly shows only the real differences. The tree view helps the other way: when a response is deeply nested, expanding one branch at a time is faster than scrolling a wall of text, and the element counts tell you the shape of the data before you read it.",
+      },
+      {
+        h: "Formatting JSON without leaking it",
+        p: "Production payloads contain names, emails, order details and sometimes tokens. Pasting them into a random online formatter means sending that data to a stranger's server, where it can be logged. This formatter runs entirely in your browser tab: the JSON never leaves your device, nothing is uploaded, and closing the tab clears it. The same code also runs in the Zase Chrome extension, fully offline, which is the version to use when the payload is genuinely sensitive.",
+      },
+    ],
+    example: {
+      lead: "A typical API response arrives as one cramped line. One click turns it into something you can actually read:",
+      inputLabel: "Before",
+      input: `{"orderId":"ORD-2026-1042","customer":"Ayesha Khan","city":"Lahore","total":12500,"paid":true,"items":[{"name":"Kurta","qty":2},{"name":"Shalwar","qty":1}]}`,
+      outputLabel: "After formatting",
+      output: `{
+  "orderId": "ORD-2026-1042",
+  "customer": "Ayesha Khan",
+  "city": "Lahore",
+  "total": 12500,
+  "paid": true,
+  "items": [
+    {
+      "name": "Kurta",
+      "qty": 2
+    },
+    {
+      "name": "Shalwar",
+      "qty": 1
+    }
+  ]
+}`,
+    },
+    faq: [
+      {
+        q: "Why does my JSON fail to parse?",
+        a: "The usual causes are trailing commas after the last item, single quotes instead of double quotes, unquoted key names, or comments inside the data. Strict JSON allows none of those. Paste it above and the error message points at the position, so you can fix the exact character instead of hunting through the whole file.",
+      },
+      {
+        q: "Is it safe to paste a production API response here?",
+        a: "Yes. The formatting happens locally in your browser: nothing is uploaded, stored or logged. Your payload stays on your device, and closing the tab discards it. For fully offline work, the same formatter is built into the free Zase Chrome extension.",
+      },
+      {
+        q: "What is the difference between Format and Minify?",
+        a: "Format adds indentation and line breaks so people can read the JSON. Minify removes all unnecessary whitespace so the JSON is as small as possible, which is what you want for storage, config values and sending payloads over the wire.",
+      },
+      {
+        q: "Can this tool convert JSON to other formats?",
+        a: "Yes. The same panel converts JSON to CSV, YAML and XML, and converts CSV back to JSON. There are also dedicated pages for JSON to CSV and JSON to YAML with the conversion already set up.",
+      },
+    ],
+  },
+
+  regex: {
+    guide: [
+      {
+        h: "What a tester saves you from",
+        p: "A regular expression usually fails quietly: it matches a little too much, a little too little, or the wrong thing entirely, and you find out in production. Testing the pattern against real sample text first turns that risk into a thirty second check. Paste the kind of text you actually process: log lines, form input, scraped content. If the pattern survives your ugliest real examples, it will survive the application.",
+      },
+      {
+        h: "Flags, in plain words",
+        p: "Flags change how the whole pattern behaves. The g flag finds every match instead of stopping at the first, which is what you want for counting, extracting and replacing. The i flag ignores letter case, so an email or name pattern works however the user typed it. The m flag makes the ^ and $ anchors match at line starts and ends inside a block of text, not just at the very beginning and end. Most surprises in regex work come from a missing flag rather than a wrong pattern.",
+      },
+      {
+        h: "When a pattern matches too much",
+        p: "Greedy quantifiers are the classic trap: .* happily swallows everything up to the last possible match instead of the first. Making it lazy with .*? or, better, naming exactly what belongs inside (for example [^\"]* inside quotes) fixes the match and makes the pattern faster and clearer. The other classic is forgetting to anchor: an unanchored pattern matches anywhere inside a longer string, so a validation pattern should usually start with ^ and end with $. Test both a string that should pass and one that should fail.",
+      },
+    ],
+    example: {
+      lead: "Dates inside a log line, pulled out with one pattern:",
+      inputLabel: "Pattern and sample text",
+      input: `Pattern: \\b\\d{4}-\\d{2}-\\d{2}\\b
+
+2026-10-31 09:14:02 INFO Order ORD-1042 confirmed
+2026-10-31 09:15:47 WARN Retry scheduled for 2026-11-02`,
+      outputLabel: "Matches",
+      output: `2026-10-31
+2026-10-31
+2026-11-02`,
+    },
+    faq: [
+      {
+        q: "What do the flags g, i and m mean?",
+        a: "g finds all matches instead of only the first. i makes matching case-insensitive. m makes ^ and $ match at the start and end of each line inside a text block. You can combine them, for example gi for a global, case-insensitive search.",
+      },
+      {
+        q: "Why does my pattern match more than I want?",
+        a: "Almost always a greedy quantifier such as .* or .+ reaching too far. Make it lazy (.*?) or describe the inside precisely, for example [0-9]+ for digits only. Adding ^ and $ anchors also stops partial matches inside longer text.",
+      },
+      {
+        q: "Can I test a find and replace here?",
+        a: "Yes. The tester includes a replace mode: write the pattern, provide a replacement string (capture groups like $1 work), and preview the result on your sample text before you trust it in code.",
+      },
+      {
+        q: "Is my sample text uploaded anywhere?",
+        a: "No. Testing runs locally in your browser. Paste real log lines, user input or data samples without worrying about where they end up, because they never leave your device.",
+      },
+    ],
+  },
+
+  base64: {
+    guide: [
+      {
+        h: "What Base64 is, and what it is not",
+        p: "Base64 is a way to carry binary or special characters safely through systems that only handle plain text: email, JSON, URLs, HTML. It rewrites data using 64 safe characters (A to Z, a to z, 0 to 9, + and /) at the cost of making it about a third longer. It is an encoding, not encryption: anyone can decode it instantly, so it protects data from corruption and mangling, never from being read. Treat anything Base64 encoded as plain text for security purposes.",
+      },
+      {
+        h: "Why UTF-8 safety matters",
+        p: "Naive encoders break on text outside plain English: accented characters, Urdu, Arabic, emoji and smart quotes come out corrupted or throw errors. The reason is that Base64 works on bytes, and characters become bytes differently in different encodings. This tool encodes your text as UTF-8 bytes first and decodes back the same way, so a name like Ayesha or a line of Urdu survives the round trip exactly. If you have ever seen mojibake after a decode, an encoding mismatch like this was the cause.",
+      },
+      {
+        h: "Where you will meet it",
+        p: "JWTs are three Base64URL segments joined by dots. HTTP Basic auth is Base64 of username:password. Data URLs embed small images in CSS and HTML as Base64. API keys, certificates and email attachments all travel as Base64. Being able to decode a string on sight, locally, without uploading it, is a daily debugging skill, and it is exactly what this page is for.",
+      },
+    ],
+    example: {
+      lead: "Plain text in, Base64 out, and back again with Decode:",
+      inputLabel: "Text",
+      input: "Hello from Zase",
+      outputLabel: "Base64",
+      output: "SGVsbG8gZnJvbSBaYXNl",
+    },
+    faq: [
+      {
+        q: "Is Base64 a form of encryption?",
+        a: "No. Base64 is an encoding that anyone can reverse instantly with no key. It exists to move data safely through text-only systems, not to keep secrets. For actual encryption, use the AES tool in this toolkit.",
+      },
+      {
+        q: "Why does the encoded text end with = signs?",
+        a: "The equals signs are padding. Base64 output must be a multiple of four characters, so one or two = characters are added at the end when the input length does not line up. Decoders expect them, so do not strip them off.",
+      },
+      {
+        q: "What is the difference between Base64 and Base64URL?",
+        a: "Base64URL is a URL-safe variant that replaces + with - and / with _ and usually drops the padding. It is the encoding used inside JSON Web Tokens. This tool handles standard Base64, and the JWT Decoder here handles the URL variant.",
+      },
+      {
+        q: "Is it safe to decode a token or key I found in a log?",
+        a: "Yes, on this page. Decoding runs locally in your browser and nothing is uploaded, so credentials and tokens are not sent to a third party server just to see what they contain.",
+      },
+    ],
+  },
+
+  jwt: {
+    guide: [
+      {
+        h: "The three parts of a token",
+        p: "A JSON Web Token is three Base64URL segments joined by dots. The header says how the token was signed, for example HS256 or RS256. The payload carries the claims: who the token belongs to (sub), when it expires (exp), when it was issued (iat), and whatever the application added, such as a name, email or role. The signature proves the first two parts were issued by someone holding the key and were not changed on the way. Decoding shows you the first two parts; it says nothing about the third.",
+      },
+      {
+        h: "What to check when a token fails",
+        p: "Start with exp: an expired token is the most common cause of a sudden 401, and comparing exp against the current time takes seconds once decoded. Then check the audience and issuer claims if your API validates them, and confirm the alg in the header matches what your server expects. Clock skew between servers causes tokens that look valid but fail as not yet active (nbf in the future) or freshly expired. Decoding the token turns all of these guesses into facts.",
+      },
+      {
+        h: "Decoded is not the same as verified",
+        p: "Anyone can create a token with any payload they like; the signature is the only proof. Never trust a decoded payload for security decisions until the signature has been verified with the secret or public key. And treat tokens like passwords while debugging: a live token pasted into a random website can be stolen. This decoder runs locally in your browser, and the Zase extension version works fully offline, so the token never leaves your machine.",
+      },
+    ],
+    example: {
+      lead: "The classic demo token decodes to a payload you can read:",
+      inputLabel: "Token (trimmed)",
+      input: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      outputLabel: "Payload",
+      output: `{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "iat": 1516239022
+}`,
+    },
+    faq: [
+      {
+        q: "Does decoding a JWT verify its signature?",
+        a: "No. Decoding only reads the header and payload. Verification is a separate step that checks the signature against the secret or public key. This toolkit's JWT Signer can verify HS256 tokens, so decode here to read, and verify there before trusting.",
+      },
+      {
+        q: "What do exp, iat and sub mean?",
+        a: "exp is the expiry time, iat is when the token was issued, and sub is the subject, usually the user ID the token belongs to. All times are Unix timestamps in seconds. If exp is in the past, the token is expired and servers will reject it.",
+      },
+      {
+        q: "Is it safe to paste a real token here?",
+        a: "Yes. Decoding happens locally in your browser; the token is never uploaded or stored. The Chrome extension version of this decoder works fully offline for complete peace of mind with production tokens.",
+      },
+      {
+        q: "Why does my token show as invalid?",
+        a: "Usually it was copied incompletely, picked up a space or newline, or is missing one of its three parts. A JWT has exactly two dots. Paste the whole token from the first character to the last, with nothing before or after it.",
+      },
+    ],
+  },
+
+  qr: {
+    guide: [
+      {
+        h: "What belongs in a QR code",
+        p: "Short, stable content scans best. A link to your site, a menu page, a payment page or a contact card works well because the phone already knows what to do with it. Long paragraphs are technically possible and practically a mistake: dense codes are harder to scan in poor light or at small sizes. If the destination might change, link to a page you control and update that page, because the printed code itself can never change.",
+      },
+      {
+        h: "Size and error correction, in plain words",
+        p: "Error correction lets a code survive damage: a logo in the middle, a scuffed print, a corner folded over. Higher correction means a denser code, so the trade is scan reliability against visual density. For most everyday uses the middle setting is right: forgiving of real-world prints without turning the code into static. Size follows the same practical rule: the further away the phone will be, the bigger the print needs to be. A counter card and a shopfront poster are very different sizes.",
+      },
+      {
+        h: "SVG for print, PNG for sharing",
+        p: "This generator offers both because they serve different jobs. SVG is a vector: it scales from a business card to a banner without going soft, which is what printers want. PNG is a fixed image that drops straight into a document, a slide, a WhatsApp message or a social post. Whichever you choose, keep strong contrast (dark code, light background), leave the quiet border around the code intact, and always test scan the final size before printing a hundred copies.",
+      },
+    ],
+    example: {
+      lead: "Type or paste a link, pick a size, and download. For example, this link becomes a scannable code in about a second:",
+      inputLabel: "You type",
+      input: "https://aktechsol.pk",
+      outputLabel: "You get",
+      output: "A crisp QR code image of that link, ready to download as SVG for print or PNG for sharing.",
+    },
+    faq: [
+      {
+        q: "Do QR codes created here expire?",
+        a: "No. These are static codes: the content is stored in the pattern itself, not on a server, so the code works forever and there is no tracking or redirect in between. If you need the destination to change later, point the code at a page you control.",
+      },
+      {
+        q: "Should I download SVG or PNG?",
+        a: "SVG for anything printed or shown at a large size, because it stays sharp at any scale. PNG for documents, slides and messages, where a ready-made image is more convenient. Both are generated locally in your browser.",
+      },
+      {
+        q: "How much text can a QR code hold?",
+        a: "It depends on the error correction level; at the level used here, roughly a hundred characters of text fit comfortably. Links are the sweet spot. Very long text makes the code dense and hard to scan, so shorten it or link to the content instead.",
+      },
+      {
+        q: "Can I put my logo in the middle of the code?",
+        a: "Error correction tolerates a small central logo, but this generator keeps codes clean and standard for maximum scan reliability. If you add a logo afterwards, keep it small and always test scan the result before printing.",
+      },
+    ],
+  },
+};
+
+/* ---------------- Converter landing pages (Step 4) ----------------
+ * Dedicated pages for the conversions people actually search for.
+ * Each mounts its parent tool with a sample already converted:
+ * web-boot.js applies window.__ZASE_PRESET__ after mounting. */
+
+const CONVERTERS = [
+  {
+    slug: "json-to-csv",
+    tool: "json",
+    name: "JSON to CSV Converter",
+    title: "JSON to CSV Converter Online Free | Zase",
+    description: "Convert JSON to CSV online for free. Paste a JSON array and get a clean CSV file for Excel or Sheets. Runs locally in your browser, nothing is uploaded.",
+    long: "Turn a JSON array into a clean CSV file you can open in Excel or Google Sheets.",
+    intro: "APIs speak JSON, but spreadsheets, clients and reports speak CSV. This page bridges the two: paste a JSON array of objects and the converter builds a CSV with a header row from the object keys and one row per object. It is the fastest way to get API data into Excel, Sheets or any tool that imports CSV, without writing a throwaway script.",
+    howTo: [
+      "Paste a JSON array of objects into the input panel (a sample array is already loaded).",
+      "Click To CSV and check the result: keys become the header row, each object becomes a row.",
+      "Copy the CSV, or download it and open it in your spreadsheet.",
+    ],
+    points: [
+      "Values containing commas, quotes or newlines are quoted properly, so the CSV opens cleanly in Excel and Sheets.",
+      "Nested objects are flattened into readable cell text instead of breaking the row layout.",
+      "Conversion runs locally in your browser: private API data is never uploaded.",
+    ],
+    faq: [
+      {
+        q: "What JSON shape converts best to CSV?",
+        a: "An array of flat objects with the same keys, like a list of orders or users. The keys become the header row. Single objects convert too, as a one-row file, and nested values are written as compact text inside their cell.",
+      },
+      {
+        q: "Can I open the result directly in Excel?",
+        a: "Yes. Download the CSV and double click it, or paste the result into a .csv file. Headers, quoting and line breaks follow the CSV standard that Excel and Google Sheets expect.",
+      },
+      {
+        q: "Is my data uploaded for conversion?",
+        a: "No. The converter runs entirely in your browser tab, so the JSON you paste never leaves your device.",
+      },
+    ],
+    preset: {
+      sample: `[{"name":"Ayesha Khan","city":"Lahore","total":12500},{"name":"Bilal Ahmed","city":"Karachi","total":8900},{"name":"Fatima Noor","city":"Islamabad","total":15200}]`,
+      button: "To CSV",
+    },
+  },
+  {
+    slug: "json-to-yaml",
+    tool: "json",
+    name: "JSON to YAML Converter",
+    title: "JSON to YAML Converter Online Free | Zase",
+    description: "Convert JSON to YAML online for free. Turn API responses and JSON configs into clean, readable YAML. Private and local: nothing is uploaded.",
+    long: "Turn JSON into clean, readable YAML for configs, pipelines and documentation.",
+    intro: "YAML is the format humans edit: Docker Compose, GitHub Actions, Kubernetes and countless config files. JSON is the format machines exchange. This converter rewrites JSON as tidy YAML with proper indentation, so you can move a config or an API response into a file you are actually willing to maintain by hand.",
+    howTo: [
+      "Paste your JSON into the input panel (a sample config is already loaded).",
+      "Click To YAML and review the indented result.",
+      "Copy it into your .yaml or .yml file, or download it.",
+    ],
+    points: [
+      "Nested objects and arrays indent the way YAML readers expect, two spaces per level.",
+      "Strings that YAML could misread (like values starting with special characters) are quoted safely.",
+      "Everything converts locally in your browser: configs with secrets in them stay on your device.",
+    ],
+    faq: [
+      {
+        q: "Why convert JSON to YAML at all?",
+        a: "Readability. YAML drops the braces and quotes that make JSON configs noisy, which is why deployment and CI tools standardized on it. Converting is the quick way to move an API response or a JSON config into that world.",
+      },
+      {
+        q: "Will the YAML keep my data types?",
+        a: "Yes. Numbers stay numbers, booleans stay booleans, and strings are quoted when leaving them bare could change their meaning, for example a value like 0123 or the word yes.",
+      },
+      {
+        q: "Is my config uploaded anywhere?",
+        a: "No. Conversion is local to your browser tab. Paste real configs, including ones with environment values, without sending them to a server.",
+      },
+    ],
+    preset: {
+      sample: `{"shop":"AK Tech Sol","city":"Lahore","active":true,"services":["Web Development","SEO","Branding"],"team":{"developers":4,"designers":2}}`,
+      button: "To YAML",
+    },
+  },
+  {
+    slug: "csv-to-json",
+    tool: "json",
+    name: "CSV to JSON Converter",
+    title: "CSV to JSON Converter Online Free | Zase",
+    description: "Convert CSV to JSON online for free. Paste spreadsheet data and get a JSON array of objects using your header row. Runs locally, no uploads.",
+    long: "Turn spreadsheet rows into a JSON array your API or app can use directly.",
+    intro: "Data usually arrives as a spreadsheet and needs to leave as JSON: seed data for an app, a product import, a one-off migration. This converter reads your CSV, takes the first row as keys, and returns a JSON array of objects, one per row. Quoted cells with commas inside them are handled properly, which is where quick hand-rolled parsers usually fail.",
+    howTo: [
+      "Paste your CSV into the input panel, keeping the header row first (sample data is loaded).",
+      "Click CSV to JSON and check the array in the output.",
+      "Copy the JSON into your code, seed file or API request.",
+    ],
+    points: [
+      "The header row becomes the object keys automatically, so name,city becomes name and city fields.",
+      "Quoted values containing commas and line breaks parse as single cells, per the CSV standard.",
+      "Conversion is fully local: customer lists and order data are never uploaded.",
+    ],
+    faq: [
+      {
+        q: "Does the first row have to be headers?",
+        a: "Yes. The converter treats the first row as the field names for every object. Name your columns the way you want the JSON keys to read, for example name, city and total.",
+      },
+      {
+        q: "Do numbers stay numbers in the JSON?",
+        a: "Values that are plainly numeric are written as JSON numbers, and everything else stays a string. Check the output before importing if a column mixes both, such as phone numbers with leading zeros, which are kept as strings.",
+      },
+      {
+        q: "Is my spreadsheet data uploaded?",
+        a: "No. The conversion happens in your browser. The CSV you paste never leaves your device, which matters when it is a customer or orders export.",
+      },
+    ],
+    preset: {
+      sample: "name,city,total\nAyesha Khan,Lahore,12500\nBilal Ahmed,Karachi,8900\nFatima Noor,Islamabad,15200",
+      button: "CSV to JSON",
+    },
+  },
+  {
+    slug: "json-minifier",
+    tool: "json",
+    name: "JSON Minifier",
+    title: "JSON Minifier Online Free | Zase",
+    description: "Minify JSON online for free. Remove whitespace and shrink JSON for storage, configs and API payloads. Validates while it minifies, all locally.",
+    long: "Shrink JSON by removing every wasted byte, and validate it at the same time.",
+    intro: "Pretty JSON is for people; minified JSON is for machines. Minifying strips indentation and line breaks so the same data takes the least space in a config value, a database field, a cookie or a request body. This minifier validates while it works, so invalid JSON fails loudly here instead of breaking somewhere downstream.",
+    howTo: [
+      "Paste your formatted JSON into the input panel (a sample is already loaded).",
+      "Click Minify and compare the character counts.",
+      "Copy the compact result wherever it needs to go.",
+    ],
+    points: [
+      "The data itself never changes: only whitespace between tokens is removed.",
+      "Invalid JSON is rejected with the error position, not silently mangled.",
+      "Runs locally in your browser, so payloads with private data stay private.",
+    ],
+    faq: [
+      {
+        q: "Does minifying change my data?",
+        a: "No. Keys, values, order and types are all preserved exactly. Only the spaces, tabs and newlines that exist for human readers are removed.",
+      },
+      {
+        q: "When should I minify JSON?",
+        a: "When it is stored or transported rather than read: environment variables, database JSON columns, local storage, embedded configs and request bodies where size matters.",
+      },
+      {
+        q: "What if my JSON has an error in it?",
+        a: "You will see the parser error and its position instead of a minified file. Fix that spot (trailing commas are the usual suspect) and minify again.",
+      },
+    ],
+    preset: {
+      sample: `{
+  "name": "Developer Toolkit by Zase",
+  "private": true,
+  "features": [
+    "offline",
+    "no tracking",
+    "free"
+  ]
+}`,
+      button: "Minify",
+    },
+  },
+  {
+    slug: "base64-encode",
+    tool: "base64",
+    name: "Base64 Encoder",
+    title: "Base64 Encode Online Free | Zase",
+    description: "Encode text to Base64 online for free. UTF-8 safe, so names, Urdu, Arabic and emoji encode correctly. Runs locally in your browser.",
+    long: "Encode any text to Base64, with proper UTF-8 handling for every language.",
+    intro: "Base64 encoding turns text and binary data into a safe alphabet that survives email, JSON, URLs and HTML. This encoder is UTF-8 safe: names with accents, Urdu and Arabic text, and emoji all encode correctly and decode back exactly, which is where many quick online encoders quietly corrupt your data.",
+    howTo: [
+      "Type or paste your text into the input panel (a sample is loaded).",
+      "Click Encode.",
+      "Copy the Base64 result into your header, data URL or payload.",
+    ],
+    points: [
+      "UTF-8 safe round trip: what you encode is exactly what decoding returns.",
+      "Works for Basic auth strings, data URLs and embedding small assets.",
+      "Your text is encoded locally and never uploaded.",
+    ],
+    faq: [
+      {
+        q: "Why is the output longer than my text?",
+        a: "Base64 represents every 3 bytes with 4 characters, so output grows by about a third. That overhead is the price of using only safe, printable characters.",
+      },
+      {
+        q: "Can I encode text in Urdu, Arabic or with emoji?",
+        a: "Yes. The encoder converts your text to UTF-8 bytes first, which is the step naive encoders skip. Any language and emoji encode and decode back exactly.",
+      },
+      {
+        q: "Is Base64 encoding the same as encrypting?",
+        a: "No. Anyone can decode Base64 instantly. It makes data safe to transport, not secret. Use the AES tool in this toolkit when you need real encryption.",
+      },
+    ],
+    preset: { sample: "Hello from Zase", button: "Encode" },
+  },
+  {
+    slug: "base64-decode",
+    tool: "base64",
+    name: "Base64 Decoder",
+    title: "Base64 Decode Online Free | Zase",
+    description: "Decode Base64 to text online for free. UTF-8 safe decoding for tokens, headers and payloads. Fully local: what you decode never leaves your device.",
+    long: "Decode Base64 back to readable text, safely and locally.",
+    intro: "Base64 strings turn up everywhere: auth headers, JWT segments, email bodies, API payloads and config values. This decoder turns them back into readable text with correct UTF-8 handling, entirely in your browser. That local part matters: the string you are decoding is often a credential or a token, and it should not be pasted into a stranger's server just to be read.",
+    howTo: [
+      "Paste the Base64 string into the input panel (a sample is loaded).",
+      "Click Decode.",
+      "Read or copy the decoded text.",
+    ],
+    points: [
+      "UTF-8 aware: multilingual text decodes back exactly as it was encoded.",
+      "Invalid input is reported clearly instead of returning garbage.",
+      "Decoding is fully local: tokens and credentials never leave your device.",
+    ],
+    faq: [
+      {
+        q: "Why did my string fail to decode?",
+        a: "Usually it was truncated in copying, includes a space or newline in the middle, or is Base64URL (with - and _ characters) rather than standard Base64. Check the full string, including any = padding at the end.",
+      },
+      {
+        q: "Can this decode the parts of a JWT?",
+        a: "JWT segments use the Base64URL variant. For tokens, use the JWT Decoder on this site, which handles that variant and labels the header and payload for you.",
+      },
+      {
+        q: "Is it safe to decode an API key or token here?",
+        a: "Yes. Decoding runs locally in your browser tab; nothing is uploaded, stored or logged. The string stays on your device from start to finish.",
+      },
+    ],
+    preset: { sample: "SGVsbG8gZnJvbSBaYXNl", button: "Decode" },
+  },
+];
+
+
 /* ---------------- build ---------------- */
 
 function main() {
@@ -908,6 +1385,105 @@ function main() {
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
 
+  /* ---- Step 4 helpers: deep sections + converter cards ---- */
+  const faqItemsHtml = (items) =>
+    items
+      .map(
+        (item) =>
+          '          <details class="z-faq__item">\n' +
+          "            <summary>" +
+          esc(item.q) +
+          "</summary>\n" +
+          "            <p>" +
+          esc(item.a) +
+          "</p>\n" +
+          "          </details>"
+      )
+      .join("\n");
+
+  const faqSectionHtml = (items) =>
+    items && items.length
+      ? "          <h2>Frequently asked questions</h2>\n" + faqItemsHtml(items)
+      : "";
+
+  const faqPageLd = (items) => ({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  });
+
+  const exampleSectionHtml = (deep) => {
+    const ex = deep.example;
+    if (!ex) return "";
+    return (
+      "          <h2>See it in action</h2>\n" +
+      "          <p>" +
+      esc(ex.lead) +
+      "</p>\n" +
+      '          <div class="z-seo__example">\n' +
+      '            <p class="z-seo__example-label">' +
+      esc(ex.inputLabel) +
+      "</p>\n" +
+      "            <pre>" +
+      esc(ex.input) +
+      "</pre>\n" +
+      '            <p class="z-seo__example-label">' +
+      esc(ex.outputLabel) +
+      "</p>\n" +
+      "            <pre>" +
+      esc(ex.output) +
+      "</pre>\n" +
+      "          </div>"
+    );
+  };
+
+  const guideSectionHtml = (deep, tool) => {
+    if (!deep.guide) return "";
+    return (
+      "          <h2>More about the " +
+      esc(tool.name) +
+      "</h2>\n" +
+      deep.guide
+        .map((g) => "          <h3>" + esc(g.h) + "</h3>\n          <p>" + esc(g.p) + "</p>")
+        .join("\n")
+    );
+  };
+
+  const converterCardHtml = (conv, prefix) => {
+    const parent = tools.find((t) => t.id === conv.tool);
+    return fill(cardT, {
+      PREFIX: prefix,
+      SLUG: conv.slug,
+      NAME: esc(conv.name),
+      DESCRIPTION: esc(conv.long),
+      ICON_SVG: parent ? iconHtml(parent) : "",
+      CAT_SLUG: parent ? categorySlug(parent.category) : "",
+      SEARCH_TEXT: escAttr(conv.name.toLowerCase()),
+    });
+  };
+
+  const converterSectionFor = (tool) => {
+    const mine = CONVERTERS.filter((c) => c.tool === tool.id);
+    if (!mine.length) return "";
+    return fill(relatedT, {
+      CARDS: mine.map((c) => converterCardHtml(c, "../")).join("\n"),
+    }).replace("Related tools", "Popular conversions");
+  };
+
+  const converterHomeSection =
+    '      <section class="z-wrap z-reveal">\n' +
+    '        <div class="z-category__head">\n' +
+    "          <h2>Popular converters</h2>\n" +
+    "        </div>\n" +
+    '        <div class="z-grid">\n' +
+    CONVERTERS.map((c) => converterCardHtml(c, "")).join("\n") +
+    "\n        </div>\n" +
+    "      </section>";
+
   /* ---- Home page ---- */
   const categorySections = categories
     .map((cat) =>
@@ -943,6 +1519,7 @@ function main() {
       CATEGORY_SECTIONS: categorySections,
       FAQ_ITEMS: faqItems,
       STORE_URL: STORE_URL,
+      CONVERTER_SECTION: converterHomeSection,
     }),
     scripts: [],
     jsonLd: [
@@ -981,6 +1558,7 @@ function main() {
     );
     const related = sameCat.concat(others).slice(0, 4);
     const content = CONTENT[tool.id];
+    const deep = DEEP_CONTENT[tool.id];
 
     const relatedSection = related.length
       ? fill(relatedT, { CARDS: related.map((t) => cardHtml(t, "../")).join("\n") })
@@ -1007,6 +1585,11 @@ function main() {
             .map((point) => "            <li>" + esc(point) + "</li>")
             .join("\n")
         : "",
+      EXAMPLE_SECTION: deep ? exampleSectionHtml(deep) : "",
+      GUIDE_SECTION: deep ? guideSectionHtml(deep, tool) : "",
+      FAQ_SECTION: deep ? faqSectionHtml(deep.faq) : "",
+      CONVERTER_SECTION: converterSectionFor(tool),
+      PRESET_SCRIPT: "",
     });
 
     const scripts = [
@@ -1061,6 +1644,104 @@ function main() {
             operatingSystem: "Any",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           },
+          ...(deep && deep.faq ? [faqPageLd(deep.faq)] : []),
+        ],
+      })
+    );
+  }
+
+  /* ---- Converter landing pages (Step 4) ---- */
+  for (const conv of CONVERTERS) {
+    const tool = tools.find((t) => t.id === conv.tool);
+    if (!tool) {
+      warnings.push(
+        "Converter '" + conv.slug + "' points at unknown tool '" + conv.tool + "'."
+      );
+      continue;
+    }
+    const siblings = CONVERTERS.filter((c) => c.slug !== conv.slug).slice(0, 3);
+    const relatedCards = [cardHtml(tool, "../")].concat(
+      siblings.map((c) => converterCardHtml(c, "../"))
+    );
+    const relatedSection = fill(relatedT, { CARDS: relatedCards.join("\n") });
+
+    const presetScript =
+      "        <script>window.__ZASE_PRESET__ = " +
+      JSON.stringify(conv.preset).split("<").join("\\u003c") +
+      ";</script>";
+
+    const body = fill(toolT, {
+      NAME: esc(conv.name),
+      LONG_DESCRIPTION: esc(conv.long),
+      ICON_SVG: iconHtml(tool),
+      TOOL_ID: tool.id,
+      CATEGORY: esc(tool.category),
+      CAT_SLUG: categorySlug(tool.category),
+      PREFIX: "../",
+      RELATED_SECTION: relatedSection,
+      STORE_URL: STORE_URL,
+      INTRO: esc(conv.intro),
+      HOW_STEPS: conv.howTo
+        .map((step) => "            <li>" + esc(step) + "</li>")
+        .join("\n"),
+      POINT_ITEMS: conv.points
+        .map((point) => "            <li>" + esc(point) + "</li>")
+        .join("\n"),
+      EXAMPLE_SECTION: "",
+      GUIDE_SECTION: "",
+      FAQ_SECTION: faqSectionHtml(conv.faq),
+      CONVERTER_SECTION: "",
+      PRESET_SCRIPT: presetScript,
+    });
+
+    const scripts = [
+      "site/web-shim.js",
+      ...RUNTIME_JS,
+      "js/tools/" + tool.id + ".js",
+      "site/web-boot.js",
+      "site/install-prompt.js",
+    ];
+
+    const ownCss = "tools/" + tool.id + ".css";
+    const ownCssLink = toolCssFiles.includes(tool.id + ".css")
+      ? '\n    <link rel="stylesheet" href="../css/' + ownCss + '" />'
+      : "";
+    const extraCss =
+      '    <link rel="stylesheet" href="../css/components.css" />' +
+      '\n    <link rel="stylesheet" href="../css/tools/_shared.css" />' +
+      ownCssLink;
+
+    writePage(
+      conv.slug,
+      renderPage({
+        title: conv.title,
+        description: conv.description,
+        path: conv.slug,
+        prefix: "../",
+        nav: "tools",
+        body,
+        scripts,
+        extraCss,
+        jsonLd: [
+          breadcrumbLd([
+            { name: "Home", url: BASE_URL + "/" },
+            {
+              name: tool.category,
+              url: BASE_URL + "/category/" + categorySlug(tool.category) + "/",
+            },
+            { name: conv.name, url: BASE_URL + "/" + conv.slug + "/" },
+          ]),
+          {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            name: conv.name,
+            url: BASE_URL + "/" + conv.slug + "/",
+            description: conv.description,
+            applicationCategory: "DeveloperApplication",
+            operatingSystem: "Any",
+            offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          },
+          faqPageLd(conv.faq),
         ],
       })
     );
@@ -1251,6 +1932,7 @@ function main() {
   const urls = [
     { loc: BASE_URL + "/", priority: "1.0" },
     ...tools.map((t) => ({ loc: BASE_URL + "/" + slugOf.get(t.id) + "/", priority: "0.8" })),
+    ...CONVERTERS.map((c) => ({ loc: BASE_URL + "/" + c.slug + "/", priority: "0.7" })),
     ...categories.map((c) => ({
       loc: BASE_URL + "/category/" + categorySlug(c) + "/",
       priority: "0.6",

@@ -12,6 +12,41 @@
 (function () {
   "use strict";
 
+  /**
+   * Converter landing pages set window.__ZASE_PRESET__ with a
+   * sample input and the label of the action button to press, so
+   * the visitor lands on the finished conversion. Best effort: a
+   * preset that does not match the mounted tool changes nothing.
+   */
+  function applyPreset(mountEl) {
+    var preset = window.__ZASE_PRESET__;
+    if (!preset) return;
+    try {
+      var field = mountEl.querySelector("textarea");
+      if (field && preset.sample != null) {
+        var setter = Object.getOwnPropertyDescriptor(
+          window.HTMLTextAreaElement.prototype,
+          "value"
+        ).set;
+        setter.call(field, preset.sample);
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      if (preset.button) {
+        setTimeout(function () {
+          var buttons = mountEl.querySelectorAll("button");
+          for (var i = 0; i < buttons.length; i++) {
+            if (buttons[i].textContent.trim() === preset.button) {
+              buttons[i].click();
+              break;
+            }
+          }
+        }, 80);
+      }
+    } catch (err) {
+      /* The page still works as a normal tool page. */
+    }
+  }
+
   function hideLoading() {
     var loader = document.getElementById("dt-tool-loading");
     if (loader) loader.style.display = "none";
@@ -36,6 +71,7 @@
     try {
       tool.mount(mountEl);
       hideLoading();
+      applyPreset(mountEl);
     } catch (err) {
       /* A broken tool must not take the page chrome down with it. */
       if (window.console && console.error) console.error("[Zase] tool mount failed:", err);

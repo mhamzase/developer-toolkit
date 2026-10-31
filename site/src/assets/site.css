@@ -2028,3 +2028,42 @@ a:hover {
   gap: var(--space-2);
   flex-wrap: wrap;
 }
+
+/* ---------------- Deep tool content (Step 4) ---------------- */
+
+.z-seo h3 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  color: var(--color-text);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.z-seo__example {
+  display: flex;
+  flex-direction: column;
+}
+
+.z-seo p.z-seo__example-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: var(--space-3) 0 var(--space-1);
+}
+
+.z-seo__example pre {
+  background-color: #14152b;
+  color: #e9e9f4;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+  white-space: pre;
+}
+
+.z-seo .z-faq__item {
+  margin-bottom: var(--space-2);
+}
