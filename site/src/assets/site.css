@@ -1956,3 +1956,75 @@ a:hover {
     flex-wrap: wrap;
   }
 }
+
+/* ---------------- Install prompt (tool pages) ----------------
+ * Floating win-ask card: appears after the third successful tool
+ * use, invites the visitor to add the extension. Built and
+ * driven by site/install-prompt.js; dismissals persist in
+ * localStorage. */
+
+.z-install {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 80;
+  width: min(580px, calc(100vw - 24px));
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-xl);
+  border: var(--border-thin) solid var(--color-border);
+  background-color: var(--z-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(1.5);
+  backdrop-filter: blur(14px) saturate(1.5);
+  box-shadow: var(--z-shadow-lg);
+
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
+  transition: opacity var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.z-install--show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .z-install { transition: none; }
+}
+
+.z-install__icon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.z-install__copy {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.z-install__title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.z-install__text {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  line-height: var(--lh-snug);
+}
+
+.z-install__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}

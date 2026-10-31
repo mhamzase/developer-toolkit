@@ -1014,6 +1014,9 @@ function main() {
       ...RUNTIME_JS,
       "js/tools/" + tool.id + ".js",
       "site/web-boot.js",
+      /* Tool pages only: the win-ask install card. Home, category
+       * and info pages never load it. */
+      "site/install-prompt.js",
     ];
 
     /* Tool pages load the shared component styles plus the
@@ -1213,6 +1216,10 @@ function main() {
   copyFile(
     path.join(SRC, "assets", "web-boot.js"),
     path.join(DIST, "site", "web-boot.js")
+  );
+  copyFile(
+    path.join(SRC, "assets", "install-prompt.js"),
+    path.join(DIST, "site", "install-prompt.js")
   );
   copyFile(
     path.join(SRC, "assets", "site.js"),
