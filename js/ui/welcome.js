@@ -50,7 +50,7 @@
       heroIconWrap,
       dom.el('div', { class: 'dt-welcome__hero-text' }, [
         dom.el('div', { class: 'dt-welcome__title', text: 'Welcome to Developer Toolkit by Zase' }),
-        dom.el('div', { class: 'dt-welcome__subtitle', text: '16 tools. All local. No tracking. No sign-up.' })
+        dom.el('div', { class: 'dt-welcome__subtitle', text: 'All tools. All local. No tracking. No sign-up.' })
       ])
     ]);
 

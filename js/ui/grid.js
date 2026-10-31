@@ -222,25 +222,17 @@
     return row;
   }
 
-  function buildSection(label, count, bodyEl) {
+  function buildSection(label, bodyEl) {
     const dom = DT.ui.dom;
     const head = dom.el("div", { class: "dt-grid-section__head" }, [
       dom.el("span", { class: "dt-grid-section__title", text: label }),
     ]);
-    if (typeof count === "number") {
-      head.appendChild(
-        dom.el("span", {
-          class: "dt-grid-section__count",
-          text: String(count),
-        }),
-      );
-    }
     return dom.el("div", { class: "dt-grid-section" }, [head, bodyEl]);
   }
 
   /* ---------------- Home head (title + view toggle) ---------------- */
 
-  function buildHomeHead(title, count) {
+  function buildHomeHead(title) {
     const dom = DT.ui.dom;
 
     function toggleBtn(mode, iconName, label) {
@@ -258,7 +250,6 @@
 
     return dom.el("div", { class: "dt-home-head" }, [
       dom.el("div", { class: "dt-home-head__title", text: title }),
-      dom.el("span", { class: "dt-home-head__count", text: String(count) }),
       dom.el("div", { class: "dt-grow" }),
       dom.el("div", { class: "dt-view-toggle" }, [
         toggleBtn('grid', 'grid', "Grid view"),
@@ -297,7 +288,7 @@
       /* Filtering or searching → flat list */
       if (!isDefaultView) {
         mount.appendChild(buildHomeHead(
-          state.query ? 'Search results' : state.filter, all.length));
+          state.query ? 'Search results' : state.filter));
         mount.appendChild(buildTools(all));
         return;
       }
@@ -326,19 +317,19 @@
         })
         .filter(Boolean);
 
-      mount.appendChild(buildHomeHead('All Tools', all.length));
+      mount.appendChild(buildHomeHead('All Tools'));
 
       /* -------- Favorites -------- */
       if (favTools.length) {
         mount.appendChild(
-          buildSection("Favorites", favTools.length, buildTools(favTools)),
+          buildSection("Favorites", buildTools(favTools)),
         );
       }
 
       /* -------- Recently used (chips) -------- */
       if (recTools.length) {
         mount.appendChild(
-          buildSection("Recently used", null, buildChipRow(recTools)),
+          buildSection("Recently used", buildChipRow(recTools)),
         );
       }
 
@@ -348,7 +339,7 @@
       });
       const label = favTools.length || recTools.length ? "All tools" : "";
       if (label) {
-        mount.appendChild(buildSection(label, restTools.length, buildTools(restTools)));
+        mount.appendChild(buildSection(label, buildTools(restTools)));
       } else {
         mount.appendChild(buildTools(restTools));
       }

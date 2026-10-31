@@ -119,7 +119,7 @@
     copy.appendChild(el(
       'p',
       'z-install__text',
-      'Get all 36 developer tools in the free Zase extension. Nothing you paste ever leaves your device.'
+      'Get all the tools in one free Chrome extension by Zase. Nothing you paste ever leaves your device.'
     ));
 
     var addBtn = el('a', 'z-btn z-btn--accent z-btn--sm', null);

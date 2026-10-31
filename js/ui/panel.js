@@ -2,7 +2,7 @@
  * File: js/ui/panel.js
  * Module: UI — Panel Kit (Phase 2A: one frame for every tool)
  * Purpose: The shared building blocks every tool screen is made of,
- *          so all 16 tools look and behave the same way:
+ *          so all tools look and behave the same way:
  *   - head(title, actions)     standard panel header
  *   - stats() + paintStats()   one stats format everywhere:
  *                              "N chars · M lines" (+ words on request)

@@ -52,9 +52,6 @@
       function groupLabel(text, opts) {
         opts = opts || {};
         const children = [dom.el('span', { class: 'dt-side-group__label-text', text: text })];
-        if (typeof opts.count === 'number') {
-          children.push(dom.el('span', { class: 'dt-side-group__count', text: String(opts.count) }));
-        }
         const labelAttrs = {
           type: opts.onClick ? 'button' : undefined,
           class: 'dt-side-group__label' + (opts.active ? ' dt-side-group__label--active' : '')
@@ -87,8 +84,7 @@
           title: 'All tools'
         }, [
           homeIconWrap,
-          dom.el('span', { class: 'dt-side-item__label', text: 'All Tools' }),
-          dom.el('span', { class: 'dt-side-item__count', text: String(all.length) })
+          dom.el('span', { class: 'dt-side-item__label', text: 'All Tools' })
         ]);
         home.addEventListener('click', function () {
           DT.core.router.go('list', { filter: 'All' });
@@ -104,7 +100,7 @@
 
         if (favTools.length) {
           const favGroup = dom.el('div', { class: 'dt-side-group' }, [
-            groupLabel('Favorites', { count: favTools.length })
+            groupLabel('Favorites')
           ]);
           favTools.forEach(function (t) { favGroup.appendChild(toolItem(t, activeToolId)); });
           track.appendChild(favGroup);
@@ -118,7 +114,6 @@
 
           const group = dom.el('div', { class: 'dt-side-group' }, [
             groupLabel(cat, {
-              count: tools.length,
               slug: DT.core.registry.categorySlug(cat),
               active: state.view === 'list' && state.filter === cat,
               onClick: function () { DT.core.router.go('list', { filter: cat }); }
