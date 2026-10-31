@@ -1218,6 +1218,30 @@ a:hover {
   .z-tool-loading__skel span { animation: none; }
 }
 
+/* Narrow tool panels (phones, small tablets): panel heads and
+ * feet were built for the wide extension window, so long hints
+ * and button rows pushed past the card edge. Let them wrap, let
+ * hints take two lines, and let the regex flag toggles wrap. */
+@media (max-width: 720px) {
+  .z-tool-shell .dt-panel__head {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .z-tool-shell .dt-panel__foot {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+
+  .z-tool-shell .dt-panel__hint {
+    white-space: normal;
+  }
+
+  .z-tool-shell .dt-regex-flags {
+    flex-wrap: wrap;
+  }
+}
+
 .z-tool-shell .dt-workspace {
   padding: var(--space-5);
 }

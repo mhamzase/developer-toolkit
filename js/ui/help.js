@@ -110,7 +110,7 @@
   function build() {
     /* Remove ALL existing help overlays before building a fresh one.
        This prevents duplicates if build() ever gets called twice. */
-    document.querySelectorAll('.dt-help').forEach(function (el) { el.remove(); });
+    document.querySelectorAll('.dt-help-overlay').forEach(function (el) { el.remove(); });
 
     const dom = DT.ui.dom;
 
@@ -144,7 +144,7 @@
       tabindex: '-1'
     }, [header, body, footer]);
 
-    const ov = dom.el('div', { class: 'dt-help' }, [panel]);
+    const ov = dom.el('div', { class: 'dt-help-overlay' }, [panel]);
 
     /* Start hidden — set inline style so no CSS rule can override it */
     ov.style.display = 'none';
@@ -248,7 +248,7 @@
       initialized = true;
 
       /* Clean any orphan overlays left over from earlier sessions/builds */
-      document.querySelectorAll('.dt-help').forEach(function (el) { el.remove(); });
+      document.querySelectorAll('.dt-help-overlay').forEach(function (el) { el.remove(); });
 
       document.addEventListener('keydown', handleKey, true);
     },

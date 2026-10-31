@@ -1344,7 +1344,7 @@ a.dt-btn--ghost:hover {
  * 21. HELP OVERLAY (keyboard shortcuts)
  * ------------------------------------------------------------ */
 
-.dt-help {
+.dt-help-overlay {
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);
@@ -1363,8 +1363,8 @@ a.dt-btn--ghost:hover {
   transition: opacity var(--duration-base) var(--ease-standard);
 }
 
-.dt-help[hidden] { display: none; }
-.dt-help.dt-help--open { opacity: 1; }
+.dt-help-overlay[hidden] { display: none; }
+.dt-help-overlay.dt-help--open { opacity: 1; }
 
 /* Panel */
 .dt-help__panel {
@@ -1516,7 +1516,7 @@ a.dt-btn--ghost:hover {
 
 /* Invisible modals should never eat clicks */
 .dt-palette:not(.dt-palette--open),
-.dt-help:not(.dt-help--open),
+.dt-help-overlay:not(.dt-help--open),
 .dt-confirm:not(.dt-confirm--open),
 .dt-settings:not(.dt-settings--open) {
   pointer-events: none !important;
