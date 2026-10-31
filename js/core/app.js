@@ -110,7 +110,7 @@
     init: function () {
       /* Safety: remove any orphaned overlays from a previous failed boot */
       document
-        .querySelectorAll(".dt-help, .dt-palette, .dt-confirm, .dt-settings")
+        .querySelectorAll(".dt-help-overlay, .dt-palette, .dt-confirm, .dt-settings")
         .forEach(function (el) {
           el.remove();
         });
@@ -172,6 +172,9 @@
 
         // First-run welcome (shows only once)
         DT.ui.welcome.init();
+
+        // Win-ask rate prompt (counts success toasts, asks once)
+        DT.ui.rate.init();
 
         // ALWAYS open on the home grid with "All" category selected
         DT.core.router.go("list", { filter: "All", query: "" });
