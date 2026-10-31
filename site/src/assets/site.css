@@ -1594,6 +1594,8 @@ a:hover {
 
   .z-hero__visual {
     max-width: 560px;
+    width: 100%;
+    margin-inline: auto;
   }
 
   .z-ext {
@@ -1616,9 +1618,10 @@ a:hover {
     top: calc(100% + 1px);
     left: 0;
     right: 0;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: stretch;
-    gap: 0;
+    gap: var(--space-2);
     margin-left: 0;
     padding: var(--space-3) var(--space-5) var(--space-4);
     background-color: var(--z-surface-2);
@@ -1630,22 +1633,22 @@ a:hover {
     display: flex;
   }
 
+  /* Menu links sit side by side, two per row. */
   .z-nav a:not(.z-nav__cta) {
-    padding: 10px 12px;
-    border-bottom: var(--border-thin) solid var(--color-border);
-    border-radius: var(--radius-md);
+    flex: 1 1 calc(50% - var(--space-2));
+    text-align: center;
+    padding: 10px 8px;
+    border: var(--border-thin) solid var(--color-border);
+    border-radius: var(--radius-full);
     font-size: var(--fs-base);
-  }
-
-  .z-nav a:last-child {
-    border-bottom: none;
   }
 
   /* Full-width store button at the top of the menu panel. */
   .z-nav .z-nav__cta {
     display: inline-flex;
+    flex: 1 1 100%;
     width: 100%;
-    margin-bottom: var(--space-2);
+    margin-bottom: 0;
     padding: 11px 16px;
   }
 
@@ -1716,22 +1719,86 @@ a:hover {
     grid-template-columns: 1fr 168px;
   }
 
-  .z-mock__chip--a { right: 0; }
-  .z-mock__chip--b { left: 0; }
+  /* Hero actions side by side on phones: equal halves, and the
+   * long store label wraps inside its own button. */
+  .z-hero__cta {
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+  }
+
+  .z-hero__cta .z-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    line-height: var(--lh-snug);
+    padding: 11px 10px;
+    font-size: var(--fs-sm);
+  }
 
   .z-hero__visual {
     min-width: 0;
   }
 
+  /* The float animation overrides the static transform in the
+   * cascade, so on phones the animation itself must stop: a
+   * tilted, drifting mock overflows the small viewport, pushes
+   * its sidebar text into the main pane and clips its chips. */
   .z-mock-scene {
+    animation: none;
     transform: none;
   }
 
+  /* Chips stay inside the window instead of popping out of it. */
+  .z-mock__chip {
+    transform: none;
+  }
+
+  .z-mock__chip--a { top: 10px; right: 10px; }
+  .z-mock__chip--b { bottom: 10px; left: 10px; }
+
+  /* Room on the bar so the title never runs under the chip. */
+  .z-mock__bar {
+    padding-right: 128px;
+  }
+
   .z-mock__body {
-    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-columns: 126px minmax(0, 1fr);
+    min-height: 264px;
+  }
+
+  .z-mock__side {
+    min-width: 0;
+    overflow: hidden;
+    padding: var(--space-2);
+    padding-bottom: 48px;
+  }
+
+  .z-mock__nav {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
   }
 
   .z-mock__main {
     min-width: 0;
+    padding: var(--space-3);
+  }
+
+  .z-mock__tool-head {
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
+
+  .z-mock__pill {
+    white-space: nowrap;
+  }
+
+  .z-mock__code {
+    padding: var(--space-3);
+  }
+
+  .z-mock__actions {
+    flex-wrap: wrap;
   }
 }
