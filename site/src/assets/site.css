@@ -246,14 +246,37 @@ a:hover {
 }
 
 .z-btn--accent {
+  position: relative;
+  overflow: hidden;
   background: var(--z-grad);
   color: #fff;
-  box-shadow: 0 6px 18px var(--z-glow);
+  box-shadow: 0 10px 28px var(--z-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* A slow light sweep across the gradient keeps the main call to
+ * action eye-catching without any extra markup. */
+.z-btn--accent::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.38) 50%, transparent 68%);
+  transform: translateX(-110%);
+  animation: z-sheen 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes z-sheen {
+  0%, 55% { transform: translateX(-110%); }
+  85%, 100% { transform: translateX(110%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .z-btn--accent::after { animation: none; }
 }
 
 .z-btn--accent:hover {
   color: #fff;
-  box-shadow: 0 10px 26px var(--z-glow);
+  box-shadow: 0 14px 34px var(--z-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
 }
 
@@ -261,12 +284,13 @@ a:hover {
   background-color: var(--z-surface-2);
   border-color: var(--color-border-strong);
   color: var(--color-text);
-  box-shadow: var(--z-shadow-sm);
+  box-shadow: var(--z-shadow-md);
 }
 
 .z-btn--ghost:hover {
   color: var(--color-text);
   border-color: var(--z-grad-2);
+  box-shadow: var(--z-shadow-md), 0 0 0 3px var(--z-glow);
   transform: translateY(-1px);
 }
 
@@ -309,6 +333,12 @@ a:hover {
 .z-btn .dt-icon {
   width: 16px;
   height: 16px;
+}
+
+.z-btn__arrow {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
 }
 
 /* Theme toggle shows the icon of the theme it switches TO. */
