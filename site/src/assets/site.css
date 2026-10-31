@@ -1866,21 +1866,24 @@ a:hover {
     grid-template-columns: 1fr 168px;
   }
 
-  /* Hero actions side by side on phones: equal halves, and the
-   * long store label wraps inside its own button. */
+  /* Hero actions stacked on phones (Hamza's call, replacing the
+   * earlier side-by-side halves): one button per row, full width,
+   * labels back on a single line at full size. */
   .z-hero__cta {
+    flex-direction: column;
     flex-wrap: nowrap;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .z-hero__cta .z-btn {
-    flex: 1 1 0;
+    flex: 0 0 auto;
+    width: 100%;
     min-width: 0;
     white-space: normal;
     text-align: center;
     line-height: var(--lh-snug);
-    padding: 11px 10px;
-    font-size: var(--fs-sm);
+    padding: 13px 18px;
+    font-size: var(--fs-base);
   }
 
   .z-hero__visual {
