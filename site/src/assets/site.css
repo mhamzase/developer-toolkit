@@ -1672,6 +1672,14 @@ a:hover {
     display: inline-flex;
   }
 
+  /* The nav leaves the flow at this width (it becomes the drop
+   * panel), so its margin-left:auto no longer pushes the action
+   * group across: give the actions their own auto margin so the
+   * theme and menu buttons sit at the right edge, brand left. */
+  .z-header__actions {
+    margin-left: auto;
+  }
+
   .z-nav {
     display: none;
     position: absolute;
