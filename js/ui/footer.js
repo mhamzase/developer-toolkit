@@ -1,7 +1,7 @@
 /**
  * File: js/ui/footer.js
  * Module: UI — Footer
- * Purpose: Version, developer credit, GitHub, donate.
+ * Purpose: Version, developer credit, GitHub, support page link.
  * Notes:
  *   - Brand name lives in the header only (avoid repetition).
  *   - External links open in a new tab.
@@ -24,7 +24,9 @@
   const DEVELOPER     = 'Zase';
   const GITHUB_URL    = 'https://github.com/mhamzase';
   const GITHUB_HANDLE = '@mhamzase';
-  const DONATE_URL    = 'https://ko-fi.com/your-username'; // update later
+  /* One support hub on the website (Patreon + crypto today,
+     future options land there too), so this URL never changes. */
+  const SUPPORT_URL   = 'https://devtoolkit-zase.pages.dev/support/';
 
   /* --------------------------------------------------------------
    * Icons
@@ -98,30 +100,22 @@
         dom.el('span', { class: 'dt-footer__github-text', text: GITHUB_HANDLE })
       ]);
 
-      /* Donate link */
-      const donateHeart = dom.svg(ICON_HEART);
+      /* Support link: opens the website support hub */
+      const supportHeart = dom.svg(ICON_HEART);
       const externalIcon = dom.svg(ICON_EXTERNAL);
 
       const donateBtn = dom.el('a', {
         class: 'dt-btn dt-btn--primary dt-btn--sm dt-footer__donate',
-        href: DONATE_URL,
+        href: SUPPORT_URL,
         target: '_blank',
         rel: 'noopener noreferrer',
-        title: 'Support the developer',
-        'aria-label': 'Donate to support development'
+        title: 'Support Zase',
+        'aria-label': 'Support Zase: opens the support page in a new tab'
       }, [
-        donateHeart ? donateHeart : dom.txt(''),
-        dom.txt('Donate'),
+        supportHeart ? supportHeart : dom.txt(''),
+        dom.txt('Support'),
         externalIcon ? externalIcon : dom.txt('')
       ]);
-
-      donateBtn.addEventListener('click', function (e) {
-        if (DONATE_URL.indexOf('your-username') !== -1) {
-          e.preventDefault();
-          DT.ui.toast.info('Donate link not configured yet');
-          return;
-        }
-      });
 
       const right = dom.el('div', { class: 'dt-footer__side dt-footer__side--right' }, [
         devCredit,

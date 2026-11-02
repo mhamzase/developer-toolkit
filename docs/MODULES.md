@@ -41,7 +41,7 @@ links) and a `div.dt-content` column (main view + footer). The sidebar
 collapses to an icon rail under 900px and to a top bar with a tool
 strip under 640px (see `css/responsive.css`).
 
-## Tool highlights (v1.0.3, store track)
+## Tool highlights (v1.0.4, store track)
 
 - `yaml.js` carries a hand written YAML engine (block parser,
   flow parser, serializer) for the everyday subset; a sequence

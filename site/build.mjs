@@ -12,8 +12,10 @@
  *   - dist/<slug>/index.html     one page per tool, each with a
  *                                per-tool SEO content block
  *   - dist/category/<slug>/      one landing page per category
- *   - dist/about, dist/contact, dist/privacy, dist/404.html
- *   - dist/sitemap.xml           every page (49 URLs)
+ *   - dist/tools                 every tool with live search
+ *   - dist/about, dist/contact, dist/privacy, dist/support,
+ *                                dist/404.html
+ *   - dist/sitemap.xml           every page (57 URLs)
  *   - dist/robots.txt            allow all + sitemap line
  * plus copies of the extension runtime files the site needs
  * (js, css, fonts, icons) and the site assets from site/src/
@@ -43,6 +45,10 @@ const BASE_URL = "https://devtoolkit-zase.pages.dev";
 const STORE_URL =
   "https://chromewebstore.google.com/detail/developer-toolkit-json-jw/fhjlhcecanniahjgnjffdhmfkfikkkdg";
 const GITHUB_URL = "https://github.com/mhamzase/developer-toolkit";
+const PATREON_URL = "https://www.patreon.com/zaseofficial";
+/* Hamza's Binance USDT deposit address, Tron (TRC20). Public
+ * by design: it is printed on the support page for donations. */
+const USDT_ADDRESS = "TFyGZN6tQhxmFKosSU8o1aco1vv8UD2Zcz";
 const OG_IMAGE = BASE_URL + "/og-image.png";
 
 /**
@@ -1262,6 +1268,8 @@ function main() {
   const aboutT = readTemplate("about.html");
   const contactT = readTemplate("contact.html");
   const privacyT = readTemplate("privacy.html");
+  const toolsT = readTemplate("tools.html");
+  const supportT = readTemplate("support.html");
   const notFoundT = readTemplate("404.html");
 
   /* Slugs with collision guard. */
@@ -1359,9 +1367,11 @@ function main() {
     const header = fill(headerT, {
       PREFIX: prefix,
       STORE_URL: STORE_URL,
+      NAV_HOME: nav === "home" ? NAV_ACTIVE : "",
       NAV_TOOLS: nav === "tools" ? NAV_ACTIVE : "",
       NAV_ABOUT: nav === "about" ? NAV_ACTIVE : "",
       NAV_CONTACT: nav === "contact" ? NAV_ACTIVE : "",
+      NAV_SUPPORT: nav === "support" ? NAV_ACTIVE : "",
       NAV_PRIVACY: nav === "privacy" ? NAV_ACTIVE : "",
     });
     const footer = fill(footerT, {
@@ -1514,7 +1524,7 @@ function main() {
       "Developer Toolkit by Zase: free online tools for developers. Format JSON, decode JWTs, test regex, encode Base64 and more. Everything runs locally in your browser: no uploads, no accounts.",
     path: "",
     prefix: "",
-    nav: "tools",
+    nav: "home",
     body: fill(homeT, {
       CATEGORY_SECTIONS: categorySections,
       FAQ_ITEMS: faqItems,
@@ -1548,6 +1558,37 @@ function main() {
     ],
   });
   writePage("", homeHtml);
+
+  /* ---- Tools page: every tool with live search, nothing else ---- */
+  const toolsCategorySections = categories
+    .map((cat) =>
+      fill(sectionT, {
+        CATEGORY: esc(cat),
+        CAT_SLUG: categorySlug(cat),
+        PREFIX: "../",
+        CARDS: toolsIn(cat).map((t) => cardHtml(t, "../")).join("\n"),
+      })
+    )
+    .join("\n");
+  writePage(
+    "tools",
+    renderPage({
+      title: "All Tools | Zase",
+      description:
+        "Every free Zase developer tool in one place: JSON, JWT, regex, Base64, hashes, QR codes and more. All run locally in your browser.",
+      path: "tools",
+      prefix: "../",
+      nav: "tools",
+      body: fill(toolsT, { CATEGORY_SECTIONS: toolsCategorySections }),
+      scripts: [],
+      jsonLd: [
+        breadcrumbLd([
+          { name: "Home", url: BASE_URL + "/" },
+          { name: "Tools", url: BASE_URL + "/tools/" },
+        ]),
+      ],
+    })
+  );
 
   /* ---- One page per tool ---- */
   for (const tool of tools) {
@@ -1826,6 +1867,14 @@ function main() {
       template: privacyT,
       fillMap: { GITHUB_URL: GITHUB_URL },
     },
+    {
+      dir: "support",
+      title: "Support Zase | Patreon and Crypto",
+      description:
+        "Support Zase: become a member on Patreon or send a one-time USDT (Tron TRC20) transfer. Every tool is free: contributions keep them maintained and improving.",
+      template: supportT,
+      fillMap: { PATREON_URL: PATREON_URL, USDT_ADDRESS: USDT_ADDRESS },
+    },
   ];
   for (const page of staticPages) {
     const body = fill(page.template, {
@@ -1914,7 +1963,7 @@ function main() {
   for (const name of ["favicon.ico", "og-image.png", "apple-touch-icon.png"]) {
     copyFile(path.join(SRC, "assets", name), path.join(DIST, name));
   }
-  for (const name of ["icon-96.png", "icon-192.png", "icon-512.png", "chrome.svg"]) {
+  for (const name of ["icon-96.png", "icon-192.png", "icon-512.png", "chrome.svg", "usdt-qr.svg"]) {
     copyFile(path.join(SRC, "assets", name), path.join(DIST, "site", name));
   }
   /* head.html links the web manifest at the site root. */
@@ -1931,6 +1980,7 @@ function main() {
   /* ---- sitemap.xml + robots.txt ---- */
   const urls = [
     { loc: BASE_URL + "/", priority: "1.0" },
+    { loc: BASE_URL + "/tools/", priority: "0.9" },
     ...tools.map((t) => ({ loc: BASE_URL + "/" + slugOf.get(t.id) + "/", priority: "0.8" })),
     ...CONVERTERS.map((c) => ({ loc: BASE_URL + "/" + c.slug + "/", priority: "0.7" })),
     ...categories.map((c) => ({
@@ -1939,6 +1989,7 @@ function main() {
     })),
     { loc: BASE_URL + "/about/", priority: "0.4" },
     { loc: BASE_URL + "/contact/", priority: "0.4" },
+    { loc: BASE_URL + "/support/", priority: "0.4" },
     { loc: BASE_URL + "/privacy/", priority: "0.3" },
   ];
   const sitemap =

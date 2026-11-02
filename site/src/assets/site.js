@@ -192,12 +192,51 @@
     });
   }
 
+  /* ---------------- Copy buttons ---------------- */
+  /* Any element with data-copy copies that text on click and
+     confirms by swapping its label for a moment (support page). */
+
+  function initCopy() {
+    var btns = document.querySelectorAll("[data-copy]");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var text = btn.getAttribute("data-copy");
+        function done() {
+          var old = btn.textContent;
+          btn.textContent = "Copied";
+          btn.disabled = true;
+          setTimeout(function () {
+            btn.textContent = old;
+            btn.disabled = false;
+          }, 1600);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, done);
+        } else {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand("copy");
+          } catch (e) {
+            /* The address stays visible to copy by hand. */
+          }
+          document.body.removeChild(ta);
+          done();
+        }
+      });
+    });
+  }
+
   function init() {
     initThemeToggle();
     initMenu();
     initSearch();
     initReveal();
     initTilt();
+    initCopy();
   }
 
   if (document.readyState === "loading") {

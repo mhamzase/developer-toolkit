@@ -1583,6 +1583,52 @@ a:hover {
   line-height: var(--lh-relaxed);
 }
 
+/* Tools page: the shared search box outside the hero. */
+.z-search--page {
+  margin: 0 0 var(--space-8);
+}
+
+/* Support page: crypto card pieces. The QR sits on a white tile
+   so it stays scannable in both themes. */
+.z-support-qr {
+  background-color: #fff;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  margin: var(--space-2) 0 var(--space-4);
+  line-height: 0;
+}
+
+.z-support-qr img {
+  display: block;
+  width: 180px;
+  height: 180px;
+}
+
+.z-support-addr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.z-support-addr__text {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  word-break: break-all;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  flex: 1 1 220px;
+}
+
+.z-support-warn {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  margin: var(--space-4) 0 0;
+}
+
 .z-contact-note a {
   color: var(--z-grad-2);
 }

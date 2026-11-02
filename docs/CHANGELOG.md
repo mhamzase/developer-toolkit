@@ -2,6 +2,25 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.0.4] — 2026-11-02
+
+### Added
+- Support Zase: a new support page on the website
+  (devtoolkit-zase.pages.dev/support) with two ways to chip
+  in: a Patreon membership and a one-time USDT (Tron TRC20)
+  transfer with QR code and copy button. The extension
+  footer's Donate button now opens that page, so future
+  support options only ever change on the website.
+- Website: a dedicated Tools page (/tools) listing every
+  tool with live search, and nothing else.
+
+### Changed
+- Website navigation: Home is now the first menu item,
+  Tools links to its own page, and Support appears in the
+  header and footer.
+- Extension and website now share version 1.0.4
+  (manifest.json remains the single version source).
+
 ## [1.0.3] — 2026-10-30
 
 ### Added (36 tools total)

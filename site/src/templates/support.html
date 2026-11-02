@@ -1,0 +1,58 @@
+    <main class="z-main">
+      <div class="z-wrap">
+        <div class="z-page-head">
+          <h1>Support Zase</h1>
+          <p class="z-page-head__sub">
+            Zase is an independent software company, and everything it ships
+            is free. If these tools save you time, a small contribution helps
+            keep them maintained, improved and free for everyone. Pick
+            whichever way suits you.
+          </p>
+        </div>
+
+        <div class="z-contact-grid">
+          <article class="z-contact-card z-reveal">
+            <span class="z-feature__icon">
+              <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </span>
+            <h2>Patreon</h2>
+            <p>
+              Become a member on Patreon and support Zase every month. It
+              starts small, you can cancel anytime, and supporters hear
+              about new releases first and get a say in what gets built
+              next.
+            </p>
+            <a class="z-btn z-btn--accent" href="{{PATREON_URL}}" target="_blank" rel="noopener">Support on Patreon</a>
+          </article>
+
+          <article class="z-contact-card z-reveal">
+            <span class="z-feature__icon">
+              <svg class="dt-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><path d="M3 14v3a1 1 0 0 0 1 1h3"/><path d="M7 17h.01"/><path d="M14 21h.01"/><path d="M21 14v.01"/></svg>
+            </span>
+            <h2>USDT (crypto)</h2>
+            <p>
+              Prefer a one-time transfer? Send USDT on the Tron (TRC20)
+              network: scan the code or copy the address. It arrives
+              directly, with no platform in between.
+            </p>
+            <div class="z-support-qr">
+              <img src="{{PREFIX}}site/usdt-qr.svg" alt="QR code for the Zase USDT (Tron TRC20) deposit address" width="180" height="180" />
+            </div>
+            <div class="z-support-addr">
+              <code class="z-support-addr__text">{{USDT_ADDRESS}}</code>
+              <button class="z-btn z-btn--ghost" type="button" data-copy="{{USDT_ADDRESS}}">Copy address</button>
+            </div>
+            <p class="z-support-warn">
+              Send only USDT on the Tron (TRC20) network. Transfers sent
+              on the wrong network cannot be recovered.
+            </p>
+          </article>
+        </div>
+
+        <p class="z-contact-note">
+          Questions about supporting Zase? Reach out through the
+          <a href="{{PREFIX}}contact/">contact page</a>. Thank you for
+          helping keep good tools free.
+        </p>
+      </div>
+    </main>
