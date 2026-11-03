@@ -1971,6 +1971,13 @@ function main() {
     path.join(SRC, "assets", "site.webmanifest"),
     path.join(DIST, "site.webmanifest")
   )
+  /* Google Search Console ownership file. It must stay at the
+     site root forever, or the GSC property loses verification.
+     Never remove it. */
+  copyFile(
+    path.join(SRC, "assets", "google048fe7268fbd6647.html"),
+    path.join(DIST, "google048fe7268fbd6647.html")
+  );
   for (const tool of tools) {
     copyIntoDist("js/tools/" + tool.id + ".js");
   }
