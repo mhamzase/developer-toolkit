@@ -1629,6 +1629,44 @@ a:hover {
   margin: var(--space-4) 0 0;
 }
 
+/* Support page: cards keep their natural height. The shared
+   contact grid stretches both cards to the taller one, which
+   left a big void inside the shorter Patreon card. */
+.z-support-grid {
+  align-items: start;
+}
+
+/* The two Patreon tiers, listed inside the Patreon card. */
+.z-support-tiers {
+  width: 100%;
+  margin: var(--space-2) 0 var(--space-6);
+}
+
+.z-support-tier {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.z-support-tier__name {
+  display: block;
+  font-weight: 600;
+}
+
+.z-support-tier__note {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.z-support-tier__price {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .z-contact-note a {
   color: var(--z-grad-2);
 }
