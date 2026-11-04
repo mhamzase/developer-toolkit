@@ -2,6 +2,19 @@
 
 All notable changes to Developer Toolkit.
 
+## [1.0.5] — 2026-11-04
+
+### Fixed
+- Extension header: the brand name no longer cuts off in
+  the sidebar. It now uses a two-line lockup, "Developer
+  Toolkit" with a smaller "by Zase" under it.
+
+### Changed
+- Website header: the wordmark now reads "Developer
+  Toolkit by Zase" (product name first, maker smaller),
+  and the navigation collapses to the menu panel at
+  tablet widths where the full header no longer fits.
+
 ## [1.0.4] — 2026-11-02
 
 ### Added
