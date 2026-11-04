@@ -58,10 +58,16 @@
         "aria-hidden": "true",
         draggable: "false",
       });
-      const title = dom.el("div", {
-        class: "dt-header__title",
-        text: "Developer Toolkit by Zase",
-      });
+      // Two-line lockup: the product name leads, the maker line
+      // sits under it. As one nowrap line the title was wider
+      // than the sidebar and cut off with an ellipsis.
+      const title = dom.el("div", { class: "dt-header__title" }, [
+        dom.el("span", {
+          class: "dt-header__title-name",
+          text: "Developer Toolkit",
+        }),
+        dom.el("span", { class: "dt-header__title-by", text: "by Zase" }),
+      ]);
       const brand = dom.el("div", { class: "dt-header__brand" }, [logo, title]);
 
       // Theme toggle

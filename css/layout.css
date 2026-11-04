@@ -92,13 +92,26 @@
 }
 
 .dt-header__title {
+  min-width: 0;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+/* Two-line brand lockup (see header.js): name on top, maker
+   line below, so the full name always fits the sidebar. */
+.dt-header__title-name {
+  display: block;
   font-size: var(--fs-md);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-tight);
-  color: var(--color-text);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.dt-header__title-by {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
 }
 
 /* Top bar above the main area: home of the search field,
