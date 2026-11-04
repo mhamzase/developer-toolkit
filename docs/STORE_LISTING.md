@@ -1,4 +1,4 @@
-# Chrome Web Store listing (v1.0.4)
+# Chrome Web Store listing (v1.0.5)
 
 Copy for the Developer Dashboard, ready to paste. Anything marked
 [TODO] needs a human action (screenshots, dashboard answers).
@@ -11,13 +11,13 @@ Copy for the Developer Dashboard, ready to paste. Anything marked
 
 ## Summary (132 characters max)
 
-JSON formatter, JWT decoder & signer, regex tester, Base64, hashes, QR codes and more. Free, 100% offline, no tracking.
+Developer tools that run entirely in your browser. Free, fully offline and private: nothing you paste ever leaves your device.
 
 ## Detailed description
 
 Your browser is where you do your work, so the tools you use every day should live there too.
 
-Inside Developer Toolkit you will find a JSON formatter and validator, a JWT decoder and signer, Base64 and URL encoders, a regex tester, hash, UUID and password generators, a QR code generator, a text diff checker, a cron builder, SQL, YAML and XML formatters, a JSONPath tester, Markdown tools, timestamp and color converters, an HTML entity converter and a slug generator, an image compressor, and quick references for the small things you should never have to Google. And that list is not final: the toolkit keeps growing, with new tools added regularly.
+Whatever the job, it is probably already here. Format and validate the data in front of you, decode a token to see what is inside it, test a pattern before you trust it, or generate the password, code or schedule you need and move on. The everyday text, encoding, color and conversion jobs are covered too, along with quick references for the small things you should never have to search for. And the toolkit keeps growing, with new tools added regularly.
 
 It is built to feel like a real app, not a cramped little popup. Open it in its own resizable window or dock it in Chrome's Side Panel. Choose a light, dark or system theme, pin the tools you use most as favorites, and reach anything instantly with search, a command palette, the keyboard, or a right click on selected text. Every tool is designed the same calm way, so once you know one, you know them all. It even opens where you left it, the way a tool you rely on should.
 
