@@ -152,6 +152,21 @@ a:hover {
   box-shadow: var(--z-shadow-sm);
 }
 
+/* Header wordmark: the product name leads, the maker line
+   ("by Zase") sits smaller and muted beside it. */
+.z-brand__by {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: 0;
+}
+
+@media (max-width: 720px) {
+  .z-brand {
+    font-size: var(--fs-lg);
+  }
+}
+
 .z-nav {
   display: flex;
   align-items: center;
@@ -1809,7 +1824,11 @@ a:hover {
   }
 }
 
-@media (max-width: 720px) {
+/* The header collapses to the menu button at 1080px: with the
+   full product wordmark ("Developer Toolkit by Zase"), the brand,
+   the inline nav and the action group only fit side by side from
+   1080px up. Below that the nav becomes the drop panel. */
+@media (max-width: 1080px) {
   .z-header .z-menu-toggle {
     display: inline-flex;
   }
@@ -1874,6 +1893,22 @@ a:hover {
 @media (max-width: 480px) {
   .z-header__inner {
     gap: var(--space-3);
+  }
+
+  /* Small phones: keep the product name readable and drop the
+     maker line, which would squeeze the header. */
+  .z-brand {
+    font-size: var(--fs-base);
+    gap: var(--space-2);
+  }
+
+  .z-brand img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .z-brand__by {
+    display: none;
   }
 
   .z-header__cta {
